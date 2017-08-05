@@ -150,7 +150,7 @@ namespace PsddfCs {
 								// Print message when all points are at dl or efinal;
 //								write(iout, 100);
 //								stop;
-								Io.WriteLine(iout, f100);
+								Io.WriteLine(OUT, f100);
 								throw new SimulationException(f100);
 							}
 							i = i - 1;
@@ -214,7 +214,7 @@ namespace PsddfCs {
 							// Print a message when less than 4 points not at dl;
 //							write(iout, 101);
 //							stop;
-							Io.WriteLine(iout, f101);
+							Io.WriteLine(OUT, f101);
 							throw new SimulationException(f101);
 						}
 					}

@@ -153,7 +153,7 @@
 				// write(iout, 101);
 				// write(iout, 102);
 				// write(iout, 103) problemname;
-				Io.WriteLine(iout, f100, ProblemName);
+				Io.WriteLine(OUT, f100, ProblemName);
 
 				Calctau(d1);
 				Setup(d1);
@@ -161,10 +161,10 @@
 				if (ngraph != 1) {
 					elev = IncompressibleFoudationElevation + CompressibleFoundationTotalInitialThickness;
 					// write(iplot, 211) time, elev;
-					Io.WriteLine(iplot, f900, CurrentTime, elev);
+					Io.WriteLine(PLOT, f900, CurrentTime, elev);
 					elev = elev + DredgedFillInitialThicknesses[1];
 					// write(iplot, 211) time, elev;
-					Io.WriteLine(iplot, f900, CurrentTime, elev);
+					Io.WriteLine(PLOT, f900, CurrentTime, elev);
 				}
 
 				if (SimulationPrintOption == 2) {
@@ -173,11 +173,11 @@
 					// Check for Compressible Foundation;
 					// write(iout, 104);
 					// write(iout, 204);
-					Io.WriteLine(iout, f104);
+					Io.WriteLine(OUT, f104);
 					for (i = 1; i <= CompressibleFoundationLayers; i++) {
 						ii = CompressibleFoundationMaterialIDs[i];
 						// write(iout, 205) ii, hbl[i], nsub1[i], cacc[ii], crcc[ii], OCR[i];
-						Io.WriteLine(iout, f205, ii, CompressibleFoundationInitialThicknesses[i], CompressibleFoundationSublayers[i], CaCcs[ii], CrCcs[ii], CompressibleFoundationOCR[i]);
+						Io.WriteLine(OUT, f205, ii, CompressibleFoundationInitialThicknesses[i], CompressibleFoundationSublayers[i], CaCcs[ii], CrCcs[ii], CompressibleFoundationOCR[i]);
 					}
 
 					for (ii = 1; ii <= CompressibleFoundationMaterialTypes; ii++) {
@@ -186,11 +186,11 @@
 						// write(iout, 105) k, gsdf[k];
 						// write(iout, 108);
 						// write(iout, 109);
-						Io.WriteLine(iout, f105, k, SpecificGravities[k]);
-						Io.WriteLine(iout, f108);
+						Io.WriteLine(OUT, f105, k, SpecificGravities[k]);
+						Io.WriteLine(OUT, f108);
 						for (i = 1; i <= j; i++) {
 							// write(iout, 110) i, voidratio[i, k], effectivestress[i, k], perm[i, k], pk[i, k], beta[i, k], dsde[i, k], alpha[i, k];
-							Io.WriteLine(iout, f110, i, VoidRatios[i, k], EffectiveStresses[i, k], Permeabilities[i, k], pk[i, k], beta[i, k], dsde[i, k], alpha[i, k]);
+							Io.WriteLine(OUT, f110, i, VoidRatios[i, k], EffectiveStresses[i, k], Permeabilities[i, k], pk[i, k], beta[i, k], dsde[i, k], alpha[i, k]);
 						}
 					}
 
@@ -201,11 +201,11 @@
 							// write (iout, 1050) indi_id[id], OCR[i];
 							// write(iout, 108);
 							// write(iout, 109);
-							Io.WriteLine(iout, f1049, id, SpecificGravities[id], indi_id[id], CompressibleFoundationOCR[i]);
-							Io.WriteLine(iout, f108);
+							Io.WriteLine(OUT, f1049, id, SpecificGravities[id], indi_id[id], CompressibleFoundationOCR[i]);
+							Io.WriteLine(OUT, f108);
 							for (j = 1; j <= RelationDefinitionLines[id]; j++) {
 								// write(iout, 110) j, voidratio[j, id], effectivestress[j, id], perm[j, id], pk[j, id], beta[j, id], dsde[j, id], alpha[j, id];
-								Io.WriteLine(iout, f110, j, VoidRatios[j, id], EffectiveStresses[j, id], Permeabilities[j, id], pk[j, id], beta[j, id], dsde[j, id], alpha[j, id]);
+								Io.WriteLine(OUT, f110, j, VoidRatios[j, id], EffectiveStresses[j, id], Permeabilities[j, id], pk[j, id], beta[j, id], dsde[j, id], alpha[j, id]);
 							}
 						}
 					}
@@ -220,26 +220,26 @@
 			// Print soil data for dredged fill;
 			// write(iout, 111);
 			// write(iout, 304);
-			Io.WriteLine(iout, f111);
+			Io.WriteLine(OUT, f111);
 			j = intx(matindex);
 			for (i = 1; i <= DredgedFillMaterialTypes; i++) {
 				k = nmat[j];
 				// write(iout, 114) k, gsdf[k], cacc[k], crcc[k], sl[k], dl[k], h2[k], sat[k];
-				Io.WriteLine(iout, f114, k, SpecificGravities[k], CaCcs[k], CrCcs[k], DredgedFillSaturationLimits[k], DredgedFillDesiccationLimits[k], DredgedFillDryingMaxDepth[k], DredgedFillAverageSaturation[k]);
+				Io.WriteLine(OUT, f114, k, SpecificGravities[k], CaCcs[k], CrCcs[k], DredgedFillSaturationLimits[k], DredgedFillDesiccationLimits[k], DredgedFillDryingMaxDepth[k], DredgedFillAverageSaturation[k]);
 				j = j + 1;
 			}
 
 			for (ii = 1; ii <= DredgedFillMaterialTypes; ii++) {
 				k = nmat[intx(matindex)];
 				// write(iout, 305) k;
-				Io.WriteLine(iout, f305, k);
+				Io.WriteLine(OUT, f305, k);
 				j = RelationDefinitionLines[k];
 				// write(iout, 108);
 				// write(iout, 109);
-				Io.WriteLine(iout, f108);
+				Io.WriteLine(OUT, f108);
 				for (i = 1; i <= j; i++) {
 					// write(iout, 110) i, voidratio[i, k], effectivestress[i, k], perm[i, k], pk[i, k], beta[i, k], dsde[i, k], alpha[i, k];
-					Io.WriteLine(iout, f110, i, VoidRatios[i, k], EffectiveStresses[i, k], Permeabilities[i, k], pk[i, k], beta[i, k], dsde[i, k], alpha[i, k]);
+					Io.WriteLine(OUT, f110, i, VoidRatios[i, k], EffectiveStresses[i, k], Permeabilities[i, k], pk[i, k], beta[i, k], dsde[i, k], alpha[i, k]);
 				}
 				matindex = matindex + 1;
 			}
@@ -247,20 +247,20 @@
 			// write(iout, 202);
 			// write(iout, 310);
 			// Print Summary Table Headings;
-			Io.WriteLine(iout, f202);
+			Io.WriteLine(OUT, f202);
 			elev = 0.0;
 			// write(iout, 311) elev, iddf[1], hdf[1], nsub[1], e00[1], tds, ms, nsc;
-			Io.WriteLine(iout, f311, elev, DredgedFillMaterialIDs[1], DredgedFillInitialThicknesses[1], DredgedFillSublayers[1], DredgedFillInitialVoidRatios[1], DredgedFillDesiccationDelayDays, DredgedFillDesiccationDelayMonths, DredgedFillPrintOption);
+			Io.WriteLine(OUT, f311, elev, DredgedFillMaterialIDs[1], DredgedFillInitialThicknesses[1], DredgedFillSublayers[1], DredgedFillInitialVoidRatios[1], DredgedFillDesiccationDelayDays, DredgedFillDesiccationDelayMonths, DredgedFillPrintOption);
 			kk = 1;
 			for (i = 1; i <= PrintTimes; i++) {
 				if (NewDredgedFillInitialThicknesses[i] != 0.0) {
 					kk = kk + 1;
 					// moves to next value in arrays;
 					// write(iout, 311) printt[i], iddf[kk], ahdf[i], nsub[kk], e00[kk], atds[i], nms[i], nnsc[i];
-					Io.WriteLine(iout, f311, PrintTimeDates[i], DredgedFillMaterialIDs[kk], NewDredgedFillInitialThicknesses[i], DredgedFillSublayers[kk], DredgedFillInitialVoidRatios[kk], NewDredgedFillDesiccationDelayDays[i], NewDredgedFillDesiccationDelayMonths[i], NewDredgedFillPrintOptions[i]);
+					Io.WriteLine(OUT, f311, PrintTimeDates[i], DredgedFillMaterialIDs[kk], NewDredgedFillInitialThicknesses[i], DredgedFillSublayers[kk], DredgedFillInitialVoidRatios[kk], NewDredgedFillDesiccationDelayDays[i], NewDredgedFillDesiccationDelayMonths[i], NewDredgedFillPrintOptions[i]);
 				} else {
 					// write(iout, 312) printt[i], atds[i], nms[i], nnsc[i];
-					Io.WriteLine(iout, f312, PrintTimeDates[i], NewDredgedFillDesiccationDelayDays[i], NewDredgedFillDesiccationDelayMonths[i], NewDredgedFillPrintOptions[i]);
+					Io.WriteLine(OUT, f312, PrintTimeDates[i], NewDredgedFillDesiccationDelayDays[i], NewDredgedFillDesiccationDelayMonths[i], NewDredgedFillPrintOptions[i]);
 				}
 			}
 
@@ -269,7 +269,7 @@
 				if (!IsCurveAdjusteds[k]) {
 					// Flag changed to False if it was adjusted;
 					// write(iout, 2001);
-					Io.WriteLine(iout, f2001, k);
+					Io.WriteLine(OUT, f2001, k);
 				}
 			}
 
@@ -277,21 +277,21 @@
 				// Print summary of rainfall and evaporation potential;
 				// write(iout, 119);
 				// write(iout, 120);
-				Io.WriteLine(iout, f119);
+				Io.WriteLine(OUT, f119);
 				for (i = 1; i <= 12; i++) {
 					// write(iout, 121) i, rf(i), pep[i];
-					Io.WriteLine(iout, f121, i, AverageMonthlyRainfall[i], MaxEnvironmentalPotentialEvaporation[i]);
+					Io.WriteLine(OUT, f121, i, AverageMonthlyRainfall[i], MaxEnvironmentalPotentialEvaporation[i]);
 				}
 				// Print calculation data;
 				// write(iout, 115);
 				// write(iout, 116);
 				// write(iout, 117);
 				// write(iout, 118) tau, e0, zk0, du0;
-				Io.WriteLine(iout, f115, TimeStep, IncompressibleFoudationVoidRatio, IncompressibleFoudationPermeability, IncompressibleFoudationDrainagePathLength);
+				Io.WriteLine(OUT, f115, TimeStep, IncompressibleFoudationVoidRatio, IncompressibleFoudationPermeability, IncompressibleFoudationDrainagePathLength);
 				// Print desication parametrs;
 				// write(iout, 200);
 				// write(iout, 201)dreff, ce, tds, ms, wtelev, xel;
-				Io.WriteLine(iout, f200, SurfaceDrainageEfficiencyFactor, MaxDredgedFillEvaporationEfficiency, DredgedFillDesiccationDelayDays, DredgedFillDesiccationDelayMonths, ExternalWaterSurfaceElevation, IncompressibleFoudationElevation);
+				Io.WriteLine(OUT, f200, SurfaceDrainageEfficiencyFactor, MaxDredgedFillEvaporationEfficiency, DredgedFillDesiccationDelayDays, DredgedFillDesiccationDelayMonths, ExternalWaterSurfaceElevation, IncompressibleFoudationElevation);
 				// Print tables of initial conditions;
 				nflag = 1;
 				Dataout();

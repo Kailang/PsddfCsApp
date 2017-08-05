@@ -281,7 +281,7 @@
 								if (stab < TimeStep) {
 									// write[iout, 100] i;
 									// write[*, 100] i;
-									Io.WriteLine(iout, f100, i);
+									Io.WriteLine(OUT, f100, i);
 									Cmd.WriteLine(f100, i);
 								}
 								id = CompressibleFoundationMaterialIDs[i];
@@ -289,7 +289,7 @@
 								if (cons <= dz1[i]) {
 									// write[iout, 101] i;
 									// write[*, 101] i;
-									Io.WriteLine(iout, f101, i);
+									Io.WriteLine(OUT, f101, i);
 									Cmd.WriteLine(f101, i);
 								}
 							} else {
@@ -316,7 +316,7 @@
 							if (stab < TimeStep) {
 								// write[iout, 102] i;
 								// write[*, 102] i;
-								Io.WriteLine(iout, f102, i);
+								Io.WriteLine(OUT, f102, i);
 								Cmd.WriteLine(f102, i);
 							}
 							id = DredgedFillMaterialIDs[i];
@@ -324,7 +324,7 @@
 							if (cons <= dz[i]) {
 								// write[iout, 103] i;
 								// write[*, 103] i;
-								Io.WriteLine(iout, f103, i);
+								Io.WriteLine(OUT, f103, i);
 								Cmd.WriteLine(f103, i);
 							}
 						} else {

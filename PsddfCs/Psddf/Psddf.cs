@@ -30,12 +30,12 @@
     ! ndata2 = 1 for output not saved; = 2 for output saved for continuation
     read(in, *) line, problemname, ndata1, ndata2
 			*/
-			Io.OpenRead(inx, InputFilePath);
+			Io.OpenRead(IN, InputFilePath);
 //			Cmd.WriteLine("Open the input file and read the data into the program");
-			Io.ReadInt(inx);
-			ProblemName = Io.ReadString(inx);
-			IsNewSimulation = Io.ReadInt(inx);
-			IsNotSaveContinuation = Io.ReadInt(inx);
+			Io.ReadInt(IN);
+			ProblemName = Io.ReadString(IN);
+			IsNewSimulation = Io.ReadInt(IN);
+			IsNotSaveContinuation = Io.ReadInt(IN);
 
 			/*
     ! ifn will name all the files used for output
@@ -53,24 +53,24 @@
         read(in, *) line, npt, recoveryflag, dimensionflag
 				*/
 //				Cmd.WriteLine("Read Flag to determine if a recovery out put is needed");
-				Io.ReadInt(inx);
-				SimulationPrintOption = Io.ReadInt(inx);
-				IsSaveRecovery = Io.ReadInt(inx);
-				IsEnglishUnit = Io.ReadInt(inx);
+				Io.ReadInt(IN);
+				SimulationPrintOption = Io.ReadInt(IN);
+				IsSaveRecovery = Io.ReadInt(IN);
+				IsEnglishUnit = Io.ReadInt(IN);
 
 				/*
         ! Consolidation Calculation data
         read(in, *) line, e0, zk0, du0, xel, wtelev, gw, tol
 				*/
 //				Cmd.WriteLine("Consolidation Calculation data");
-				Io.ReadInt(inx);
-				IncompressibleFoudationVoidRatio = Io.ReadDouble(inx);
-				IncompressibleFoudationPermeability = Io.ReadDouble(inx);
-				IncompressibleFoudationDrainagePathLength = Io.ReadDouble(inx);
-				IncompressibleFoudationElevation = Io.ReadDouble(inx);
-				ExternalWaterSurfaceElevation = Io.ReadDouble(inx);
-				WaterUnitWeight = Io.ReadDouble(inx);
-				SecondaryCompressionExcessPoreWaterPressureLimit = Io.ReadDouble(inx);
+				Io.ReadInt(IN);
+				IncompressibleFoudationVoidRatio = Io.ReadDouble(IN);
+				IncompressibleFoudationPermeability = Io.ReadDouble(IN);
+				IncompressibleFoudationDrainagePathLength = Io.ReadDouble(IN);
+				IncompressibleFoudationElevation = Io.ReadDouble(IN);
+				ExternalWaterSurfaceElevation = Io.ReadDouble(IN);
+				WaterUnitWeight = Io.ReadDouble(IN);
+				SecondaryCompressionExcessPoreWaterPressureLimit = Io.ReadDouble(IN);
 
 				/*
         ! Soil data for foundation layer or soft layer
@@ -80,10 +80,10 @@
         read(in, *)line, numbl, ntypescompress, ntypedredge
 				*/
 //				Cmd.WriteLine("Soil data for foundation layer or soft layer");
-				Io.ReadInt(inx);
-				CompressibleFoundationLayers = Io.ReadInt(inx);
-				CompressibleFoundationMaterialTypes = Io.ReadInt(inx);
-				DredgedFillMaterialTypes = Io.ReadInt(inx);
+				Io.ReadInt(IN);
+				CompressibleFoundationLayers = Io.ReadInt(IN);
+				CompressibleFoundationMaterialTypes = Io.ReadInt(IN);
+				DredgedFillMaterialTypes = Io.ReadInt(IN);
 
 				/*
         if (numbl == 0) then
@@ -111,11 +111,11 @@
 				*/
 //				Cmd.WriteLine("Read from input file for compressible foundation");
 				for (int i = 1; i <= CompressibleFoundationLayers; i++) {
-					Io.ReadInt(inx);
-					CompressibleFoundationInitialThicknesses[i] = Io.ReadDouble(inx);
-					CompressibleFoundationMaterialIDs[i] = Io.ReadInt(inx);
-					CompressibleFoundationSublayers[i] = Io.ReadInt(inx);
-					CompressibleFoundationOCR[i] = Io.ReadDouble(inx);
+					Io.ReadInt(IN);
+					CompressibleFoundationInitialThicknesses[i] = Io.ReadDouble(IN);
+					CompressibleFoundationMaterialIDs[i] = Io.ReadInt(IN);
+					CompressibleFoundationSublayers[i] = Io.ReadInt(IN);
+					CompressibleFoundationOCR[i] = Io.ReadDouble(IN);
 				}
 
 				/*
@@ -130,19 +130,19 @@
         enddo
 				*/
 				for (int i = 1; i <= CompressibleFoundationMaterialTypes; i++) {
-					Io.ReadInt(inx);
-					MaterialID = Io.ReadInt(inx);
-					SpecificGravities[MaterialID] = Io.ReadDouble(inx);
-					CaCcs[MaterialID] = Io.ReadDouble(inx);
-					CrCcs[MaterialID] = Io.ReadDouble(inx);
-					RelationDefinitionLines[MaterialID] = Io.ReadInt(inx);
+					Io.ReadInt(IN);
+					MaterialID = Io.ReadInt(IN);
+					SpecificGravities[MaterialID] = Io.ReadDouble(IN);
+					CaCcs[MaterialID] = Io.ReadDouble(IN);
+					CrCcs[MaterialID] = Io.ReadDouble(IN);
+					RelationDefinitionLines[MaterialID] = Io.ReadInt(IN);
 					nmat[i] = MaterialID;
 
 					for (int j = 1; j <= RelationDefinitionLines[MaterialID]; j++) {
-						Io.ReadInt(inx);
-						VoidRatios[j, MaterialID] = Io.ReadDouble(inx);
-						EffectiveStresses[j, MaterialID] = Io.ReadDouble(inx);
-						Permeabilities[j, MaterialID] = Io.ReadDouble(inx);
+						Io.ReadInt(IN);
+						VoidRatios[j, MaterialID] = Io.ReadDouble(IN);
+						EffectiveStresses[j, MaterialID] = Io.ReadDouble(IN);
+						Permeabilities[j, MaterialID] = Io.ReadDouble(IN);
 					}
 				}
 					
@@ -180,16 +180,16 @@
 				*/
 //				Cmd.WriteLine("Read from input file for dredge fill");
 				for (int i = 1; i <= DredgedFillMaterialTypes; i++) {
-					Io.ReadInt(inx);
-					MaterialID = Io.ReadInt(inx);
-					SpecificGravities[MaterialID] = Io.ReadDouble(inx);
-					CaCcs[MaterialID] = Io.ReadDouble(inx);
-					CrCcs[MaterialID] = Io.ReadDouble(inx);
-					DredgedFillDesiccationLimits[MaterialID] = Io.ReadDouble(inx);
-					DredgedFillSaturationLimits[MaterialID] = Io.ReadDouble(inx);
-					DredgedFillDryingMaxDepth[MaterialID] = Io.ReadDouble(inx);
-					DredgedFillAverageSaturation[MaterialID] = Io.ReadDouble(inx);
-					RelationDefinitionLines[MaterialID] = Io.ReadInt(inx);
+					Io.ReadInt(IN);
+					MaterialID = Io.ReadInt(IN);
+					SpecificGravities[MaterialID] = Io.ReadDouble(IN);
+					CaCcs[MaterialID] = Io.ReadDouble(IN);
+					CrCcs[MaterialID] = Io.ReadDouble(IN);
+					DredgedFillDesiccationLimits[MaterialID] = Io.ReadDouble(IN);
+					DredgedFillSaturationLimits[MaterialID] = Io.ReadDouble(IN);
+					DredgedFillDryingMaxDepth[MaterialID] = Io.ReadDouble(IN);
+					DredgedFillAverageSaturation[MaterialID] = Io.ReadDouble(IN);
+					RelationDefinitionLines[MaterialID] = Io.ReadInt(IN);
 					nmat[intx(matindex)] = MaterialID;
 					matindex++;
 //					const string f114 =
@@ -198,10 +198,10 @@
 //					Cmd.WriteLine(f114, kom, gsdf[kom], cacc[kom], crcc[kom], sl[kom], dl[kom], h2[kom], sat[kom]);
 
 					for (int j = 1; j <= RelationDefinitionLines[MaterialID]; j++) {
-						Io.ReadInt(inx);
-						VoidRatios[j, MaterialID] = Io.ReadDouble(inx);
-						EffectiveStresses[j, MaterialID] = Io.ReadDouble(inx);
-						Permeabilities[j, MaterialID] = Io.ReadDouble(inx);
+						Io.ReadInt(IN);
+						VoidRatios[j, MaterialID] = Io.ReadDouble(IN);
+						EffectiveStresses[j, MaterialID] = Io.ReadDouble(IN);
+						Permeabilities[j, MaterialID] = Io.ReadDouble(IN);
 					}
 				}
 			
@@ -211,8 +211,8 @@
         ntime = ntime - 1
 				*/
 //				Cmd.WriteLine("Read the number of print times (must be less than 1000)");
-				Io.ReadInt(inx);
-				PrintTimes = Io.ReadInt(inx);
+				Io.ReadInt(IN);
+				PrintTimes = Io.ReadInt(IN);
 				PrintTimes--;
 
 				/*
@@ -220,14 +220,14 @@
         read(in, *) line, hdf(1), tds, ms, nsc, e00(1), iddf(1), nsub(1)
 				*/
 //				Cmd.WriteLine("Read for print times");
-				Io.ReadInt(inx);
-				DredgedFillInitialThicknesses[1] = Io.ReadDouble(inx);
-				DredgedFillDesiccationDelayDays = Io.ReadDouble(inx);
-				DredgedFillDesiccationDelayMonths = Io.ReadInt(inx);
-				DredgedFillPrintOption = Io.ReadInt(inx);
-				DredgedFillInitialVoidRatios[1] = Io.ReadDouble(inx);
-				DredgedFillMaterialIDs[1] = Io.ReadInt(inx);
-				DredgedFillSublayers[1] = Io.ReadInt(inx);
+				Io.ReadInt(IN);
+				DredgedFillInitialThicknesses[1] = Io.ReadDouble(IN);
+				DredgedFillDesiccationDelayDays = Io.ReadDouble(IN);
+				DredgedFillDesiccationDelayMonths = Io.ReadInt(IN);
+				DredgedFillPrintOption = Io.ReadInt(IN);
+				DredgedFillInitialVoidRatios[1] = Io.ReadDouble(IN);
+				DredgedFillMaterialIDs[1] = Io.ReadInt(IN);
+				DredgedFillSublayers[1] = Io.ReadInt(IN);
 
 				/*
         kk = 1
@@ -249,19 +249,19 @@
 				DredgedFillLayers = 1;
 				tds1 = DredgedFillDesiccationDelayDays;
 				for (int i = 1; i <= PrintTimes; i++) {
-					Io.ReadInt(inx);
-					PrintTimeDates[i] = Io.ReadDouble(inx);
-					NewDredgedFillInitialThicknesses[i] = Io.ReadDouble(inx);
-					NewDredgedFillDesiccationDelayDays[i] = Io.ReadDouble(inx);
-					NewDredgedFillDesiccationDelayMonths[i] = Io.ReadInt(inx);
-					NewDredgedFillPrintOptions[i] = Io.ReadInt(inx);
+					Io.ReadInt(IN);
+					PrintTimeDates[i] = Io.ReadDouble(IN);
+					NewDredgedFillInitialThicknesses[i] = Io.ReadDouble(IN);
+					NewDredgedFillDesiccationDelayDays[i] = Io.ReadDouble(IN);
+					NewDredgedFillDesiccationDelayMonths[i] = Io.ReadInt(IN);
+					NewDredgedFillPrintOptions[i] = Io.ReadInt(IN);
 
 					if (NewDredgedFillInitialThicknesses[i] != 0) {
 						// New layer has been added;
 						DredgedFillLayers++;
-						DredgedFillInitialVoidRatios[DredgedFillLayers] = Io.ReadDouble(inx);
-						DredgedFillMaterialIDs[DredgedFillLayers] = Io.ReadInt(inx);
-						DredgedFillSublayers[DredgedFillLayers] = Io.ReadInt(inx);
+						DredgedFillInitialVoidRatios[DredgedFillLayers] = Io.ReadDouble(IN);
+						DredgedFillMaterialIDs[DredgedFillLayers] = Io.ReadInt(IN);
+						DredgedFillSublayers[DredgedFillLayers] = Io.ReadInt(IN);
 						DredgedFillInitialThicknesses[DredgedFillLayers] = NewDredgedFillInitialThicknesses[i];
 					}
 				}
@@ -299,10 +299,10 @@
         read(in, *) line, tpm, dreff, ce
 				*/
 //				Cmd.WriteLine("Desiccation calculation data");
-				Io.ReadInt(inx);
-				DaysInMonth = Io.ReadDouble(inx);
-				SurfaceDrainageEfficiencyFactor = Io.ReadDouble(inx);
-				MaxDredgedFillEvaporationEfficiency = Io.ReadDouble(inx);
+				Io.ReadInt(IN);
+				DaysInMonth = Io.ReadDouble(IN);
+				SurfaceDrainageEfficiencyFactor = Io.ReadDouble(IN);
+				MaxDredgedFillEvaporationEfficiency = Io.ReadDouble(IN);
 			
 				/*
         ! Read in precipitation and evaportationdata
@@ -314,9 +314,9 @@
 				*/
 //				Cmd.WriteLine("Read in precipitation and evaportationdata");
 				for (int i = 1; i <= 12; i++) {
-					Io.ReadInt(inx);
-					MaxEnvironmentalPotentialEvaporation[i] = Io.ReadDouble(inx);
-					AverageMonthlyRainfall[i] = Io.ReadDouble(inx);
+					Io.ReadInt(IN);
+					MaxEnvironmentalPotentialEvaporation[i] = Io.ReadDouble(IN);
+					AverageMonthlyRainfall[i] = Io.ReadDouble(IN);
 				}
 
 				MaterialTypes = CompressibleFoundationMaterialTypes + DredgedFillMaterialTypes;
@@ -442,9 +442,9 @@
         ! newdf = number of new dredge material types to be used
         read(in, *) line, mtime, newdf
 				*/
-				Io.ReadInt(inx);
-				ContinuationPrintTimes = Io.ReadInt(inx);
-				ContinuationDredgedFillMaterialTypes = Io.ReadInt(inx);
+				Io.ReadInt(IN);
+				ContinuationPrintTimes = Io.ReadInt(IN);
+				ContinuationDredgedFillMaterialTypes = Io.ReadInt(IN);
 
 				/*
         call datain(dim1, voidratio, perm, effectivestress, tol)
@@ -467,24 +467,24 @@
         enddo
 				*/
 				for (int i = 1; i <= ContinuationDredgedFillMaterialTypes; i++) {
-					Io.ReadInt(inx);
-					MaterialID = Io.ReadInt(inx);
-					SpecificGravities[MaterialID] = Io.ReadDouble(inx);
-					CaCcs[MaterialID] = Io.ReadDouble(inx);
-					CrCcs[MaterialID] = Io.ReadDouble(inx);
-					DredgedFillDesiccationLimits[MaterialID] = Io.ReadDouble(inx);
-					DredgedFillSaturationLimits[MaterialID] = Io.ReadDouble(inx);
-					DredgedFillDryingMaxDepth[MaterialID] = Io.ReadDouble(inx);
-					DredgedFillAverageSaturation[MaterialID] = Io.ReadDouble(inx);
-					RelationDefinitionLines[MaterialID] = Io.ReadInt(inx);
+					Io.ReadInt(IN);
+					MaterialID = Io.ReadInt(IN);
+					SpecificGravities[MaterialID] = Io.ReadDouble(IN);
+					CaCcs[MaterialID] = Io.ReadDouble(IN);
+					CrCcs[MaterialID] = Io.ReadDouble(IN);
+					DredgedFillDesiccationLimits[MaterialID] = Io.ReadDouble(IN);
+					DredgedFillSaturationLimits[MaterialID] = Io.ReadDouble(IN);
+					DredgedFillDryingMaxDepth[MaterialID] = Io.ReadDouble(IN);
+					DredgedFillAverageSaturation[MaterialID] = Io.ReadDouble(IN);
+					RelationDefinitionLines[MaterialID] = Io.ReadInt(IN);
 					nmat[intx(matindex)] = MaterialID;
 					matindex++;
 
 					for (int j = 1; j <= RelationDefinitionLines[MaterialID]; j++) {
-						Io.ReadInt(inx);
-						VoidRatios[j, MaterialID] = Io.ReadDouble(inx);
-						EffectiveStresses[j, MaterialID] = Io.ReadDouble(inx);
-						Permeabilities[j, MaterialID] = Io.ReadDouble(inx);
+						Io.ReadInt(IN);
+						VoidRatios[j, MaterialID] = Io.ReadDouble(IN);
+						EffectiveStresses[j, MaterialID] = Io.ReadDouble(IN);
+						Permeabilities[j, MaterialID] = Io.ReadDouble(IN);
 					}
 				}
 
@@ -504,20 +504,20 @@
         enddo
 				*/
 				for (int i = nm; i <= PrintTimes; i++) {
-					Io.ReadInt(inx);
-					PrintTimeDates[i] = Io.ReadDouble(inx);
-					NewDredgedFillInitialThicknesses[i] = Io.ReadDouble(inx);
-					NewDredgedFillDesiccationDelayDays[i] = Io.ReadDouble(inx);
-					NewDredgedFillDesiccationDelayMonths[i] = Io.ReadInt(inx);
-					NewDredgedFillPrintOptions[i] = Io.ReadInt(inx);
+					Io.ReadInt(IN);
+					PrintTimeDates[i] = Io.ReadDouble(IN);
+					NewDredgedFillInitialThicknesses[i] = Io.ReadDouble(IN);
+					NewDredgedFillDesiccationDelayDays[i] = Io.ReadDouble(IN);
+					NewDredgedFillDesiccationDelayMonths[i] = Io.ReadInt(IN);
+					NewDredgedFillPrintOptions[i] = Io.ReadInt(IN);
 
 					if (NewDredgedFillInitialThicknesses[i] != 0) {
 						// New layer has been added;
 						DredgedFillLayers++;
 						IsDredgedFillInPrimaryConsolidations[DredgedFillLayers] = true;
-						DredgedFillInitialVoidRatios[DredgedFillLayers] = Io.ReadDouble(inx);
-						DredgedFillMaterialIDs[DredgedFillLayers] = Io.ReadInt(inx);
-						DredgedFillSublayers[DredgedFillLayers] = Io.ReadInt(inx);
+						DredgedFillInitialVoidRatios[DredgedFillLayers] = Io.ReadDouble(IN);
+						DredgedFillMaterialIDs[DredgedFillLayers] = Io.ReadInt(IN);
+						DredgedFillSublayers[DredgedFillLayers] = Io.ReadInt(IN);
 						DredgedFillInitialThicknesses[DredgedFillLayers] = NewDredgedFillInitialThicknesses[i];
 						DredgedFillTotleInitialThickness = DredgedFillTotleInitialThickness + DredgedFillInitialThicknesses[DredgedFillLayers];
 					}

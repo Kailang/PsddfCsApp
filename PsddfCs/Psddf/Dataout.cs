@@ -107,20 +107,20 @@
 
 			if (CurrentTime <= TimeStep) {
 				// write(igracf, '(i10)') numbl;
-				Io.WriteLine(igracf, "{0,10}", CompressibleFoundationLayers);
+				Io.WriteLine(GCF, "{0,10}", CompressibleFoundationLayers);
 				j = 1;
 				for (i = 1; i <= CompressibleFoundationLayers; i++) {
 					j = j + CompressibleFoundationSublayers[i];
 					// write(igracf, '(g20.10)') z1[j];
-					Io.WriteLine(igracf, "{0,20:F10}", CompressibleFoundationCoordZ[j]);
+					Io.WriteLine(GCF, "{0,20:F10}", CompressibleFoundationCoordZ[j]);
 					j = j + 1;
 				}
 			}
 
 			// write(igracf, '(i10)') nblpoint;
 			// write(igradf, '(i10)') ndfpoint;
-			Io.WriteLine(igracf, "{0,10}", nblpoint);
-			Io.WriteLine(igradf, "{0,10}", ndfpoint);
+			Io.WriteLine(GCF, "{0,10}", nblpoint);
+			Io.WriteLine(GDF, "{0,10}", ndfpoint);
 
 			// For Compressible Foundation;
 			if (IsFoundationCompressible != 2) {
@@ -128,11 +128,11 @@
 				switch (nflag) {
 				case 0:
 					// write(iout, 108);
-					Io.WriteLine(iout, f108);
+					Io.WriteLine(OUT, f108);
 					break;
 				case 1:
 					// write(iout, 100);
-					Io.WriteLine(iout, f100);
+					Io.WriteLine(OUT, f100);
 					// Saving intital void ratio in compressible layer for recovery calculation;
 					if (IsSaveRecovery == 1) {
 						for (i = 1; i <= nblpoint; i++) {
@@ -145,14 +145,14 @@
 				if (DredgedFillPrintOption != 3) {
 					// write(iout, 101);
 					// write(iout, 102);
-					Io.WriteLine(iout, f101);
+					Io.WriteLine(OUT, f101);
 					i = nblpoint;
 					for (j = CompressibleFoundationLayers; j >= 1; j -= 1) {
 						id = CompressibleFoundationMaterialIDs[j];
 						for (k = 1; k <= CompressibleFoundationSublayers[j] + 1; k++) {
 							// write(iout, 103)a1[i], xi1[i], z1[i], e11[i], er[i], efin1[i], id;
 							Io.WriteLine(
-								iout, f103, 
+								OUT, f103, 
 								CompressibleFoundationCoordA[i], 
 								CompressibleFoundationCoordXI[i], 
 								CompressibleFoundationCoordZ[i], 
@@ -166,14 +166,14 @@
 					if (DredgedFillPrintOption != 2) {
 						// write(iout, 104);
 						// write(iout, 105);
-						Io.WriteLine(iout, f104);
+						Io.WriteLine(OUT, f104);
 						i = nblpoint;
 						for (j = CompressibleFoundationLayers; j >= 1; j -= 1) {
 							id = CompressibleFoundationMaterialIDs[j];
 							for (k = 1; k <= CompressibleFoundationSublayers[j] + 1; k++) {
 								// write(iout, 103) xi1[i], tostr1[i], efstr1[i], uw1[i], u01[i], u1[i], id;
 								Io.WriteLine(
-									iout, f105, 
+									OUT, f105, 
 									CompressibleFoundationCoordXI[i], 
 									CompressibleFoundationTotalStree[i], 
 									CompressibleFoundationEffectiveStree[i], 
@@ -188,10 +188,10 @@
 				}
 
 				// write(igracf, '(g20.10)') time;
-				Io.WriteLine(igracf, "{0,20:F10}", CurrentTime);
+				Io.WriteLine(GCF, "{0,20:F10}", CurrentTime);
 				for (i = 1; i <= nblpoint; i++) {
 					// write(igracf, '(4g20.10)') z1[i], u1[i], efstr1[i], er[i];
-					Io.WriteLine(igracf, "{0,20:F10}{1,20:F10}{2,20:F10}{3,20:F10}", CompressibleFoundationCoordZ[i], CompressibleFoundationExcessPoreWaterPressure[i], CompressibleFoundationEffectiveStree[i], CompressibleFoundationCurrentVoidRatio[i]);
+					Io.WriteLine(GCF, "{0,20:F10}{1,20:F10}{2,20:F10}{3,20:F10}", CompressibleFoundationCoordZ[i], CompressibleFoundationExcessPoreWaterPressure[i], CompressibleFoundationEffectiveStree[i], CompressibleFoundationCurrentVoidRatio[i]);
 				}
 
 				// write(*, '(80(''*''))');
@@ -202,7 +202,7 @@
 					"                COMPRESSIBLE FOUNDATION");
 
 				Io.Write(
-					iout, f107h, 
+					OUT, f107h, 
 					CurrentTime, 
 					CompressibleFoundationAverageConsolidationDegree * 100, 
 					CompressibleFoundationTotalSettlement, 
@@ -215,13 +215,13 @@
 					CompressibleFoundationTotalSettlement - CompressibleFoundationSecondaryCompressionSettlement);
 
 				if (CompressibleFoundationAverageConsolidationDegree > uconmax) {
-					Io.Write(iout, f107sc, CurrentTime, CompressibleFoundationSecondaryCompressionSettlement);
+					Io.Write(OUT, f107sc, CurrentTime, CompressibleFoundationSecondaryCompressionSettlement);
 					Cmd.Write(f107sc, CurrentTime, CompressibleFoundationSecondaryCompressionSettlement);
 				} else {
-					Io.Write(iout, "            Secondary Compression Not Activited at Day {0:F0}\n\n", CurrentTime);
+					Io.Write(OUT, "            Secondary Compression Not Activited at Day {0:F0}\n\n", CurrentTime);
 					Cmd.Write("            Secondary Compression Not Activited at Day {0:F0}\n\n", CurrentTime);
 				}
-				Io.WriteLine(iout, f107epc, CurrentTime, CompressibleFoundationFinalSettlement);
+				Io.WriteLine(OUT, f107epc, CurrentTime, CompressibleFoundationFinalSettlement);
 				Cmd.WriteLine(f107epc, CurrentTime, CompressibleFoundationFinalSettlement);
 
 				// write(iout, 107) time, ucon1 * 100;
@@ -241,12 +241,12 @@
 			switch (nflag) {
 			case 0:
 				// write(iout, 109);
-				Io.WriteLine(iout, f109);
+				Io.WriteLine(OUT, f109);
 				break;
 			case 1:
 				// Intitial conditions;
 				// write(iout, 106);
-				Io.WriteLine(iout, f106);
+				Io.WriteLine(OUT, f106);
 				// Saving intital void ratio in compressible layer for recovery calculation;
 				if (IsSaveRecovery == 1) {
 					for (i = 1; i <= ndfpoint; i++) {
@@ -261,14 +261,14 @@
 			if (DredgedFillPrintOption != 3) {
 				// write(iout, 101);
 				// write(iout, 102);
-				Io.WriteLine(iout, f101);
+				Io.WriteLine(OUT, f101);
 				i = ndfpoint;
 				for (j = ndflayer; j >= 1; j -= 1) {
 					id = DredgedFillMaterialIDs[j];
 					for (k = 1; k <= DredgedFillSublayers[j] + 1; k++) {
 						// write(iout, 103)a[i], xi[i], z[i], e1[i], e[i], efin[i], id;
 						Io.WriteLine(
-							iout, f103, 
+							OUT, f103, 
 							DredgedFillCoordA[i], 
 							DredgedFillCoordXI[i], 
 							DredgedFillCoordZ[i], 
@@ -283,14 +283,14 @@
 				if (DredgedFillPrintOption != 2) {
 					// write(iout, 104);
 					// write(iout, 105);
-					Io.WriteLine(iout, f104);
+					Io.WriteLine(OUT, f104);
 					i = ndfpoint;
 					for (j = ndflayer; j >= 1; j -= 1) {
 						id = DredgedFillMaterialIDs[j];
 						for (k = 1; k <= DredgedFillSublayers[j] + 1; k++) {
 							// write(iout, 103) xi[i], totstr[i], effstr[i], uw[i], u0[i], u[i], id;
 							Io.WriteLine(
-								iout, f105, 
+								OUT, f105, 
 								DredgedFillCoordXI[i], 
 								DredgedFillTotalStress[i], 
 								DredgedFillEffectiveStress[i], 
@@ -305,11 +305,11 @@
 			}
 
 			// write(igradf, '(g20.10)') time;
-			Io.WriteLine(igradf, "{0,20:F10}", CurrentTime);
+			Io.WriteLine(GDF, "{0,20:F10}", CurrentTime);
 
 			for (i = 1; i <= ndfpoint; i++) {
 				// write(igradf, '(4g20.10)')z[i], u[i], effstr[i], e[i];
-				Io.WriteLine(igradf, "{0,20:F10}{1,20:F10}{2,20:F10}{3,20:F10}", DredgedFillCoordZ[i], DredgedFillExcessPoreWaterPressure[i], DredgedFillEffectiveStress[i], DredgedFillCurrentVoidRatio[i]);
+				Io.WriteLine(GDF, "{0,20:F10}{1,20:F10}{2,20:F10}{3,20:F10}", DredgedFillCoordZ[i], DredgedFillExcessPoreWaterPressure[i], DredgedFillEffectiveStress[i], DredgedFillCurrentVoidRatio[i]);
 			}
 
 			// write(*, '(80(''*''))');
@@ -320,7 +320,7 @@
 				"                DREDGED FILL");
 
 			Io.Write(
-				iout, f107h, 
+				OUT, f107h, 
 				CurrentTime, 
 				DredgedFillAverageConsolidationDegree * 100, 
 				DredgedFillTotalSettlement, 
@@ -333,20 +333,20 @@
 				DredgedFillTotalSettlement - DredgedFillSecondaryCompressionSettlement - DredgedFillDesiccationSettlement);
 
 			if (DredgedFillAverageConsolidationDegree > uconmax) {
-				Io.Write(iout, f107sc, CurrentTime, DredgedFillSecondaryCompressionSettlement);
+				Io.Write(OUT, f107sc, CurrentTime, DredgedFillSecondaryCompressionSettlement);
 				Cmd.Write(f107sc, CurrentTime, DredgedFillSecondaryCompressionSettlement);
 			} else {
-				Io.Write(iout, "            Secondary Compression Not Activited at Day {0:F0}\n\n", CurrentTime);
+				Io.Write(OUT, "            Secondary Compression Not Activited at Day {0:F0}\n\n", CurrentTime);
 				Cmd.Write("            Secondary Compression Not Activited at Day {0:F0}\n\n", CurrentTime);
 			}
 			if (CurrentTime >= DredgedFillDesiccationDelayDays) {
-				Io.Write(iout, f107d, CurrentTime, DredgedFillDesiccationSettlement);
+				Io.Write(OUT, f107d, CurrentTime, DredgedFillDesiccationSettlement);
 				Cmd.Write(f107d, CurrentTime, DredgedFillDesiccationSettlement);
 			} else {
-				Io.Write(iout, "            Desiccation Not Activited at Day {0:F0}\n\n", CurrentTime);
+				Io.Write(OUT, "            Desiccation Not Activited at Day {0:F0}\n\n", CurrentTime);
 				Cmd.Write("            Desiccation Not Activited at Day {0:F0}\n\n", CurrentTime);
 			}
-			Io.WriteLine(iout, f107epc, CurrentTime, DredgedFillFinalSettlement);
+			Io.WriteLine(OUT, f107epc, CurrentTime, DredgedFillFinalSettlement);
 			Cmd.WriteLine(f107epc, CurrentTime, DredgedFillFinalSettlement);
 
 //			if (time >= tds) {
@@ -385,18 +385,18 @@
 				if (ngraph != 1 && nloop != 0) {
 					elev = preelev + hdf1;
 					// write(iplot, 10) pretime, elev;
-					Io.WriteLine(iplot, f10, pretime, elev);
+					Io.WriteLine(PLOT, f10, pretime, elev);
 				}
 
 				elev = IncompressibleFoudationElevation - CompressibleFoundationTotalSettlement + DredgedFillCoordXI[ndfpoint] + CompressibleFoundationTotalInitialThickness;
 				// write(iout, 114) elev;
 				// write(*, 114) elev;
 				// write(*, *);
-				Io.WriteLine(iout, f114, CurrentTime, elev);
+				Io.WriteLine(OUT, f114, CurrentTime, elev);
 				Cmd.WriteLine(f114, CurrentTime, elev);
 				if (ngraph != 1) {
 					// write(iplot, 10) time, elev;
-					Io.WriteLine(iplot, f10, CurrentTime, elev);
+					Io.WriteLine(PLOT, f10, CurrentTime, elev);
 					pretime = CurrentTime;
 					preelev = elev;
 					nloop = 1;

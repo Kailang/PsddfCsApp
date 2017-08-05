@@ -212,18 +212,18 @@
 			// Time conversion from day to year;
 			// This prints the output data;
 			// write(recoveryout, 922) time_yr, total_element1 + total_element;
-			Io.WriteLine(recoveryout, f922, time_yr, total_element1 + total_element);
+			Io.WriteLine(RCY, f922, time_yr, total_element1 + total_element);
 			// Time and number of consolidation elements;
 			// Print out dredged layer first (upper part);
 			for (i = total_element; i >= 1; i -= 1) {
 				// write(recoveryout, 923) id_element[i], thick[i], porosity_element[i], density_element[i], flux[i];
-				Io.WriteLine(recoveryout, f923, id_element[i], thick[i], porosity_element[i], density_element[i], flux[i]);
+				Io.WriteLine(RCY, f923, id_element[i], thick[i], porosity_element[i], density_element[i], flux[i]);
 			}
 			// Print out compressible foundation if considered;
 			if (IsFoundationCompressible != 2) {
 				for (i = total_element1; i >= 1; i -= 1) {
 					// write(recoveryout, 923) id_element1[i], thick1[i], porosity_element1[i], density_element1[i], flux1[i];
-					Io.WriteLine(recoveryout, f923, id_element1[i], thick1[i], porosity_element1[i], density_element1[i], flux1[i]);
+					Io.WriteLine(RCY, f923, id_element1[i], thick1[i], porosity_element1[i], density_element1[i], flux1[i]);
 				}
 			}
 

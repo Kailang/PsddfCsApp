@@ -14,41 +14,41 @@
 		/// <summary>
 		/// Input Channel: Main input.
 		/// </summary>
-		const int inx = 10;
+		public const int IN = 10;
 		/// <summary>
 		/// Output Channel: Main Output / Calculations.
 		/// </summary>
-		const int iout = 11;
-		/// <summary>
-		/// Output Channel: Surface Elevation data.
-		/// </summary>
-		const int iplot = 12;
-		/// <summary>
-		/// Output Channel: Stores the output from a previous simulation so that it can be restarted;
-		/// Available when ndata2 == 2, save for continuation.
-		/// </summary>
-		const int iouts = 13;
+		public const int OUT = 11;
 		/// <summary>
 		/// Input Channel: Stores the output from a previous simulation so that it can be restarted.
 		/// Available when ndata1 == 2, read from continuation.
 		/// </summary>
-		const int ins = 14;
+		public const int INS = 14;
+		/// <summary>
+		/// Output Channel: Stores the output from a previous simulation so that it can be restarted;
+		/// Available when ndata2 == 2, save for continuation.
+		/// </summary>
+		public const int OUTS = 13;
+		/// <summary>
+		/// Output Channel: Surface Elevation data.
+		/// </summary>
+		public const int PLOT = 12;
 		/// <summary>
 		/// Output Channel: Compressible Foundation Results.
 		/// </summary>
-		const int igracf = 15;
+		public const int GCF = 15;
 		/// <summary>
 		/// Output Channel: Dredged Material Results.
 		/// </summary>
-		const int igradf = 16;
+		public const int GDF = 16;
 		/// <summary>
 		/// Output Channel: For use with the CAP model.
 		/// </summary>
-		const int recoveryout = 20;
+		public const int RCY = 20;
 		/// <summary>
 		/// Output Channel: For outputing the PSI file.
 		/// </summary>
-		const int inout = 30;
+		public const int INOUT = 30;
 
 		#endregion
 
@@ -160,7 +160,7 @@
 		/// Kailang: Now secondary compression will be turned on automatically if the degree of consolidation is larger than maxUcon.
 		///          This variable is now useless.
 		/// </summary>
-		double SecondaryCompressionExcessPoreWaterPressureLimit;
+		public double SecondaryCompressionExcessPoreWaterPressureLimit;
 		/// <summary>
 		/// Kailang: Now secondary compression will be turned on automatically if the degree of consolidation is larger than maxUcon.
 		/// </summary>
@@ -612,7 +612,8 @@
 		/// Previous time for recovery.
 		/// </summary>
 		double pre_time;
-		int[] nmat = new int[nleymax + 1];
+
+		public readonly int[] nmat = new int[nleymax + 1];
 
 		/*
     ! Group Four
