@@ -59,6 +59,11 @@
 		/// </summary>
 		public string InputFilePath;
 		/// <summary>
+		/// Path or name of the output data file.
+		/// Need to be set before calling Ifn().
+		/// </summary>
+		public string OutputFilePath = "p_temp_opt", ContinuationFilePath = "temp_contfile";
+		/// <summary>
 		/// Logical denotion the following options:
 		/// true = print simulation process.
 		/// false = do not print simulation process.
