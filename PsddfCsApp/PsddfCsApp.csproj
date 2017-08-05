@@ -93,5 +93,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PsddfCs\PsddfCs.csproj">
+      <Project>{746c97bf-e707-40d9-a46d-5130ef657e13}</Project>
+      <Name>PsddfCs</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

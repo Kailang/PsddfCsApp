@@ -13,16 +13,20 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PsddfCsApp
-{
+using PsddfCs;
+
+namespace PsddfCsApp {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window
-	{
-		public MainWindow ()
-		{
+	public partial class MainWindow : Window {
+		public MainWindow () {
 			InitializeComponent();
+		}
+
+		private void OnSimulateMenuClicked (object sender, RoutedEventArgs e) {
+			var psddf = new Psddf();
+			psddf.Main(new[] { FilePathTextBox.Text });
 		}
 	}
 }
