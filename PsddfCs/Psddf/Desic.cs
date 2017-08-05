@@ -8,7 +8,7 @@ namespace PsddfCs {
 		/// Calculate the new void ratios due to desiccation in the upper parts of the dreged fill.
 		/// Only called in Fdifeq.
 		/// </summary>
-		public void Desic (int d1) {
+		void Desic (int d1) {
 //			Cmd.Print("Desic()");
 			int i, j, ji, jin, id, ij, ntemp;
 			bool lset, lset1, lset2, lset3, check;

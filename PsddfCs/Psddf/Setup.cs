@@ -3,7 +3,7 @@
 		/// <summary>
 		/// Only called in Intro.
 		/// </summary>
-		public void Setup (int d1) {
+		void Setup (int d1) {
 			int jin, i, ii, id, k, ij, j, kk = 0, para;
 			double efs, h2mx, dz2, g1, w1, hsa, wl1, efsdl = 0, elev, overpress, voidx = 0, totstress;
 

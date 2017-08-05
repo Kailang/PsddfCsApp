@@ -1,6 +1,6 @@
 ﻿namespace PsddfCs {
 	public partial class Psddf {
-		public static void Boundary (
+		static void Boundary (
 			int d1, int[] ldf, int l, int k, 
 			double[] e, double[] f, double[] efin, double[] dz, double[] u, 
 			double[,] pk, double[,] voidratio, double[,] effectivestress, double[] eff, 

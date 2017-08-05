@@ -4,7 +4,7 @@
 		/// Calculate new void ratios as consolidation proceeds.
 		/// Only called in Psddf.
 		/// </summary>
-		public void Fdifq (int d1) {
+		void Fdifq (int d1) {
 			int jin, id, i = 0, ii, ij, l, k, j;
 
 			double cf, dz2, dz12, cf1, est = 0, cc = 0, ca;

@@ -5,7 +5,7 @@ namespace PsddfCs {
 		/// <summary>
 		/// Interpolate the specified d1, min, comin, comp, eval, comout, jin, id, aux and ix.
 		/// </summary>
-		public static void Intpl (
+		static void Intpl (
 			int d1, int[] min, double comin, double[,] comp, double[,] eval, 
 			ref double comout, ref int jin, int id, double[,] aux, int ix) {
 

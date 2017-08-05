@@ -4,7 +4,7 @@
 		/// Save the .psi input file of the simulation to the filename.
 		/// </summary>
 		/// <param name="filename">Filename.</param>
-		public void Inputout (string filename) {
+		void Inputout (string filename) {
 			int i, j = 100, kk;
 
 			Io.OpenWrite(inout, filename);

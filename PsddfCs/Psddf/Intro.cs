@@ -4,7 +4,7 @@
 		/// Print input data and results of initial calculations in tabular form.
 		/// </summary>
 		/// <param name="d1">D1.</param>
-		public void Intro (int d1) {
+		void Intro (int d1) {
 			int i, j, ii, k, kk, id;
 			double elev;
 

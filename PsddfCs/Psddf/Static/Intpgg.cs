@@ -1,6 +1,6 @@
 ﻿namespace PsddfCs {
 	public partial class Psddf {
-		public static void Intpgg (
+		static void Intpgg (
 			int d1, int[] min, double comin, double[,] comp, double[,] eval, double[,] evall, 
 			ref double comout, ref double cmoutt, ref int jin, int id, double[,] aux, int ix, int ii, int jj) {
 

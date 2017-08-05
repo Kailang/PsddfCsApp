@@ -4,7 +4,7 @@
 		/// Calculate functions for dredged fill and compresible foundation.
 		/// Only called in Calctau.
 		/// </summary>
-		public void Pfunc () {
+		void Pfunc () {
 			int kk, k, i, l, ii, ij;
 			double cd, den;
 

@@ -1,6 +1,6 @@
 ﻿namespace PsddfCs {
 	public partial class Psddf {
-		public void Dataout () {
+		void Dataout () {
 			int i, j, k, id;
 			double elev;
 

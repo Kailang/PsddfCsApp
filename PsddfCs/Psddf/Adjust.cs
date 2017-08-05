@@ -2,7 +2,7 @@
 
 namespace PsddfCs {
 	public partial class Psddf {
-		public void Adjust (int d1, int d2, int ii, int id, int total_point, double[,] voidratio, ref bool flag) {
+		void Adjust (int d1, int d2, int ii, int id, int total_point, double[,] voidratio, ref bool flag) {
 			/*
 			! Local Variables
 			integer:: i

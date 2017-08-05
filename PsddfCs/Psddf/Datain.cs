@@ -5,7 +5,7 @@ namespace PsddfCs {
 		/// <summary>
 		/// Read .pci binary file to restore status.
 		/// </summary>
-		public void Datain () {
+		void Datain () {
 			int i, k, id;
 
 			// read(ins) ntypescompress, ntypedredge, numbl, numdf, hhbl, hhdf, add

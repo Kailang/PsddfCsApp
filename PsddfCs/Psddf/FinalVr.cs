@@ -3,7 +3,7 @@
 		/// <summary>
 		/// Called in Setup, Reset, and Desic.
 		/// </summary>
-		public void FinalVr (
+		void FinalVr (
 			int d1, double[,] voidratio, double[,] effectivestress, double[] ef, double[] dzz, 
 			int[] nsubcap, int ncap, int[] idm, int nnodes, ref double top_stress, int ndesicl, ref int jin, double[,] aux) {
 

@@ -3,7 +3,7 @@
 		/// <summary>
 		/// Calculate alpha and beta functions for current void ratios.
 		/// </summary>
-		public void Vrfunc (int d1) {
+		void Vrfunc (int d1) {
 			int i, j, k, kk = 0, id, jin;
 		
 			jin = 2;

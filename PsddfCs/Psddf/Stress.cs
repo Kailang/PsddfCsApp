@@ -3,7 +3,7 @@
 		/// <summary>
 		/// Only called in Psddf.
 		/// </summary>
-		public void Stress (int d1) {
+		void Stress (int d1) {
 			int i, jin, id, kk = 0, k, j;
 			double wl1, g1, w1, elev, overpress, voidx = 0, h_solid, hsa;
 

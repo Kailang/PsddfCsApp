@@ -6,7 +6,7 @@
 		/// The array that are read from are generated in dataout.f90;
 		/// There have been some modifications due to interface between dredge lifts not considered before;
 		/// </summary>
-		public void Recovery () {
+		void Recovery () {
 			/*
 			integer, dimension(1000):: id_element1, id_element
 			integer:: total_element1, total_element, id_max_pore

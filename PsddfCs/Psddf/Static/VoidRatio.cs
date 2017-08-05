@@ -3,7 +3,7 @@
 		/// <summary>
 		/// Calculate the void ratio.
 		/// </summary>
-		public static double VoidRatio (
+		static double VoidRatio (
 			double f1, double f2, double f10, double af, double af1, double af2, double dz, double dz2, double cff, double gcid, double bf1) {
 		
 			double df, df2dz, ac;

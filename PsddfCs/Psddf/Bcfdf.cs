@@ -1,6 +1,6 @@
 ﻿namespace PsddfCs {
 	public partial class Psddf {
-		public void Bcfdf (int d1, double[,] voidratio, double[,]effectivestress, double[,] pk, ref int jin) {
+		void Bcfdf (int d1, double[,] voidratio, double[,]effectivestress, double[,] pk, ref int jin) {
 			int id;
 			double pk_upper = 0, pk_lower = 0, voidx = 0, const_k, u_inter, estress_int;
 

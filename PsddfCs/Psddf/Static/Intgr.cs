@@ -4,7 +4,7 @@
 		/// Evaluates the void ratio integral to each mesh point in the material.
 		/// Only f is modified.
 		/// </summary>
-		public static void Intgr (double[] e, double dz, int n, double[] f, double acum, int index) {
+		static void Intgr (double[] e, double dz, int n, double[] f, double acum, int index) {
 			int i, nn, nnn;
 
 			// ... by Simpson rule for all odd numbered mesh points;

@@ -4,7 +4,7 @@
 		/// Update previous calculations to handle additional depositions of dredged fill.
 		/// Only called in Psddf.
 		/// </summary>
-		public void Reset (int d1) {
+		void Reset (int d1) {
 			int i, ii, jin, id, nt, n, ntemp;
 			double el, ell1, vlop, de, topstress;
 

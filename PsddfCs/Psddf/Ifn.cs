@@ -3,7 +3,7 @@
 		/// <summary>
 		/// Create output files and open output streams.
 		/// </summary>
-		public void Ifn () {
+		void Ifn () {
 			/*
     eof = 0
     prev = 99

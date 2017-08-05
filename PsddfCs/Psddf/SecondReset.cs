@@ -4,7 +4,7 @@
 		/// Reset the values used in the secondary compresion process.
 		/// Only called in Desic and Reset.
 		/// </summary>
-		public void SecondReset (
+		void SecondReset (
 			int d1, double[,] voidratio, double[,] effectivestress, double[,] pk, double[,] dvds, double[,] dsde, double[,] alpha, double[,] beta, 
 			int nlayer, int n_point) {
 

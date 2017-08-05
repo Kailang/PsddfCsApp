@@ -1,6 +1,6 @@
 ﻿namespace PsddfCs {
 	public partial class Psddf {
-		public static void FirstPoint (
+		static void FirstPoint (
 			int d1, int[] ldf, ref double vr, double[,] voidratio, double[,] dsde, double dudz, double gcid, 
 			double f1, double f2, double[] af, int l, double dzz, double cff, double bf1, double efin1, double e11, ref int jin, int id, double[,] aux) {
 		

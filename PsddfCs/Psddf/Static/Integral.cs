@@ -4,7 +4,7 @@
 		/// Integral the specified e, dz, nsubcap, f, ncap and ndesicl.
 		/// Only f is modified.
 		/// </summary>
-		public static void Integral (double[] e, double[] dz, int[] nsubcap, double[] f, int ncap, int ndesicl) {
+		static void Integral (double[] e, double[] dz, int[] nsubcap, double[] f, int ncap, int ndesicl) {
 			double acum;
 			int i, index;
 

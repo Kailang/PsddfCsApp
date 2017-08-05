@@ -3,7 +3,7 @@
 		/// <summary>
 		/// Write .pci binary file to record current status.
 		/// </summary>
-		public void Savdat () {
+		void Savdat () {
 			int i, k, id;
 
 			// write(iouts) ntypescompress, ntypedredge, numbl, numdf, hhbl, hhdf, add

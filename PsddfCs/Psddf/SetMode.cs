@@ -5,7 +5,7 @@ namespace PsddfCs {
 		/// <summary>
 		/// Set fname1 and lstat using args from console.
 		/// </summary>
-		public void SetMode (string[] args) {
+		void SetMode (string[] args) {
 			if (args.Length < 1)
 				throw new ConsoleException("Too few arugments.");
 

@@ -4,7 +4,7 @@
 		/// Calculate the tau(the time step) variable when it is not given for the user.
 		/// Only called in Intro.
 		/// </summary>
-		public void Calctau (int d1) {
+		void Calctau (int d1) {
 			int i, j, nbd, jin = 0, k, l, temp, id;
 			double dzz, efs, dabl, v = 0, tdz, taubl, taudf, sum;
 			double[] cent_eff = new double[nleymax], cent_eff_ocr = new double[nleymax], cent_e_ocr = new double[nleymax];
