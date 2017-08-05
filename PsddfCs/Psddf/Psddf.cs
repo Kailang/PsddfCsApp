@@ -1,5 +1,10 @@
 ﻿namespace PsddfCs {
 	public partial class Psddf {
+		public Psddf (ICmd cmd, IIo io) {
+			Cmd = cmd;
+			Io = io;
+		}
+
 		/// <summary>
 		/// ndff = 1 if not a restart loop.
 		/// </summary>

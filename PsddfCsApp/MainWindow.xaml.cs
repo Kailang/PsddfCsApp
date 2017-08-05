@@ -25,7 +25,7 @@ namespace PsddfCsApp {
 		}
 
 		private void OnSimulateMenuClicked (object sender, RoutedEventArgs e) {
-			var psddf = new Psddf();
+			var psddf = new Psddf(new Cmd(), new Io());
 			psddf.Main(new[] { FilePathTextBox.Text });
 		}
 	}

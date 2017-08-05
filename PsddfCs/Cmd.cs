@@ -1,28 +1,40 @@
 ﻿using System;
 
 namespace PsddfCs {
-	public static class Cmd {
-		public static void Write (object o = null) {
+	public interface ICmd {
+		void Write (object o = null);
+		void Write (string format, params object[] args);
+
+		void WriteLine (object o = null);
+		void WriteLine (string format, params object[] args);
+
+		string ReadLine ();
+
+		void Print (params object[] objs);
+	}
+
+	public class Cmd : ICmd {
+		public void Write (object o = null) {
 			Console.Write(o);
 		}
 
-		public static void Write (string format, params object[] args) {
+		public void Write (string format, params object[] args) {
 			Console.Write(format, args);
 		}
 
-		public static void WriteLine (object o = null) {
+		public void WriteLine (object o = null) {
 			Console.WriteLine(o);
 		}
 
-		public static void WriteLine (string format, params object[] args) {
+		public void WriteLine (string format, params object[] args) {
 			Console.WriteLine(format, args);
 		}
 
-		public static string ReadLine () {
+		public string ReadLine () {
 			return Console.ReadLine();
 		}
 
-		public static void Print (params object[] objs) {
+		public void Print (params object[] objs) {
 			foreach (var obj in objs)
 				if (obj.GetType().IsArray)
 					foreach (var item in (System.Collections.ICollection)obj)

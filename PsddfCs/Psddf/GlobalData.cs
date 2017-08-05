@@ -8,6 +8,8 @@
 		const int dim1 = 100, dim2 = 200;
 
 		#region IO Channels
+		public readonly ICmd Cmd;
+		public readonly IIo Io;
 
 		/// <summary>
 		/// Input Channel: Main input.
