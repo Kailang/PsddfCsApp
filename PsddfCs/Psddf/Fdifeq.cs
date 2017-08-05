@@ -41,7 +41,7 @@
 					l = 1;
 					for (k = 1; k <= CompressibleFoundationLayers; k++) {
 						id = CompressibleFoundationMaterialIDs[k];
-						cf1 = tau / (WaterUnitWeight * dz1[k]);
+						cf1 = TimeStep / (WaterUnitWeight * dz1[k]);
 						dz12 = dz1[k] * 2.0;
 						if (IsCompressibleFoundationInPrimaryConsolidations[k]) {
 							if (l == 1) {
@@ -94,14 +94,14 @@
 							Intpgg(d1, RelationDefinitionLines, CompressibleFoundationFinalVoidRatio[l], VoidRatios, dvds, dvds, ref cc, ref voidx, ref jin, id, auxbl, l, 12, 12);
 							ca = cc * CaCcs[id];
 
-							CompressibleFoundationCurrentVoidRatio[l] = f1[l] + ca * dlog10(CurrentTime / (CurrentTime - tau));
+							CompressibleFoundationCurrentVoidRatio[l] = f1[l] + ca * dlog10(CurrentTime / (CurrentTime - TimeStep));
 
 							for (j = 1; j <= CompressibleFoundationSublayers[k]; j++) {
 								jin = 2;
 								i = l + j;
 								Intpgg(d1, RelationDefinitionLines, CompressibleFoundationFinalVoidRatio[i], VoidRatios, dvds, dvds, ref cc, ref voidx, ref jin, id, auxbl, i, 12, 12);
 								ca = cc * CaCcs[id];
-								CompressibleFoundationCurrentVoidRatio[i] = f1[i] + ca * dlog10(CurrentTime / (CurrentTime - tau));
+								CompressibleFoundationCurrentVoidRatio[i] = f1[i] + ca * dlog10(CurrentTime / (CurrentTime - TimeStep));
 							}
 							Integral(sub(f1, CompressibleFoundationCurrentVoidRatio), dz1, CompressibleFoundationSublayers, ffint1, CompressibleFoundationLayers, 0);
 							CompressibleFoundationSecondaryCompressionSettlement = CompressibleFoundationSecondaryCompressionSettlement + (ffint1[i] - ffint1[l]);
@@ -139,7 +139,7 @@
 				l = 1;
 				for (k = 1; k <= ndflayer; k++) {
 					id = DredgedFillMaterialIDs[k];
-					cf = tau / (WaterUnitWeight * dz[k]);
+					cf = TimeStep / (WaterUnitWeight * dz[k]);
 					dz2 = dz[k] * 2.0;
 					if (IsDredgedFillInPrimaryConsolidations[k]) {
 						if (l == 1 && IsFoundationCompressible == 2) {
@@ -195,14 +195,14 @@
 					} else {
 						Intpgg(d1, RelationDefinitionLines, DredgedFillFinalVoidRatio[l], VoidRatios, dvds, dvds, ref cc, ref voidx, ref jin, id, auxdf, l, 12, 12);
 						ca = cc * CaCcs[id];
-						DredgedFillCurrentVoidRatio[l] = f[l] + ca * dlog10(CurrentTime / (CurrentTime - tau));
+						DredgedFillCurrentVoidRatio[l] = f[l] + ca * dlog10(CurrentTime / (CurrentTime - TimeStep));
 
 						for (j = 1; j <= DredgedFillSublayers[k]; j++) {
 							jin = 2;
 							i = l + j;
 							Intpgg(d1, RelationDefinitionLines, DredgedFillFinalVoidRatio[i], VoidRatios, dvds, dvds, ref cc, ref voidx, ref jin, id, auxdf, i, 12, 12);
 							ca = cc * CaCcs[id];
-							DredgedFillCurrentVoidRatio[i] = f[i] + ca * dlog10(CurrentTime / (CurrentTime - tau));
+							DredgedFillCurrentVoidRatio[i] = f[i] + ca * dlog10(CurrentTime / (CurrentTime - TimeStep));
 
 						}
 
@@ -236,7 +236,7 @@
 				Vrfunc(d1);
 
 				// calculate current time and check against desication time and print time;
-				CurrentTime = CurrentTime + tau;
+				CurrentTime = CurrentTime + TimeStep;
 
 				if (CurrentTime > DredgedFillDesiccationDelayDays && mm == 1) {
 					mm = 2;
@@ -278,7 +278,7 @@
 								}
 								ii = ii + 1;
 								stab = abs((dz1[i] * dz1[i] * WaterUnitWeight) / (2.0 * raf));
-								if (stab < tau) {
+								if (stab < TimeStep) {
 									// write[iout, 100] i;
 									// write[*, 100] i;
 									Io.WriteLine(iout, f100, i);
@@ -313,7 +313,7 @@
 							}
 							ii = ii + 1;
 							stab = abs((dz[i] * dz[i] * WaterUnitWeight) / (2.0 * raf));
-							if (stab < tau) {
+							if (stab < TimeStep) {
 								// write[iout, 102] i;
 								// write[*, 102] i;
 								Io.WriteLine(iout, f102, i);

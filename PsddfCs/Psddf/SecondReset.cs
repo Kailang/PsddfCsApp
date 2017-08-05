@@ -86,8 +86,8 @@
 								alphamax = abs(auxbl[9, i]);
 							}
 							tautemp = (pow(dz1[k], 2) * WaterUnitWeight) / (2 * alphamax);
-							if (tautemp < tau) {
-								tau = 0.99 * tautemp;
+							if (tautemp < TimeStep) {
+								TimeStep = 0.99 * tautemp;
 							}
 						}
 					}
@@ -164,8 +164,8 @@
 							alphamax = abs(auxdf[9, i]);
 						}
 						tautemp = (pow(dz[k], 2) * WaterUnitWeight) / (2 * alphamax);
-						if (tautemp < tau) {
-							tau = 0.99 * tautemp;
+						if (tautemp < TimeStep) {
+							TimeStep = 0.99 * tautemp;
 						}
 					}
 					Integral(DredgedFillCurrentVoidRatio, dz, DredgedFillSublayers, fint, nlayer, 0);

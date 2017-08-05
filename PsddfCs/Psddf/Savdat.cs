@@ -41,7 +41,7 @@
 			Io.StreamWrite(iouts, hdf1, DredgedFillTotalSettlement, CompressibleFoundationTotalSettlement);
 
 			// write(iouts) sfin, sfin1, tau, time, tprint
-			Io.StreamWrite(iouts, DredgedFillFinalSettlement, CompressibleFoundationFinalSettlement, tau, CurrentTime, tprint);
+			Io.StreamWrite(iouts, DredgedFillFinalSettlement, CompressibleFoundationFinalSettlement, TimeStep, CurrentTime, tprint);
 
 			// write(iouts) ucon, ucon1, vri1
 			Io.StreamWrite(iouts, DredgedFillAverageConsolidationDegree, CompressibleFoundationAverageConsolidationDegree, vri1);

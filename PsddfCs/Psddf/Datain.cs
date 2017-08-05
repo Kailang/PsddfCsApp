@@ -67,7 +67,7 @@ namespace PsddfCs {
 			// read(ins) sfin, sfin1, tau, time, tprint
 			DredgedFillFinalSettlement = Io.StreamReadDouble(ins);
 			CompressibleFoundationFinalSettlement = Io.StreamReadDouble(ins);
-			tau = Io.StreamReadDouble(ins);
+			TimeStep = Io.StreamReadDouble(ins);
 			CurrentTime = Io.StreamReadDouble(ins);
 			tprint = Io.StreamReadDouble(ins);
 

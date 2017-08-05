@@ -147,9 +147,9 @@
 			}
 
 			if (taubl < taudf) {
-				tau = taubl * 0.99;
+				TimeStep = taubl * 0.99;
 			} else {
-				tau = taudf * 0.99;
+				TimeStep = taudf * 0.99;
 			}
 		}
 

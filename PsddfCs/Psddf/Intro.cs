@@ -287,7 +287,7 @@
 				// write(iout, 116);
 				// write(iout, 117);
 				// write(iout, 118) tau, e0, zk0, du0;
-				Io.WriteLine(iout, f115, tau, IncompressibleFoudationVoidRatio, IncompressibleFoudationPermeability, IncompressibleFoudationDrainagePathLength);
+				Io.WriteLine(iout, f115, TimeStep, IncompressibleFoudationVoidRatio, IncompressibleFoudationPermeability, IncompressibleFoudationDrainagePathLength);
 				// Print desication parametrs;
 				// write(iout, 200);
 				// write(iout, 201)dreff, ce, tds, ms, wtelev, xel;

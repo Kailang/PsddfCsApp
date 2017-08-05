@@ -105,7 +105,7 @@
 			
 			#endregion
 
-			if (CurrentTime <= tau) {
+			if (CurrentTime <= TimeStep) {
 				// write(igracf, '(i10)') numbl;
 				Io.WriteLine(igracf, "{0,10}", CompressibleFoundationLayers);
 				j = 1;
