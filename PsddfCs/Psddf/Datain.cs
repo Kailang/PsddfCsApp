@@ -61,19 +61,19 @@ namespace PsddfCs {
 				DredgedFillInitialThicknesses[i] = Io.StreamReadDouble(ins);
 			
 			hdf1 = Io.StreamReadDouble(ins);
-			sett = Io.StreamReadDouble(ins);
-			sett1 = Io.StreamReadDouble(ins);
+			DredgedFillTotalSettlement = Io.StreamReadDouble(ins);
+			CompressibleFoundationTotalSettlement = Io.StreamReadDouble(ins);
 			
 			// read(ins) sfin, sfin1, tau, time, tprint
-			sfin = Io.StreamReadDouble(ins);
-			sfin1 = Io.StreamReadDouble(ins);
+			DredgedFillFinalSettlement = Io.StreamReadDouble(ins);
+			CompressibleFoundationFinalSettlement = Io.StreamReadDouble(ins);
 			tau = Io.StreamReadDouble(ins);
-			time = Io.StreamReadDouble(ins);
+			CurrentTime = Io.StreamReadDouble(ins);
 			tprint = Io.StreamReadDouble(ins);
 
 			// read(ins) ucon, ucon1, vri1
-			ucon = Io.StreamReadDouble(ins);
-			ucon1 = Io.StreamReadDouble(ins);
+			DredgedFillAverageConsolidationDegree = Io.StreamReadDouble(ins);
+			CompressibleFoundationAverageConsolidationDegree = Io.StreamReadDouble(ins);
 			vri1 = Io.StreamReadDouble(ins);
 
 			// read(ins) du0, dudz10, e0
@@ -108,9 +108,9 @@ namespace PsddfCs {
 			// read(ins) qdf, setc, setd, setsdf, setsbl
 			qdf = Io.StreamReadDouble(ins);
 			setc = Io.StreamReadDouble(ins);
-			setd = Io.StreamReadDouble(ins);
-			setsdf = Io.StreamReadDouble(ins);
-			setsbl = Io.StreamReadDouble(ins);
+			DredgedFillDesiccationSettlement = Io.StreamReadDouble(ins);
+			DredgedFillSecondaryCompressionSettlement = Io.StreamReadDouble(ins);
+			CompressibleFoundationSecondaryCompressionSettlement = Io.StreamReadDouble(ins);
 
 			// read(ins) tds, tpm, vrint
 			DredgedFillDesiccationDelayDays = Io.StreamReadDouble(ins);
@@ -146,25 +146,25 @@ namespace PsddfCs {
 			*/
 			for (i = 1; i <= ndfpoint; i++) {
 				// read(ins)  a(i), af(i), bf(i), e(i), e1(i)
-				a[i] = Io.StreamReadDouble(ins);
+				DredgedFillCoordA[i] = Io.StreamReadDouble(ins);
 				af[i] = Io.StreamReadDouble(ins);
 				bf[i] = Io.StreamReadDouble(ins);
-				e[i] = Io.StreamReadDouble(ins);
-				e1[i] = Io.StreamReadDouble(ins);
+				DredgedFillCurrentVoidRatio[i] = Io.StreamReadDouble(ins);
+				DredgedFillInitialVoidRatio[i] = Io.StreamReadDouble(ins);
 
 				// read(ins)  efin(i), effstr(i), f(i), fint(i), totstr(i)
-				efin[i] = Io.StreamReadDouble(ins);
-				effstr[i] = Io.StreamReadDouble(ins);
+				DredgedFillFinalVoidRatio[i] = Io.StreamReadDouble(ins);
+				DredgedFillEffectiveStress[i] = Io.StreamReadDouble(ins);
 				f[i] = Io.StreamReadDouble(ins);
 				fint[i] = Io.StreamReadDouble(ins);
-				totstr[i] = Io.StreamReadDouble(ins);
+				DredgedFillTotalStress[i] = Io.StreamReadDouble(ins);
 
 				// read(ins)  u(i), u0(i), uw(i), xi(i), z(i)
-				u[i] = Io.StreamReadDouble(ins);
-				u0[i] = Io.StreamReadDouble(ins);
-				uw[i] = Io.StreamReadDouble(ins);
-				xi[i] = Io.StreamReadDouble(ins);
-				z[i] = Io.StreamReadDouble(ins);
+				DredgedFillExcessPoreWaterPressure[i] = Io.StreamReadDouble(ins);
+				DredgedFillHydrostaticPoreWaterPressure[i] = Io.StreamReadDouble(ins);
+				DredgedFillTotalPoreWaterPressure[i] = Io.StreamReadDouble(ins);
+				DredgedFillCoordXI[i] = Io.StreamReadDouble(ins);
+				DredgedFillCoordZ[i] = Io.StreamReadDouble(ins);
 
 				// read(ins)  et(i)
 				et[i] = Io.StreamReadDouble(ins);
@@ -183,25 +183,25 @@ namespace PsddfCs {
 				// Check for Compressible Foundation
 				for (i = 1; i <= ndfpoint; i++) {
 					// read(ins)  a1(i), af1(i), bf1(i), er(i), e11(i)
-					a1[i] = Io.StreamReadDouble(ins);
+					CompressibleFoundationCoordA[i] = Io.StreamReadDouble(ins);
 					af1[i] = Io.StreamReadDouble(ins);
 					bf1[i] = Io.StreamReadDouble(ins);
-					er[i] = Io.StreamReadDouble(ins);
-					e11[i] = Io.StreamReadDouble(ins);
+					CompressibleFoundationCurrentVoidRatio[i] = Io.StreamReadDouble(ins);
+					CompressibleFoundationInitialVoidRatio[i] = Io.StreamReadDouble(ins);
 
 					// read(ins)  efin1(i), efstr1(i), f1(i), fint1(i), tostr1(i)
-					efin1[i] = Io.StreamReadDouble(ins);
-					efstr1[i] = Io.StreamReadDouble(ins);
+					CompressibleFoundationFinalVoidRatio[i] = Io.StreamReadDouble(ins);
+					CompressibleFoundationEffectiveStree[i] = Io.StreamReadDouble(ins);
 					f1[i] = Io.StreamReadDouble(ins);
 					fint1[i] = Io.StreamReadDouble(ins);
-					tostr1[i] = Io.StreamReadDouble(ins);
+					CompressibleFoundationTotalStree[i] = Io.StreamReadDouble(ins);
 
 					// read(ins)  u1(i), u01(i), uw1(i), xi1(i), z1(i)
-					u1[i] = Io.StreamReadDouble(ins);
-					u01[i] = Io.StreamReadDouble(ins);
-					uw1[i] = Io.StreamReadDouble(ins);
-					xi1[i] = Io.StreamReadDouble(ins);
-					z1[i] = Io.StreamReadDouble(ins);
+					CompressibleFoundationExcessPoreWaterPressure[i] = Io.StreamReadDouble(ins);
+					CompressibleFoundationHydrostaticPoreWaterPressure[i] = Io.StreamReadDouble(ins);
+					CompressibleFoundationTotalPoreWaterPressure[i] = Io.StreamReadDouble(ins);
+					CompressibleFoundationCoordXI[i] = Io.StreamReadDouble(ins);
+					CompressibleFoundationCoordZ[i] = Io.StreamReadDouble(ins);
 				}
 			}
 
@@ -221,7 +221,7 @@ namespace PsddfCs {
 				DredgedFillMaterialIDs[i] = Io.StreamReadInt(ins);
 				DredgedFillSublayers[i] = Io.StreamReadInt(ins);
 				dz[i] = Io.StreamReadDouble(ins);
-				primdf[i] = Io.StreamReadBool(ins);
+				IsDredgedFillInPrimaryConsolidations[i] = Io.StreamReadBool(ins);
 
 				// id = iddf(i)
 				id = DredgedFillMaterialIDs[i];
@@ -266,7 +266,7 @@ namespace PsddfCs {
 					CompressibleFoundationMaterialIDs[i] = Io.StreamReadInt(ins);
 					CompressibleFoundationSublayers[i] = Io.StreamReadInt(ins);
 					dz1[i] = Io.StreamReadDouble(ins);
-					primbl[i] = Io.StreamReadBool(ins);
+					IsCompressibleFoundationInPrimaryConsolidations[i] = Io.StreamReadBool(ins);
 
 					// id = iddf(i)
 					id = CompressibleFoundationMaterialIDs[i];

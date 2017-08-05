@@ -6,14 +6,13 @@
 		int ndff;
 
 		public void Main (string[] args) {
-			int q, i, j, kk;
 			double tds1 = 0;
 
-			for (q = 1; q <= npdf; q++) af[q] = 0;
+			for (int i = 1; i <= npdf; i++) af[i] = 0;
 			// Set flag to normally consolidated;
-			for (q = 1; q <= nleymax; q++) CompressibleFoundationOCR[q] = 1;
+			for (int i = 1; i <= nleymax; i++) CompressibleFoundationOCR[i] = 1;
 			// Clear adjustflags ;
-			for (q = 1; q <= npdf; q++) IsCurveAdjusteds[q] = true;
+			for (int i = 1; i <= npdf; i++) IsCurveAdjusteds[i] = true;
 			ndff = 1;
 
 			// Get the name of the file holding the input data
@@ -106,12 +105,12 @@
         enddo
 				*/
 //				Cmd.WriteLine("Read from input file for compressible foundation");
-				for (kk = 1; kk <= CompressibleFoundationLayers; kk++) {
+				for (int i = 1; i <= CompressibleFoundationLayers; i++) {
 					Io.ReadInt(inx);
-					CompressibleFoundationInitialThicknesses[kk] = Io.ReadDouble(inx);
-					CompressibleFoundationMaterialIDs[kk] = Io.ReadInt(inx);
-					CompressibleFoundationSublayers[kk] = Io.ReadInt(inx);
-					CompressibleFoundationOCR[kk] = Io.ReadDouble(inx);
+					CompressibleFoundationInitialThicknesses[i] = Io.ReadDouble(inx);
+					CompressibleFoundationMaterialIDs[i] = Io.ReadInt(inx);
+					CompressibleFoundationSublayers[i] = Io.ReadInt(inx);
+					CompressibleFoundationOCR[i] = Io.ReadDouble(inx);
 				}
 
 				/*
@@ -125,20 +124,20 @@
             enddo
         enddo
 				*/
-				for (kk = 1; kk <= CompressibleFoundationMaterialTypes; kk++) {
+				for (int i = 1; i <= CompressibleFoundationMaterialTypes; i++) {
 					Io.ReadInt(inx);
 					MaterialID = Io.ReadInt(inx);
 					SpecificGravities[MaterialID] = Io.ReadDouble(inx);
 					CaCcs[MaterialID] = Io.ReadDouble(inx);
 					CrCcs[MaterialID] = Io.ReadDouble(inx);
 					RelationDefinitionLines[MaterialID] = Io.ReadInt(inx);
-					nmat[kk] = MaterialID;
+					nmat[i] = MaterialID;
 
-					for (i = 1; i <= RelationDefinitionLines[MaterialID]; i++) {
+					for (int j = 1; j <= RelationDefinitionLines[MaterialID]; j++) {
 						Io.ReadInt(inx);
-						VoidRatios[i, MaterialID] = Io.ReadDouble(inx);
-						EffectiveStresses[i, MaterialID] = Io.ReadDouble(inx);
-						Permeabilities[i, MaterialID] = Io.ReadDouble(inx);
+						VoidRatios[j, MaterialID] = Io.ReadDouble(inx);
+						EffectiveStresses[j, MaterialID] = Io.ReadDouble(inx);
+						Permeabilities[j, MaterialID] = Io.ReadDouble(inx);
 					}
 				}
 					
@@ -150,7 +149,7 @@
         enddo
 				*/
 				matindex = CompressibleFoundationMaterialTypes + 1;
-				for (i = 1; i <= CompressibleFoundationLayers; i++) {
+				for (int i = 1; i <= CompressibleFoundationLayers; i++) {
 					CompressibleFoundationTotalInitialThickness = CompressibleFoundationTotalInitialThickness + CompressibleFoundationInitialThicknesses[i];
 				}
 			
@@ -175,7 +174,7 @@
         hhdf = 0.0
 				*/
 //				Cmd.WriteLine("Read from input file for dredge fill");
-				for (kk = 1; kk <= DredgedFillMaterialTypes; kk++) {
+				for (int i = 1; i <= DredgedFillMaterialTypes; i++) {
 					Io.ReadInt(inx);
 					MaterialID = Io.ReadInt(inx);
 					SpecificGravities[MaterialID] = Io.ReadDouble(inx);
@@ -193,11 +192,11 @@
 //						"  {0,3}   {1,7:F3}  {2,7:F3}  {3,7:F3}  {4,7:F3}    {5,7:F3}   {6,7:F3}   {7,7:F3}";
 //					Cmd.WriteLine(f114, kom, gsdf[kom], cacc[kom], crcc[kom], sl[kom], dl[kom], h2[kom], sat[kom]);
 
-					for (i = 1; i <= RelationDefinitionLines[MaterialID]; i++) {
+					for (int j = 1; j <= RelationDefinitionLines[MaterialID]; j++) {
 						Io.ReadInt(inx);
-						VoidRatios[i, MaterialID] = Io.ReadDouble(inx);
-						EffectiveStresses[i, MaterialID] = Io.ReadDouble(inx);
-						Permeabilities[i, MaterialID] = Io.ReadDouble(inx);
+						VoidRatios[j, MaterialID] = Io.ReadDouble(inx);
+						EffectiveStresses[j, MaterialID] = Io.ReadDouble(inx);
+						Permeabilities[j, MaterialID] = Io.ReadDouble(inx);
 					}
 				}
 			
@@ -242,9 +241,9 @@
         ! numdf = number of dredge fill deposits
         numdf = kk
 				*/
-				kk = 1;
+				DredgedFillLayers = 1;
 				tds1 = DredgedFillDesiccationDelayDays;
-				for (i = 1; i <= PrintTimes; i++) {
+				for (int i = 1; i <= PrintTimes; i++) {
 					Io.ReadInt(inx);
 					PrintTimeDates[i] = Io.ReadDouble(inx);
 					NewDredgedFillInitialThicknesses[i] = Io.ReadDouble(inx);
@@ -254,14 +253,13 @@
 
 					if (NewDredgedFillInitialThicknesses[i] != 0) {
 						// New layer has been added;
-						kk++;
-						DredgedFillInitialVoidRatios[kk] = Io.ReadDouble(inx);
-						DredgedFillMaterialIDs[kk] = Io.ReadInt(inx);
-						DredgedFillSublayers[kk] = Io.ReadInt(inx);
-						DredgedFillInitialThicknesses[kk] = NewDredgedFillInitialThicknesses[i];
+						DredgedFillLayers++;
+						DredgedFillInitialVoidRatios[DredgedFillLayers] = Io.ReadDouble(inx);
+						DredgedFillMaterialIDs[DredgedFillLayers] = Io.ReadInt(inx);
+						DredgedFillSublayers[DredgedFillLayers] = Io.ReadInt(inx);
+						DredgedFillInitialThicknesses[DredgedFillLayers] = NewDredgedFillInitialThicknesses[i];
 					}
 				}
-				DredgedFillLayers = kk;
 
 				/*
         ! Check the initial void ratio against the void ratio at zero effective stress
@@ -273,23 +271,24 @@
         enddo
 				*/
 //				Cmd.WriteLine("Check the initial void ratio against the void ratio at zero effective stress");
-				for (i = 1; i <= kk; i++) {
+				for (int i = 1; i <= DredgedFillLayers; i++) {
 					// Check all added layers;
 					if (DredgedFillInitialVoidRatios[i] != VoidRatios[1, DredgedFillMaterialIDs[i]]) {
 //						Cmd.WriteLine("e00[{0}] != voidratio[0, iddf[{0}]; call adjust()", i);
 						Adjust(dim1, dim2, i, DredgedFillMaterialIDs[i], RelationDefinitionLines[DredgedFillMaterialIDs[i]], VoidRatios, ref IsCurveAdjusteds[DredgedFillMaterialIDs[i]]);
 					}
 				}
-			
+
 				/*
         ! Calculate the total height of dredge fill added
         do i = 1, numdf
             hhdf = hhdf + hdf(i)
         enddo
 				*/
-				for (i = 1; i <= DredgedFillLayers; i++)
+				for (int i = 1; i <= DredgedFillLayers; i++) {
 					DredgedFillTotleInitialThickness += DredgedFillInitialThicknesses[i];
-			
+				}
+
 				/*
         ! Desiccation calculation data
         read(in, *) line, tpm, dreff, ce
@@ -309,7 +308,7 @@
         totaltypes = ntypescompress + ntypedredge
 				*/
 //				Cmd.WriteLine("Read in precipitation and evaportationdata");
-				for (i = 1; i <= 12; i++) {
+				for (int i = 1; i <= 12; i++) {
 					Io.ReadInt(inx);
 					MaxEnvironmentalPotentialEvaporation[i] = Io.ReadDouble(inx);
 					AverageMonthlyRainfall[i] = Io.ReadDouble(inx);
@@ -345,26 +344,26 @@
             enddo
         enddo
 				*/
-				for (i = 1; i <= CompressibleFoundationLayers; i++) {
-					primbl[i] = true;
+				for (int i = 1; i <= CompressibleFoundationLayers; i++) {
+					IsCompressibleFoundationInPrimaryConsolidations[i] = true;
 					tpbl[i] = 0.0;
 					difsecbl[i] = 0.0;
 				}
 
-				for (i = 1; i <= DredgedFillLayers; i++) {
-					primdf[i] = true;
+				for (int i = 1; i <= DredgedFillLayers; i++) {
+					IsDredgedFillInPrimaryConsolidations[i] = true;
 					tpdf[i] = 0.0;
 					difsecdf[i] = 0.0;
 				}
 
-				for (i = 1; i <= npdf; i++) {
-					for (j = 1; j <= 15; j++) {
+				for (int i = 1; i <= npdf; i++) {
+					for (int j = 1; j <= 15; j++) {
 						auxdf[j, i] = 0.0;
 					}
 				}
 
-				for (i = 1; i <= npbl; i++) {
-					for (j = 1; j <= 15; j++) {
+				for (int i = 1; i <= npbl; i++) {
+					for (int j = 1; j <= 15; j++) {
 						auxbl[j, i] = 0.0;
 					}
 				}
@@ -402,20 +401,20 @@
 				m = DredgedFillDesiccationDelayMonths - 1;
 				dtim = DredgedFillDesiccationDelayDays + DaysInMonth;
 				setc = 0.0;
-				setd = 0.0;
+				DredgedFillDesiccationSettlement = 0.0;
 
-				time = 0.0;
+				CurrentTime = 0.0;
 
-				ucon = 0.0;
-				sett = 0.0;
-				sfin = 0.0;
+				DredgedFillAverageConsolidationDegree = 0.0;
+				DredgedFillTotalSettlement = 0.0;
+				DredgedFillFinalSettlement = 0.0;
 
-				ucon1 = 0.0;
-				sett1 = 0.0;
-				sfin1 = 0.0;
+				CompressibleFoundationAverageConsolidationDegree = 0.0;
+				CompressibleFoundationTotalSettlement = 0.0;
+				CompressibleFoundationFinalSettlement = 0.0;
 
-				setsdf = 0.0;
-				setsbl = 0.0;
+				DredgedFillSecondaryCompressionSettlement = 0.0;
+				CompressibleFoundationSecondaryCompressionSettlement = 0.0;
 
 				vri1 = 0.0;
 				nm = 1;
@@ -462,7 +461,7 @@
             enddo
         enddo
 				*/
-				for (kk = 1; kk <= ContinuationDredgedFillMaterialTypes; kk++) {
+				for (int i = 1; i <= ContinuationDredgedFillMaterialTypes; i++) {
 					Io.ReadInt(inx);
 					MaterialID = Io.ReadInt(inx);
 					SpecificGravities[MaterialID] = Io.ReadDouble(inx);
@@ -476,11 +475,11 @@
 					nmat[intx(matindex)] = MaterialID;
 					matindex++;
 
-					for (i = 1; i <= RelationDefinitionLines[MaterialID]; i++) {
+					for (int j = 1; j <= RelationDefinitionLines[MaterialID]; j++) {
 						Io.ReadInt(inx);
-						VoidRatios[i, MaterialID] = Io.ReadDouble(inx);
-						EffectiveStresses[i, MaterialID] = Io.ReadDouble(inx);
-						Permeabilities[i, MaterialID] = Io.ReadDouble(inx);
+						VoidRatios[j, MaterialID] = Io.ReadDouble(inx);
+						EffectiveStresses[j, MaterialID] = Io.ReadDouble(inx);
+						Permeabilities[j, MaterialID] = Io.ReadDouble(inx);
 					}
 				}
 
@@ -499,7 +498,7 @@
             endif
         enddo
 				*/
-				for (i = nm; i <= PrintTimes; i++) {
+				for (int i = nm; i <= PrintTimes; i++) {
 					Io.ReadInt(inx);
 					PrintTimeDates[i] = Io.ReadDouble(inx);
 					NewDredgedFillInitialThicknesses[i] = Io.ReadDouble(inx);
@@ -509,11 +508,12 @@
 
 					if (NewDredgedFillInitialThicknesses[i] != 0) {
 						// New layer has been added;
-						kk++;
-						DredgedFillInitialVoidRatios[kk] = Io.ReadDouble(inx);
-						DredgedFillMaterialIDs[kk] = Io.ReadInt(inx);
-						DredgedFillSublayers[kk] = Io.ReadInt(inx);
-						DredgedFillInitialThicknesses[kk] = NewDredgedFillInitialThicknesses[i];
+						DredgedFillLayers++;
+						IsDredgedFillInPrimaryConsolidations[DredgedFillLayers] = true;
+						DredgedFillInitialVoidRatios[DredgedFillLayers] = Io.ReadDouble(inx);
+						DredgedFillMaterialIDs[DredgedFillLayers] = Io.ReadInt(inx);
+						DredgedFillSublayers[DredgedFillLayers] = Io.ReadInt(inx);
+						DredgedFillInitialThicknesses[DredgedFillLayers] = NewDredgedFillInitialThicknesses[i];
 						DredgedFillTotleInitialThickness = DredgedFillTotleInitialThickness + DredgedFillInitialThicknesses[DredgedFillLayers];
 					}
 				}
@@ -523,7 +523,7 @@
             dz(i) = hdf(i) / ((1+e00(i))*nsub(i))
         enddo
 				*/
-				for (i = ndff; i <= DredgedFillLayers; i++) {
+				for (int i = ndff; i <= DredgedFillLayers; i++) {
 					dz[i] = DredgedFillInitialThicknesses[i] / ((1 + DredgedFillInitialVoidRatios[i]) * DredgedFillSublayers[i]);
 				}
 
@@ -535,17 +535,17 @@
 				LastPrintTimeDate = intx(PrintTimeDates[PrintTimes]);
 
 				// Main simulation loop.
-				for (kk = nm; kk <= PrintTimes; kk++) {
-					tprint = PrintTimeDates[kk];
-					DredgedFillPrintOption = NewDredgedFillPrintOptions[kk];
-					add = NewDredgedFillInitialThicknesses[kk];
+				for (int i = nm; i <= PrintTimes; i++) {
+					tprint = PrintTimeDates[i];
+					DredgedFillPrintOption = NewDredgedFillPrintOptions[i];
+					add = NewDredgedFillInitialThicknesses[i];
 
 					// hdf1, tadd, tds, and ms is set for the first layer of dredged fill;
-					if (kk != 1) {
-						hdf1 = NewDredgedFillInitialThicknesses[kk - 1];
+					if (i != 1) {
+						hdf1 = NewDredgedFillInitialThicknesses[i - 1];
 						tadd = tadd + hdf1;
-						DredgedFillDesiccationDelayDays = NewDredgedFillDesiccationDelayDays[kk - 1];
-						DredgedFillDesiccationDelayMonths = NewDredgedFillDesiccationDelayMonths[kk - 1];
+						DredgedFillDesiccationDelayDays = NewDredgedFillDesiccationDelayDays[i - 1];
+						DredgedFillDesiccationDelayMonths = NewDredgedFillDesiccationDelayMonths[i - 1];
 						Reset(dim1);
 					}				
 

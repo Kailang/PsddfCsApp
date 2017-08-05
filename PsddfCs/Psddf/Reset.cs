@@ -25,89 +25,89 @@
 
 				// Updating u for compresible foundation and dreged fill;
 				for (i = 1; i <= nblpoint; i++) {
-					u1[i] = u1[i] + el * gc[id];
+					CompressibleFoundationExcessPoreWaterPressure[i] = CompressibleFoundationExcessPoreWaterPressure[i] + el * gc[id];
 				}
 
 				for (i = 1; i <= ndfpoint; i++) {
-					u[i] = u[i] + gc[id] * el;
+					DredgedFillExcessPoreWaterPressure[i] = DredgedFillExcessPoreWaterPressure[i] + gc[id] * el;
 				}
 
 				ndfpoint = ndfpoint + DredgedFillSublayers[ndflayer] + 1;
 				hsolids = hsolids + el * DredgedFillInitialVoidRatios[ndflayer];
 				ell1 = dz[ndflayer] * DredgedFillSublayers[ndflayer] * DredgedFillInitialVoidRatios[ndflayer];
-				vlop = vrint + setd + setc + ell1;
-				vrint = vlop - setd - setc;
+				vlop = vrint + DredgedFillDesiccationSettlement + setc + ell1;
+				vrint = vlop - DredgedFillDesiccationSettlement - setc;
 				da = hdf1 / DredgedFillSublayers[ndflayer];
 
 				// Calculate additional coordinates and set void ratios;
 				i = ntemp - 1;
-				z[ntemp] = z[i];
-				a[ntemp] = a[i];
-				xi[ntemp] = xi[i];
-				e1[ntemp] = DredgedFillInitialVoidRatios[ndflayer];
+				DredgedFillCoordZ[ntemp] = DredgedFillCoordZ[i];
+				DredgedFillCoordA[ntemp] = DredgedFillCoordA[i];
+				DredgedFillCoordXI[ntemp] = DredgedFillCoordXI[i];
+				DredgedFillInitialVoidRatio[ntemp] = DredgedFillInitialVoidRatios[ndflayer];
 				f[ntemp] = DredgedFillInitialVoidRatios[ndflayer];
-				e[ntemp] = DredgedFillInitialVoidRatios[ndflayer];
-				u[ntemp] = u[i];
+				DredgedFillCurrentVoidRatio[ntemp] = DredgedFillInitialVoidRatios[ndflayer];
+				DredgedFillExcessPoreWaterPressure[ntemp] = DredgedFillExcessPoreWaterPressure[i];
 
 				for (i = ntemp + 1; i <= ndfpoint; i++) {
 					ii = i - 1;
-					z[i] = z[ii] + dz[ndflayer];
-					a[i] = a[ii] + da;
-					xi[i] = xi[ii] + da;
-					e1[i] = DredgedFillInitialVoidRatios[ndflayer];
+					DredgedFillCoordZ[i] = DredgedFillCoordZ[ii] + dz[ndflayer];
+					DredgedFillCoordA[i] = DredgedFillCoordA[ii] + da;
+					DredgedFillCoordXI[i] = DredgedFillCoordXI[ii] + da;
+					DredgedFillInitialVoidRatio[i] = DredgedFillInitialVoidRatios[ndflayer];
 					f[i] = DredgedFillInitialVoidRatios[ndflayer];
-					e[i] = DredgedFillInitialVoidRatios[ndflayer];
-					u[i] = gc[id] * (acumel - z[i]);
+					DredgedFillCurrentVoidRatio[i] = DredgedFillInitialVoidRatios[ndflayer];
+					DredgedFillExcessPoreWaterPressure[i] = gc[id] * (acumel - DredgedFillCoordZ[i]);
 				}
 
 				nt = ntemp - 1;
-				e[nt] = (e[nt] + DredgedFillInitialVoidRatios[ndflayer]) * 0.5;
-				f[nt] = e[nt];
+				DredgedFillCurrentVoidRatio[nt] = (DredgedFillCurrentVoidRatio[nt] + DredgedFillInitialVoidRatios[ndflayer]) * 0.5;
+				f[nt] = DredgedFillCurrentVoidRatio[nt];
 
 				// Calculate final void ratios for dredged fill;
 				topstress = 0.0;
-				FinalVr(d1, VoidRatios, EffectiveStresses, efin, dz, DredgedFillSublayers, ndflayer, DredgedFillMaterialIDs, ndfpoint, ref topstress, 0, ref jin, auxdf);
+				FinalVr(d1, VoidRatios, EffectiveStresses, DredgedFillFinalVoidRatio, dz, DredgedFillSublayers, ndflayer, DredgedFillMaterialIDs, ndfpoint, ref topstress, 0, ref jin, auxdf);
 
 				// Calculate final void ratios for foundation;
 				if (IsFoundationCompressible != 2) {
 					// Check for Compressible Foundation;
-					FinalVr(d1, VoidRatios, EffectiveStresses, efin1, dz1, CompressibleFoundationSublayers, CompressibleFoundationLayers, CompressibleFoundationMaterialIDs, nblpoint, ref topstress, 0, ref jin, auxbl);
+					FinalVr(d1, VoidRatios, EffectiveStresses, CompressibleFoundationFinalVoidRatio, dz1, CompressibleFoundationSublayers, CompressibleFoundationLayers, CompressibleFoundationMaterialIDs, nblpoint, ref topstress, 0, ref jin, auxbl);
 
 					// Calculate ultimate settlement for commpresive foundation;
-					Integral(efin1, dz1, CompressibleFoundationSublayers, fint1, CompressibleFoundationLayers, 0);
-					sfin1 = vri1 - fint1[nblpoint];
+					Integral(CompressibleFoundationFinalVoidRatio, dz1, CompressibleFoundationSublayers, fint1, CompressibleFoundationLayers, 0);
+					CompressibleFoundationFinalSettlement = vri1 - fint1[nblpoint];
 
 					// Reset bottom boundary dudz;
-					dudz10 = u1[1] / IncompressibleFoudationDrainagePathLength;
+					dudz10 = CompressibleFoundationExcessPoreWaterPressure[1] / IncompressibleFoudationDrainagePathLength;
 				}
 
 				if (IsFoundationCompressible == 2) {
 					// Check for Compressible Foundation;
-					dudz10 = u[1] / IncompressibleFoudationDrainagePathLength;
+					dudz10 = DredgedFillExcessPoreWaterPressure[1] / IncompressibleFoudationDrainagePathLength;
 				}
 
 				// Ultimate setlement for total dredged fill;
-				Integral(efin, dz, DredgedFillSublayers, fint, ndflayer, 0);
-				sfin = hsolids - fint[ndfpoint];
+				Integral(DredgedFillFinalVoidRatio, dz, DredgedFillSublayers, fint, ndflayer, 0);
+				DredgedFillFinalSettlement = hsolids - fint[ndfpoint];
 
 
 				// Set void ratio functions for reset values;
 				jin = 2;
 				for (i = ntemp; i <= ndfpoint; i++) {
-					Intpgg(d1, RelationDefinitionLines, e[i], VoidRatios, alpha, beta, ref af[i], ref bf[i], ref jin, id, auxdf, i, 0, 0);
+					Intpgg(d1, RelationDefinitionLines, DredgedFillCurrentVoidRatio[i], VoidRatios, alpha, beta, ref af[i], ref bf[i], ref jin, id, auxdf, i, 0, 0);
 				}
 
 				for (i = 1; i <= ndfpoint; i++) {
-					et[i] = e[i];
+					et[i] = DredgedFillCurrentVoidRatio[i];
 				}
 
 				n = ntemp - ndfcons - 1;
 				if (n > 0) {
-					de = (e[ntemp - 1] - e[ndfcons]) / floatx(n);
+					de = (DredgedFillCurrentVoidRatio[ntemp - 1] - DredgedFillCurrentVoidRatio[ndfcons]) / floatx(n);
 					for (i = ndfcons + 1; i <= ntemp - 2; i++) {
 						ii = i - 1;
-						e[i] = e[ii] + de;
-						f[i] = e[i];
+						DredgedFillCurrentVoidRatio[i] = DredgedFillCurrentVoidRatio[ii] + de;
+						f[i] = DredgedFillCurrentVoidRatio[i];
 					}
 					ndfcons = ntemp - 1;
 					Vrfunc(d1);

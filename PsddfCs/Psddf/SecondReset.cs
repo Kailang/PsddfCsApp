@@ -20,17 +20,17 @@
 				l = 1;
 				for (k = 1; k <= CompressibleFoundationLayers; k++) {
 					id = CompressibleFoundationMaterialIDs[k];
-					if (!primbl[k]) {
+					if (!IsCompressibleFoundationInPrimaryConsolidations[k]) {
 						if (k == 1) {
 							dudz11 = 0.0;
 						}
 
-						primbl[k] = true;
-						incre = pow((time / tpbl[k]), (CaCcs[id] / (1 - CrCcs[id])));
+						IsCompressibleFoundationInPrimaryConsolidations[k] = true;
+						incre = pow((CurrentTime / tpbl[k]), (CaCcs[id] / (1 - CrCcs[id])));
 						for (j = 0; j <= CompressibleFoundationSublayers[k]; j++) {
 							i = l + j;
-							Intpgg(d1, RelationDefinitionLines, er[i], voidratio, effectivestress, effectivestress, ref temp1, ref temp1, ref jin, id, auxbl, i, 6, 6);
-							auxbl[1, i] = er[i];
+							Intpgg(d1, RelationDefinitionLines, CompressibleFoundationCurrentVoidRatio[i], voidratio, effectivestress, effectivestress, ref temp1, ref temp1, ref jin, id, auxbl, i, 6, 6);
+							auxbl[1, i] = CompressibleFoundationCurrentVoidRatio[i];
 							auxbl[5, i] = auxbl[4, i] * incre;
 							if (temp1 >= auxbl[5, i]) {
 								auxbl[5, i] = temp1 * 1.005;
@@ -98,16 +98,16 @@
 			l = 1;
 			for (k = 1; k <= nlayer; k++) {
 				id = DredgedFillMaterialIDs[k];
-				if (!primdf[k]) {
+				if (!IsDredgedFillInPrimaryConsolidations[k]) {
 					if (k == 1) {
 						dudz21 = 0.0;
 					}
-					primdf[k] = true;
-					incre = pow((time / tpdf[k]), (CaCcs[id] / (1 - CrCcs[id])));
+					IsDredgedFillInPrimaryConsolidations[k] = true;
+					incre = pow((CurrentTime / tpdf[k]), (CaCcs[id] / (1 - CrCcs[id])));
 					for (j = 0; j <= DredgedFillSublayers[k]; j++) {
 						i = l + j;
-						Intpgg(d1, RelationDefinitionLines, e[i], voidratio, effectivestress, effectivestress, ref temp1, ref temp1, ref jin, id, auxdf, i, 6, 6);
-						auxdf[1, i] = e[i];
+						Intpgg(d1, RelationDefinitionLines, DredgedFillCurrentVoidRatio[i], voidratio, effectivestress, effectivestress, ref temp1, ref temp1, ref jin, id, auxdf, i, 6, 6);
+						auxdf[1, i] = DredgedFillCurrentVoidRatio[i];
 						auxdf[5, i] = auxdf[4, i] * incre;
 
 						if (temp1 >= auxdf[5, i]) {
@@ -168,7 +168,7 @@
 							tau = 0.99 * tautemp;
 						}
 					}
-					Integral(e, dz, DredgedFillSublayers, fint, nlayer, 0);
+					Integral(DredgedFillCurrentVoidRatio, dz, DredgedFillSublayers, fint, nlayer, 0);
 
 					difsecdf[k] = 0.0;
 				}

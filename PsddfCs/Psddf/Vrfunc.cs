@@ -14,8 +14,8 @@
 					id = CompressibleFoundationMaterialIDs[i];
 					for (j = 1; j <= CompressibleFoundationSublayers[i] + 1; j++) {
 						kk = k + j;
-						Intpgg(d1, RelationDefinitionLines, er[kk], VoidRatios, alpha, alpha, ref af1[kk], ref af1[kk], ref jin, id, auxbl, kk, 9, 9);
-						Intpgg(d1, RelationDefinitionLines, er[kk], VoidRatios, beta, beta, ref bf1[kk], ref bf1[kk], ref jin, id, auxbl, kk, 0, 0);
+						Intpgg(d1, RelationDefinitionLines, CompressibleFoundationCurrentVoidRatio[kk], VoidRatios, alpha, alpha, ref af1[kk], ref af1[kk], ref jin, id, auxbl, kk, 9, 9);
+						Intpgg(d1, RelationDefinitionLines, CompressibleFoundationCurrentVoidRatio[kk], VoidRatios, beta, beta, ref bf1[kk], ref bf1[kk], ref jin, id, auxbl, kk, 0, 0);
 					}
 					k = kk;
 				}
@@ -29,8 +29,8 @@
 				id = DredgedFillMaterialIDs[i];
 				for (j = 1; j <= DredgedFillSublayers[i] + 1; j++) {
 					kk = k + j;
-					Intpgg(d1, RelationDefinitionLines, e[kk], VoidRatios, alpha, alpha, ref af[kk], ref af[kk], ref jin, id, auxdf, kk, 9, 9);
-					Intpgg(d1, RelationDefinitionLines, e[kk], VoidRatios, alpha, beta, ref bf[kk], ref bf[kk], ref jin, id, auxdf, kk, 0, 0);
+					Intpgg(d1, RelationDefinitionLines, DredgedFillCurrentVoidRatio[kk], VoidRatios, alpha, alpha, ref af[kk], ref af[kk], ref jin, id, auxdf, kk, 9, 9);
+					Intpgg(d1, RelationDefinitionLines, DredgedFillCurrentVoidRatio[kk], VoidRatios, alpha, beta, ref bf[kk], ref bf[kk], ref jin, id, auxdf, kk, 0, 0);
 				}
 				k = kk;
 			}

@@ -161,10 +161,10 @@
 				if (ngraph != 1) {
 					elev = IncompressibleFoudationElevation + CompressibleFoundationTotalInitialThickness;
 					// write(iplot, 211) time, elev;
-					Io.WriteLine(iplot, f900, time, elev);
+					Io.WriteLine(iplot, f900, CurrentTime, elev);
 					elev = elev + DredgedFillInitialThicknesses[1];
 					// write(iplot, 211) time, elev;
-					Io.WriteLine(iplot, f900, time, elev);
+					Io.WriteLine(iplot, f900, CurrentTime, elev);
 				}
 
 				if (SimulationPrintOption == 2) {

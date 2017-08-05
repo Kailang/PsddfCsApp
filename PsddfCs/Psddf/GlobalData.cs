@@ -496,7 +496,7 @@
 		/// <summary>
 		/// The simulation time.
 		/// </summary>
-		double time;
+		double CurrentTime;
 		/// <summary>
 		/// Time interval of the explicit finite difference analysis.
 		/// </summary>
@@ -505,57 +505,57 @@
 		/// Coordinates of nodal points.
 		/// </summary>
 		double[] 
-			a = new double[npdf + 1], a1 = new double[npbl + 1],
-			xi = new double[npdf + 1], xi1 = new double[npbl + 1], 
-			z = new double[npdf + 1], z1 = new double[npbl + 1];
+			DredgedFillCoordA = new double[npdf + 1], CompressibleFoundationCoordA = new double[npbl + 1],
+			DredgedFillCoordXI = new double[npdf + 1], CompressibleFoundationCoordXI = new double[npbl + 1], 
+			DredgedFillCoordZ = new double[npdf + 1], CompressibleFoundationCoordZ = new double[npbl + 1];
 		/// <summary>
 		/// Initial void ratio at each coordinate point.
 		/// </summary>
-		double[] e1 = new double[npdf + 1], e11 = new double[npbl + 1];
+		double[] DredgedFillInitialVoidRatio = new double[npdf + 1], CompressibleFoundationInitialVoidRatio = new double[npbl + 1];
 		/// <summary>
 		/// Current void ratio at each coordinate point.
 		/// </summary>
-		double[] e = new double[npdf + 1], er = new double[npbl + 1];
+		double[] DredgedFillCurrentVoidRatio = new double[npdf + 1], CompressibleFoundationCurrentVoidRatio = new double[npbl + 1];
 		/// <summary>
 		/// Final void ratio at each coordinate point.
 		/// </summary>
-		double[] efin = new double[npdf + 1], efin1 = new double[npbl + 1];
+		double[] DredgedFillFinalVoidRatio = new double[npdf + 1], CompressibleFoundationFinalVoidRatio = new double[npbl + 1];
 		/// <summary>
 		/// Total stress at each coordinate point.
 		/// </summary>
-		double[] totstr = new double[npdf + 1], tostr1 = new double[npbl + 1];
+		double[] DredgedFillTotalStress = new double[npdf + 1], CompressibleFoundationTotalStree = new double[npbl + 1];
 		/// <summary>
 		/// Effective stress at each coordinate point.
 		/// </summary>
-		double[] effstr = new double[npdf + 1], efstr1 = new double[npbl + 1], f = new double[npdf + 1], f1 = new double[npbl + 1];
+		double[] DredgedFillEffectiveStress = new double[npdf + 1], CompressibleFoundationEffectiveStree = new double[npbl + 1], f = new double[npdf + 1], f1 = new double[npbl + 1];
 		/// <summary>
 		/// Total pore pressure at each coordinate point.
 		/// </summary>
-		double[] uw = new double[npdf + 1], uw1 = new double[npbl + 1];
+		double[] DredgedFillTotalPoreWaterPressure = new double[npdf + 1], CompressibleFoundationTotalPoreWaterPressure = new double[npbl + 1];
 		/// <summary>
 		/// Static pore pressure at each coordinate point.
 		/// </summary>
-		double[] u0 = new double[npdf + 1], u01 = new double[npbl + 1];
+		double[] DredgedFillHydrostaticPoreWaterPressure = new double[npdf + 1], CompressibleFoundationHydrostaticPoreWaterPressure = new double[npbl + 1];
 		/// <summary>
 		/// Excess pore-water pressure at each coordinate point.
 		/// </summary>
-		double[] u = new double[npdf + 1], u1 = new double[npbl + 1];
+		double[] DredgedFillExcessPoreWaterPressure = new double[npdf + 1], CompressibleFoundationExcessPoreWaterPressure = new double[npbl + 1];
 		/// <summary>
 		/// Degree of consolidation.
 		/// </summary>
-		double ucon, ucon1;
+		double DredgedFillAverageConsolidationDegree, CompressibleFoundationAverageConsolidationDegree;
 		/// <summary>
 		/// Settlement at current time.
 		/// </summary>
-		double sett, sett1;
+		double DredgedFillTotalSettlement, CompressibleFoundationTotalSettlement;
 		/// <summary>
 		/// Final settlement at the end of primary consolidation.
 		/// </summary>
-		double sfin, sfin1;
+		double DredgedFillFinalSettlement, CompressibleFoundationFinalSettlement;
 		/// <summary>
 		/// Settlement caused by secondary compression.
 		/// </summary>
-		double setsbl, setsdf;
+		double DredgedFillSecondaryCompressionSettlement, CompressibleFoundationSecondaryCompressionSettlement;
 
 		#endregion
 
@@ -630,7 +630,7 @@
              add, tadd, hhbl, hhdf, setsbl, setsdf, ffint(npdf), ffint1(npbl)
 		*/
 		double 
-			aev, cset, dsc, dset, dtim, qdf, setc, setd, 
+			aev, cset, dsc, dset, dtim, qdf, setc, DredgedFillDesiccationSettlement, 
 			vrint;
 		double[]
 			fint = new double[npdf + 1], fint1 = new double[npbl + 1],
@@ -677,7 +677,7 @@
 		*/
 		double[,] auxbl = new double[15 + 1, npbl + 1];
 		double[] tpbl = new double[nleymax + 1], difsecbl = new double[nleymax + 1];
-		bool[] primdf = new bool[nleymax + 1], primbl = new bool[nleymax + 1];
+		bool[] IsDredgedFillInPrimaryConsolidations = new bool[nleymax + 1], IsCompressibleFoundationInPrimaryConsolidations = new bool[nleymax + 1];
 
 		/*
     ! Input and output variables

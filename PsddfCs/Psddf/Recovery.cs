@@ -47,14 +47,14 @@
 			// There have been some modifications due to interface between dredge lifts not considered before;
 
 			// Find time interval between t and t + 1;
-			del_time = time - pre_time;
-			pre_time = time;
+			del_time = CurrentTime - pre_time;
+			pre_time = CurrentTime;
 			// Find change of void ratio in compressible foundation between t and t + 1;
 			if (IsFoundationCompressible != 2) {
 				// Nbl is not 2 means there are compressible layers;
 				for (i = 1; i <= nblpoint; i++) {
-					del_er[i] = pre_er[i] - er[i];
-					pre_er[i] = er[i];
+					del_er[i] = pre_er[i] - CompressibleFoundationCurrentVoidRatio[i];
+					pre_er[i] = CompressibleFoundationCurrentVoidRatio[i];
 					// For the next time step;
 				}
 			}
@@ -62,18 +62,18 @@
 			if (pre_ndfpoint < ndfpoint) {
 				// In case new dredge layer is installed;
 				for (i = 1; i <= pre_ndfpoint; i++) {
-					del_e[i] = pre_e[i] - e[i];
-					pre_e[i] = e[i];
+					del_e[i] = pre_e[i] - DredgedFillCurrentVoidRatio[i];
+					pre_e[i] = DredgedFillCurrentVoidRatio[i];
 				}
 				for (i = pre_ndfpoint + 1; i <= ndfpoint; i += 1) {
-					del_e[i] = e[ndfpoint] - e[i];
-					pre_e[i] = e[i];
+					del_e[i] = DredgedFillCurrentVoidRatio[ndfpoint] - DredgedFillCurrentVoidRatio[i];
+					pre_e[i] = DredgedFillCurrentVoidRatio[i];
 				}
 				pre_ndfpoint = ndfpoint;
 			} else {
 				for (i = 1; i <= ndfpoint; i++) {
-					del_e[i] = pre_e[i] - e[i];
-					pre_e[i] = e[i];
+					del_e[i] = pre_e[i] - DredgedFillCurrentVoidRatio[i];
+					pre_e[i] = DredgedFillCurrentVoidRatio[i];
 				}
 			}
 			// Initialization of total elements in both foundation and dredged fill;
@@ -90,11 +90,11 @@
 						id_element1[i] = i;
 						// Id of element;
 
-						thick1[i] = xi1[g + 1] - xi1[g];
+						thick1[i] = CompressibleFoundationCoordXI[g + 1] - CompressibleFoundationCoordXI[g];
 						// Thickness of element (solid + void);
-						sol_thick1[i] = z1[g + 1] - z1[g];
+						sol_thick1[i] = CompressibleFoundationCoordZ[g + 1] - CompressibleFoundationCoordZ[g];
 						// Thickness of solid element;
-						void_element1[i] = (er[g + 1] + er[g]) / 2;
+						void_element1[i] = (CompressibleFoundationCurrentVoidRatio[g + 1] + CompressibleFoundationCurrentVoidRatio[g]) / 2;
 						// Ave. void ratio in element at time t + 1;
 						porosity_element1[i] = void_element1[i] / (1 + void_element1[i]);
 						// Porosity in element;
@@ -107,7 +107,7 @@
 						ele_flux1[i] = void_volume1[i] / del_time;
 						// Generated flux in element due to consolidation;
 						// Ft / dat;
-						ele_pore1[i] = (u1[g + 1] + u1[g]) / 2;
+						ele_pore1[i] = (CompressibleFoundationExcessPoreWaterPressure[g + 1] + CompressibleFoundationExcessPoreWaterPressure[g]) / 2;
 						// Ave. excessive pore pressure in element;
 						total_element1 = i;
 						// Number of total element in compressible foundation;
@@ -133,11 +133,11 @@
 				for (kk = 1; kk <= DredgedFillSublayers[k]; kk++) {
 					id_element[i] = i;
 					// Id of element;
-					thick[i] = xi[g + 1] - xi[g];
+					thick[i] = DredgedFillCoordXI[g + 1] - DredgedFillCoordXI[g];
 					// Thickness of element;
-					sol_thick[i] = z[g + 1] - z[g];
+					sol_thick[i] = DredgedFillCoordZ[g + 1] - DredgedFillCoordZ[g];
 					// Thickness of solid element;
-					void_element[i] = (e[g + 1] + e[g]) / 2;
+					void_element[i] = (DredgedFillCurrentVoidRatio[g + 1] + DredgedFillCurrentVoidRatio[g]) / 2;
 					// Ave. void ratio in element;
 					porosity_element[i] = void_element[i] / (1 + void_element[i]);
 					// Porosity in element;
@@ -149,7 +149,7 @@
 					ele_flux[i] = void_volume[i] / del_time;
 					// Generated flux in element due to consolidation;
 					// Ft / dat;
-					ele_pore[i] = (u[g + 1] + u[g]) / 2;
+					ele_pore[i] = (DredgedFillExcessPoreWaterPressure[g + 1] + DredgedFillExcessPoreWaterPressure[g]) / 2;
 					// Ave. excessive pore pressure in element;
 					// Dry density (g / m^3);
 
@@ -208,7 +208,7 @@
 				}
 			}
 
-			time_yr = time / 365.25;
+			time_yr = CurrentTime / 365.25;
 			// Time conversion from day to year;
 			// This prints the output data;
 			// write(recoveryout, 922) time_yr, total_element1 + total_element;

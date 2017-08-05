@@ -13,35 +13,35 @@
 			// Compute constant K;
 			const_k = dz[1] * pk_lower / (pk_upper * dz1[CompressibleFoundationLayers]);
 			// Compute exess pore pressure at interface;
-			u_inter = (u[2] + const_k * u1[nblpoint - 1]) / (1 + const_k);
+			u_inter = (DredgedFillExcessPoreWaterPressure[2] + const_k * CompressibleFoundationExcessPoreWaterPressure[nblpoint - 1]) / (1 + const_k);
 			// Compute eff. stress @ interface;
-			estress_int = effstr[1] + u[1] - u_inter;
+			estress_int = DredgedFillEffectiveStress[1] + DredgedFillExcessPoreWaterPressure[1] - u_inter;
 			if (estress_int < 0.0) {
-				estress_int = effstr[1];
+				estress_int = DredgedFillEffectiveStress[1];
 			}
-			u[1] = u_inter;
-			u1[nblpoint] = u[1];
-			effstr[1] = estress_int;
+			DredgedFillExcessPoreWaterPressure[1] = u_inter;
+			CompressibleFoundationExcessPoreWaterPressure[nblpoint] = DredgedFillExcessPoreWaterPressure[1];
+			DredgedFillEffectiveStress[1] = estress_int;
 
 			// Compute void ratios @ interface;
-			Intpl(d1, RelationDefinitionLines, estress_int, effectivestress, voidratio, ref er[nblpoint], ref jin, id, auxbl, nblpoint);
+			Intpl(d1, RelationDefinitionLines, estress_int, effectivestress, voidratio, ref CompressibleFoundationCurrentVoidRatio[nblpoint], ref jin, id, auxbl, nblpoint);
 			id = DredgedFillMaterialIDs[1];
-			Intpl(d1, RelationDefinitionLines, estress_int, effectivestress, voidratio, ref e[1], ref jin, id, auxdf, 1);
+			Intpl(d1, RelationDefinitionLines, estress_int, effectivestress, voidratio, ref DredgedFillCurrentVoidRatio[1], ref jin, id, auxdf, 1);
 
-			if (e[1] > f[1]) {
-				e[1] = f[1];
+			if (DredgedFillCurrentVoidRatio[1] > f[1]) {
+				DredgedFillCurrentVoidRatio[1] = f[1];
 			}
 
-			if (er[nblpoint] > f1[nblpoint]) {
-				er[nblpoint] = f1[nblpoint];
+			if (CompressibleFoundationCurrentVoidRatio[nblpoint] > f1[nblpoint]) {
+				CompressibleFoundationCurrentVoidRatio[nblpoint] = f1[nblpoint];
 			}
 
-			if (e[1] < efin[1]) {
-				e[1] = efin[1];
+			if (DredgedFillCurrentVoidRatio[1] < DredgedFillFinalVoidRatio[1]) {
+				DredgedFillCurrentVoidRatio[1] = DredgedFillFinalVoidRatio[1];
 			}
 
-			if (er[nblpoint] < efin1[nblpoint]) {
-				er[nblpoint] = efin1[nblpoint];
+			if (CompressibleFoundationCurrentVoidRatio[nblpoint] < CompressibleFoundationFinalVoidRatio[nblpoint]) {
+				CompressibleFoundationCurrentVoidRatio[nblpoint] = CompressibleFoundationFinalVoidRatio[nblpoint];
 			}
 		}
 	}

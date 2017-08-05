@@ -10,8 +10,6 @@
 
     name = 'p_temp_opt'
 			*/
-			const int prev = 99;
-
 			const string name = "p_temp_opt";
 			const string temp = "temp_contfile";
 
@@ -75,6 +73,7 @@
 				// For continuation file
 				Io.OpenRead(ins, temp + ".psc");
 
+				const int prev = 99;
 				Io.OpenRead(prev, temp + ".psp");
 				while (!Io.EndOfFile(prev)) {
 					// write(iplot, '(2f15.5)') void1, void2

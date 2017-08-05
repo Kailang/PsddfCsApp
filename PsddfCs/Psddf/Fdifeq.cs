@@ -43,84 +43,84 @@
 						id = CompressibleFoundationMaterialIDs[k];
 						cf1 = tau / (WaterUnitWeight * dz1[k]);
 						dz12 = dz1[k] * 2.0;
-						if (primbl[k]) {
+						if (IsCompressibleFoundationInPrimaryConsolidations[k]) {
 							if (l == 1) {
-								FirstPoint(d1, RelationDefinitionLines, ref er[1], VoidRatios, dsde, dudz11, gc[id], f1[1], f1[2], af1, 1, dz1[k], cf1, bf1[1], efin1[1], e11[1], ref jin, id, auxbl);
+								FirstPoint(d1, RelationDefinitionLines, ref CompressibleFoundationCurrentVoidRatio[1], VoidRatios, dsde, dudz11, gc[id], f1[1], f1[2], af1, 1, dz1[k], cf1, bf1[1], CompressibleFoundationFinalVoidRatio[1], CompressibleFoundationInitialVoidRatio[1], ref jin, id, auxbl);
 							} else {
-								Boundary(d1, RelationDefinitionLines, l, k, er, f1, efin1, dz1, u1, pk, VoidRatios, EffectiveStresses, efstr1, CompressibleFoundationMaterialIDs, ref jin, auxbl);
+								Boundary(d1, RelationDefinitionLines, l, k, CompressibleFoundationCurrentVoidRatio, f1, CompressibleFoundationFinalVoidRatio, dz1, CompressibleFoundationExcessPoreWaterPressure, pk, VoidRatios, EffectiveStresses, CompressibleFoundationEffectiveStree, CompressibleFoundationMaterialIDs, ref jin, auxbl);
 							}
 						}
-						if (primbl[k]) {
+						if (IsCompressibleFoundationInPrimaryConsolidations[k]) {
 							maxu = 0;
 							for (j = 1; j <= CompressibleFoundationSublayers[k] - 1; j++) {
 								i = l + j;
 								ij = i + 1;
 								ii = i - 1;
-								er[i] = VoidRatio(f1[i], f1[ij], f1[ii], af1[i], af1[ii], af1[ij], dz1[k], dz12, cf1, gc[id], bf1[i]);
-								if (er[i] > f1[i]) {
-									er[i] = f1[i];
+								CompressibleFoundationCurrentVoidRatio[i] = VoidRatio(f1[i], f1[ij], f1[ii], af1[i], af1[ii], af1[ij], dz1[k], dz12, cf1, gc[id], bf1[i]);
+								if (CompressibleFoundationCurrentVoidRatio[i] > f1[i]) {
+									CompressibleFoundationCurrentVoidRatio[i] = f1[i];
 								}
 
-								if (er[i] <= efin1[i]) {
-									er[i] = efin1[i];
+								if (CompressibleFoundationCurrentVoidRatio[i] <= CompressibleFoundationFinalVoidRatio[i]) {
+									CompressibleFoundationCurrentVoidRatio[i] = CompressibleFoundationFinalVoidRatio[i];
 								}
 
-								Intpgg(d1, RelationDefinitionLines, er[i], VoidRatios, EffectiveStresses, EffectiveStresses, ref efstr1[i], ref voidx, ref jin, id, auxbl, i, 6, 6);
+								Intpgg(d1, RelationDefinitionLines, CompressibleFoundationCurrentVoidRatio[i], VoidRatios, EffectiveStresses, EffectiveStresses, ref CompressibleFoundationEffectiveStree[i], ref voidx, ref jin, id, auxbl, i, 6, 6);
 								Intpgg(d1, RelationDefinitionLines, f1[i], VoidRatios, EffectiveStresses, EffectiveStresses, ref voidx, ref voidx, ref jin, id, auxbl, i, 6, 6);
-								u1[i] = u1[i] - (efstr1[i] - voidx);
+								CompressibleFoundationExcessPoreWaterPressure[i] = CompressibleFoundationExcessPoreWaterPressure[i] - (CompressibleFoundationEffectiveStree[i] - voidx);
 
-								if (u1[i] > maxu) {
-									maxu = u1[i];
+								if (CompressibleFoundationExcessPoreWaterPressure[i] > maxu) {
+									maxu = CompressibleFoundationExcessPoreWaterPressure[i];
 								}
 							}
 
 //							if (maxu < tol) {
-							// If Compressible Foundation's degree of consolidatoin is larger tha 96%,
+							// If Compressible Foundation's degree of consolidatoin is larger than 96%,
 							// start secondary compression.
-							if (ucon1 > uconmax) {
-								primbl[k] = false;
-								tpbl[k] = time;
-								if (l > 1) er[l - 1] = efin1[l - 1];
+							if (CompressibleFoundationAverageConsolidationDegree > uconmax) {
+								IsCompressibleFoundationInPrimaryConsolidations[k] = false;
+								tpbl[k] = CurrentTime;
+								if (l > 1) CompressibleFoundationCurrentVoidRatio[l - 1] = CompressibleFoundationFinalVoidRatio[l - 1];
 								for (j = 0; j <= CompressibleFoundationSublayers[k]; j++) {
 									i = l + j;
-									er[i] = efin1[i];
-									Intpgg(d1, RelationDefinitionLines, er[i], VoidRatios, EffectiveStresses, EffectiveStresses, ref voidx, ref voidx, ref jin, id, auxbl, i, 6, 6);
+									CompressibleFoundationCurrentVoidRatio[i] = CompressibleFoundationFinalVoidRatio[i];
+									Intpgg(d1, RelationDefinitionLines, CompressibleFoundationCurrentVoidRatio[i], VoidRatios, EffectiveStresses, EffectiveStresses, ref voidx, ref voidx, ref jin, id, auxbl, i, 6, 6);
 									auxbl[4, i] = voidx;
 								}
-								Integral(er, dz1, CompressibleFoundationSublayers, fint1, CompressibleFoundationLayers, 0);
+								Integral(CompressibleFoundationCurrentVoidRatio, dz1, CompressibleFoundationSublayers, fint1, CompressibleFoundationLayers, 0);
 								difsecbl[k] = fint1[i] - fint1[l];
 							}
 						} else {
-							Intpgg(d1, RelationDefinitionLines, efin1[l], VoidRatios, dvds, dvds, ref cc, ref voidx, ref jin, id, auxbl, l, 12, 12);
+							Intpgg(d1, RelationDefinitionLines, CompressibleFoundationFinalVoidRatio[l], VoidRatios, dvds, dvds, ref cc, ref voidx, ref jin, id, auxbl, l, 12, 12);
 							ca = cc * CaCcs[id];
 
-							er[l] = f1[l] + ca * dlog10(time / (time - tau));
+							CompressibleFoundationCurrentVoidRatio[l] = f1[l] + ca * dlog10(CurrentTime / (CurrentTime - tau));
 
 							for (j = 1; j <= CompressibleFoundationSublayers[k]; j++) {
 								jin = 2;
 								i = l + j;
-								Intpgg(d1, RelationDefinitionLines, efin1[i], VoidRatios, dvds, dvds, ref cc, ref voidx, ref jin, id, auxbl, i, 12, 12);
+								Intpgg(d1, RelationDefinitionLines, CompressibleFoundationFinalVoidRatio[i], VoidRatios, dvds, dvds, ref cc, ref voidx, ref jin, id, auxbl, i, 12, 12);
 								ca = cc * CaCcs[id];
-								er[i] = f1[i] + ca * dlog10(time / (time - tau));
+								CompressibleFoundationCurrentVoidRatio[i] = f1[i] + ca * dlog10(CurrentTime / (CurrentTime - tau));
 							}
-							Integral(sub(f1, er), dz1, CompressibleFoundationSublayers, ffint1, CompressibleFoundationLayers, 0);
-							setsbl = setsbl + (ffint1[i] - ffint1[l]);
+							Integral(sub(f1, CompressibleFoundationCurrentVoidRatio), dz1, CompressibleFoundationSublayers, ffint1, CompressibleFoundationLayers, 0);
+							CompressibleFoundationSecondaryCompressionSettlement = CompressibleFoundationSecondaryCompressionSettlement + (ffint1[i] - ffint1[l]);
 						}
 						l = l + CompressibleFoundationSublayers[k] + 1;
 					}
 
 					// Reset for next loop (Compresible Foundation);
 					for (i = 1; i <= nblpoint; i++) {
-						f1[i] = er[i];
+						f1[i] = CompressibleFoundationCurrentVoidRatio[i];
 					}
 
 					// Reset Bottom Boundary Gradient for C.F.;
 					id = CompressibleFoundationMaterialIDs[1];
-					Intpgg(d1, RelationDefinitionLines, er[1], VoidRatios, pk, pk, ref rpker, ref voidx, ref jin, id, auxbl, 1, 0, 0);
-					Intpgg(d1, RelationDefinitionLines, er[1], VoidRatios, EffectiveStresses, EffectiveStresses, ref voidx, ref est1, ref jin, id, auxbl, 1, 6, 6);
+					Intpgg(d1, RelationDefinitionLines, CompressibleFoundationCurrentVoidRatio[1], VoidRatios, pk, pk, ref rpker, ref voidx, ref jin, id, auxbl, 1, 0, 0);
+					Intpgg(d1, RelationDefinitionLines, CompressibleFoundationCurrentVoidRatio[1], VoidRatios, EffectiveStresses, EffectiveStresses, ref voidx, ref est1, ref jin, id, auxbl, 1, 6, 6);
 
 					dudz11 = dudz10 * pk0 / rpker;
-					ut1 = u1[1] - est1 + efstr1[1];
+					ut1 = CompressibleFoundationExcessPoreWaterPressure[1] - est1 + CompressibleFoundationEffectiveStree[1];
 					dudz10 = ut1 / IncompressibleFoudationDrainagePathLength;
 
 					// Calculate void ratio of top point in C.F.;
@@ -128,10 +128,10 @@
 				} else {
 					// Rest Bottom Boundary dudz for D.F.;
 					id = DredgedFillMaterialIDs[1];
-					Intpgg(d1, RelationDefinitionLines, e[1], VoidRatios, pk, pk, ref pke, ref voidx, ref jin, id, auxdf, 1, 0, 0);
-					Intpgg(d1, RelationDefinitionLines, e[1], VoidRatios, EffectiveStresses, EffectiveStresses, ref voidx, ref est, ref jin, id, auxdf, 1, 10, 4);
+					Intpgg(d1, RelationDefinitionLines, DredgedFillCurrentVoidRatio[1], VoidRatios, pk, pk, ref pke, ref voidx, ref jin, id, auxdf, 1, 0, 0);
+					Intpgg(d1, RelationDefinitionLines, DredgedFillCurrentVoidRatio[1], VoidRatios, EffectiveStresses, EffectiveStresses, ref voidx, ref est, ref jin, id, auxdf, 1, 10, 4);
 					dudz21 = dudz10 * pk0 / pke;
-					ut = u[1] - est + effstr[1];
+					ut = DredgedFillExcessPoreWaterPressure[1] - est + DredgedFillEffectiveStress[1];
 					dudz10 = ut / IncompressibleFoudationDrainagePathLength;
 				}
 
@@ -141,32 +141,32 @@
 					id = DredgedFillMaterialIDs[k];
 					cf = tau / (WaterUnitWeight * dz[k]);
 					dz2 = dz[k] * 2.0;
-					if (primdf[k]) {
+					if (IsDredgedFillInPrimaryConsolidations[k]) {
 						if (l == 1 && IsFoundationCompressible == 2) {
-							FirstPoint(d1, RelationDefinitionLines, ref e[l], VoidRatios, dsde, dudz21, gc[id], f[l], f[l + 1], af, l, dz[k], cf, bf[l], efin[l], e1[l], ref jin, id, auxdf);
+							FirstPoint(d1, RelationDefinitionLines, ref DredgedFillCurrentVoidRatio[l], VoidRatios, dsde, dudz21, gc[id], f[l], f[l + 1], af, l, dz[k], cf, bf[l], DredgedFillFinalVoidRatio[l], DredgedFillInitialVoidRatio[l], ref jin, id, auxdf);
 						} else if (l != 1) {
-							Boundary(d1, RelationDefinitionLines, l, k, e, f, efin, dz, u, pk, VoidRatios, EffectiveStresses, effstr, DredgedFillMaterialIDs, ref jin, auxdf);
+							Boundary(d1, RelationDefinitionLines, l, k, DredgedFillCurrentVoidRatio, f, DredgedFillFinalVoidRatio, dz, DredgedFillExcessPoreWaterPressure, pk, VoidRatios, EffectiveStresses, DredgedFillEffectiveStress, DredgedFillMaterialIDs, ref jin, auxdf);
 						}
 					}
-					if (primdf[k]) {
+					if (IsDredgedFillInPrimaryConsolidations[k]) {
 						maxu = 0;
 						for (j = 1; j <= DredgedFillSublayers[k] - 1; j++) {
 							i = l + j;
-							if (e[i] > efin[i]) {
+							if (DredgedFillCurrentVoidRatio[i] > DredgedFillFinalVoidRatio[i]) {
 								ij = i + 1;
 								ii = i - 1;
-								e[i] = VoidRatio(f[i], f[ij], f[ii], af[i], af[ii], af[ij], dz[k], dz2, cf, gc[id], bf[i]);
-								if (e[i] <= efin[i]) {
-									e[i] = efin[i];
+								DredgedFillCurrentVoidRatio[i] = VoidRatio(f[i], f[ij], f[ii], af[i], af[ii], af[ij], dz[k], dz2, cf, gc[id], bf[i]);
+								if (DredgedFillCurrentVoidRatio[i] <= DredgedFillFinalVoidRatio[i]) {
+									DredgedFillCurrentVoidRatio[i] = DredgedFillFinalVoidRatio[i];
 								}
-								if (e[i] > f[i]) {
-									e[i] = f[i];
+								if (DredgedFillCurrentVoidRatio[i] > f[i]) {
+									DredgedFillCurrentVoidRatio[i] = f[i];
 								}
-								Intpgg(d1, RelationDefinitionLines, e[i], VoidRatios, EffectiveStresses, EffectiveStresses, ref effstr[i], ref voidx, ref jin, id, auxdf, i, 6, 6);
+								Intpgg(d1, RelationDefinitionLines, DredgedFillCurrentVoidRatio[i], VoidRatios, EffectiveStresses, EffectiveStresses, ref DredgedFillEffectiveStress[i], ref voidx, ref jin, id, auxdf, i, 6, 6);
 								Intpgg(d1, RelationDefinitionLines, f[i], VoidRatios, EffectiveStresses, EffectiveStresses, ref voidx, ref voidx, ref jin, id, auxdf, i, 6, 6);
-								u[i] = u[i] - (effstr[i] - voidx);
-								if (u[i] > maxu) {
-									maxu = u[i];
+								DredgedFillExcessPoreWaterPressure[i] = DredgedFillExcessPoreWaterPressure[i] - (DredgedFillEffectiveStress[i] - voidx);
+								if (DredgedFillExcessPoreWaterPressure[i] > maxu) {
+									maxu = DredgedFillExcessPoreWaterPressure[i];
 								}
 							}
 						}
@@ -174,39 +174,39 @@
 //						if (maxu < tol) {
 						// If Dredged Fill's degree of consolidatoin is larger tha 96%,
 						// start secondary compression.
-						if (ucon > uconmax) {
-							primdf[k] = false;
+						if (DredgedFillAverageConsolidationDegree > uconmax) {
+							IsDredgedFillInPrimaryConsolidations[k] = false;
 							// Changes this because of secondary compression??;
 
-							tpdf[k] = time;
-							if (l > 1) e[l - 1] = efin[l - 1];
+							tpdf[k] = CurrentTime;
+							if (l > 1) DredgedFillCurrentVoidRatio[l - 1] = DredgedFillFinalVoidRatio[l - 1];
 							for (j = 0; j <= DredgedFillSublayers[k]; j++) {
 								i = l + j;
-								e[i] = efin[i];
-								Intpgg(d1, RelationDefinitionLines, e[i], VoidRatios, EffectiveStresses, EffectiveStresses, ref voidx, ref voidx, ref jin, id, auxdf, i, 6, 6);
+								DredgedFillCurrentVoidRatio[i] = DredgedFillFinalVoidRatio[i];
+								Intpgg(d1, RelationDefinitionLines, DredgedFillCurrentVoidRatio[i], VoidRatios, EffectiveStresses, EffectiveStresses, ref voidx, ref voidx, ref jin, id, auxdf, i, 6, 6);
 								auxdf[4, i] = voidx;
 							}
-							Integral(e, dz, DredgedFillSublayers, fint, ndflayer, 0);
+							Integral(DredgedFillCurrentVoidRatio, dz, DredgedFillSublayers, fint, ndflayer, 0);
 							difsecdf[k] = fint[i] - fint[l];
 							if (k == ndflayer) {
 								auxdf[4, ndfpoint] = auxdf[4, ndfpoint - 1] * 0.01;
 							}
 						}
 					} else {
-						Intpgg(d1, RelationDefinitionLines, efin[l], VoidRatios, dvds, dvds, ref cc, ref voidx, ref jin, id, auxdf, l, 12, 12);
+						Intpgg(d1, RelationDefinitionLines, DredgedFillFinalVoidRatio[l], VoidRatios, dvds, dvds, ref cc, ref voidx, ref jin, id, auxdf, l, 12, 12);
 						ca = cc * CaCcs[id];
-						e[l] = f[l] + ca * dlog10(time / (time - tau));
+						DredgedFillCurrentVoidRatio[l] = f[l] + ca * dlog10(CurrentTime / (CurrentTime - tau));
 
 						for (j = 1; j <= DredgedFillSublayers[k]; j++) {
 							jin = 2;
 							i = l + j;
-							Intpgg(d1, RelationDefinitionLines, efin[i], VoidRatios, dvds, dvds, ref cc, ref voidx, ref jin, id, auxdf, i, 12, 12);
+							Intpgg(d1, RelationDefinitionLines, DredgedFillFinalVoidRatio[i], VoidRatios, dvds, dvds, ref cc, ref voidx, ref jin, id, auxdf, i, 12, 12);
 							ca = cc * CaCcs[id];
-							e[i] = f[i] + ca * dlog10(time / (time - tau));
+							DredgedFillCurrentVoidRatio[i] = f[i] + ca * dlog10(CurrentTime / (CurrentTime - tau));
 
 						}
 
-						Integral(sub(f, e), dz, DredgedFillSublayers, ffint, ndflayer, 0);
+						Integral(sub(f, DredgedFillCurrentVoidRatio), dz, DredgedFillSublayers, ffint, ndflayer, 0);
 
 						/**
 						* Jiarui: Fixed PSDDF Error 3
@@ -219,7 +219,7 @@
 							ffint[i] = ffint[l];
 						}
 
-						setsdf = setsdf + (ffint[i] - ffint[l]);
+						DredgedFillSecondaryCompressionSettlement = DredgedFillSecondaryCompressionSettlement + (ffint[i] - ffint[l]);
 						//Cmd.Print (time, setsdf);
 						//Cmd.Print (time, ffint[i],ffint[l]);
 						//for (i = 1; i <= ndfpoint; i++) {
@@ -230,32 +230,32 @@
 				}
 				DredgedFillSublayers[ndflayer] = DredgedFillSublayers[ndflayer] + (ndfpoint - ndfcons);
 				for (i = 1; i <= nnd; i++) {
-					f[i] = e[i];
+					f[i] = DredgedFillCurrentVoidRatio[i];
 				}
 				// calculate alpha and beta for current void ratios;
 				Vrfunc(d1);
 
 				// calculate current time and check against desication time and print time;
-				time = time + tau;
+				CurrentTime = CurrentTime + tau;
 
-				if (time > DredgedFillDesiccationDelayDays && mm == 1) {
+				if (CurrentTime > DredgedFillDesiccationDelayDays && mm == 1) {
 					mm = 2;
-					Integral(e, dz, DredgedFillSublayers, fint, ndflayer, ndfpoint - ndfcons);
+					Integral(DredgedFillCurrentVoidRatio, dz, DredgedFillSublayers, fint, ndflayer, ndfpoint - ndfcons);
 					cset = vrint - fint[ndfcons];
 					setc = setc + cset;
 					vrint = fint[ndfcons];
 				}
-				if (time >= dtim) {
+				if (CurrentTime >= dtim) {
 					Desic(d1);
 				}
 
 				// tnnn = tnnn + 1;
-				if (time >= tprint) {
+				if (CurrentTime >= tprint) {
 					logic1 = false;
 					// Recover actual void ratios;
 					for (i = 2; i <= ndfcons; i++) {
-						if (e[i] > et[i]) {
-							e[i] = et[i];
+						if (DredgedFillCurrentVoidRatio[i] > et[i]) {
+							DredgedFillCurrentVoidRatio[i] = et[i];
 						}
 					}
 					Vrfunc(d1);
@@ -266,7 +266,7 @@
 						// Checks for Compressible Foundation;
 						ii = 1;
 						for (i = 1; i <= CompressibleFoundationLayers; i++) {
-							if (primbl[i]) {
+							if (IsCompressibleFoundationInPrimaryConsolidations[i]) {
 								rbf = abs(bf1[ii]);
 								raf = abs(af1[ii]);
 								for (j = 1; j <= CompressibleFoundationSublayers[i]; j++) {
@@ -301,7 +301,7 @@
 					// Dredge Fill;
 					ii = 1;
 					for (i = 1; i <= ndflayer; i++) {
-						if (primdf[i]) {
+						if (IsDredgedFillInPrimaryConsolidations[i]) {
 							rbf = abs(bf[ii]);
 							raf = abs(af[ii]);
 							for (j = 1; j <= DredgedFillSublayers[i]; j++) {
@@ -335,7 +335,7 @@
 
 				// write the status of the simulation to the screen;
 				if (IsPrintProcess) {
-					ratio = time / LastPrintTimeDate * 100;
+					ratio = CurrentTime / LastPrintTimeDate * 100;
 					// write (*, '(a36, f6.1)') '+ Percentage of Execution Completed:', ratio;
 					Cmd.WriteLine("+ Percentage of Execution Completed:{0,6:F1}", ratio);
 				}
