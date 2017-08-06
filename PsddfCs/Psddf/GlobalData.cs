@@ -303,7 +303,7 @@
 		/// Number of output or print times during simulation. 
 		/// The value of NTIME must be less than or equal to 1000. 
 		/// </summary>
-		public int PrintTimes;
+		public int PrintTimes, StartPrintTime;
 		#endregion
 
 		#region Group F
@@ -648,7 +648,7 @@
 
 
 
-		int nflag, nm, nnd, m, mm, ndfcons;
+		int nflag, nnd, m, mm, ndfcons;
 		int nloop;
 		double pretime, preelev;
 

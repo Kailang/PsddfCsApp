@@ -422,7 +422,7 @@
 				CompressibleFoundationSecondaryCompressionSettlement = 0.0;
 
 				vri1 = 0.0;
-				nm = 1;
+				StartPrintTime = 1;
 				mm = 1;
 				hdf1 = 0.0;
 				dudz21 = 0.0;
@@ -503,7 +503,7 @@
             endif
         enddo
 				*/
-				for (int i = nm; i <= PrintTimes; i++) {
+				for (int i = StartPrintTime; i <= PrintTimes; i++) {
 					Io.ReadInt(IN);
 					PrintTimeDates[i] = Io.ReadDouble(IN);
 					NewDredgedFillInitialThicknesses[i] = Io.ReadDouble(IN);
@@ -540,7 +540,7 @@
 				LastPrintTimeDate = intx(PrintTimeDates[PrintTimes]);
 
 				// Main simulation loop.
-				for (int i = nm; i <= PrintTimes; i++) {
+				for (int i = StartPrintTime; i <= PrintTimes; i++) {
 					tprint = PrintTimeDates[i];
 					DredgedFillPrintOption = NewDredgedFillPrintOptions[i];
 					add = NewDredgedFillInitialThicknesses[i];

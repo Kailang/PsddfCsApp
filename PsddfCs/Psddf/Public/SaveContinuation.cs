@@ -3,8 +3,8 @@
 		/// <summary>
 		/// Write .pci binary file to record current status.
 		/// </summary>
-		void Savdat () {
-			int i, k, id;
+		public void SaveContinuation (string path) {
+			Io.OpenWrite(OUTS, path);
 
 			// write(iouts) ntypescompress, ntypedredge, numbl, numdf, hhbl, hhdf, add
 			Io.StreamWrite(OUTS, CompressibleFoundationMaterialTypes, DredgedFillMaterialTypes, CompressibleFoundationLayers, DredgedFillLayers, CompressibleFoundationTotalInitialThickness, DredgedFillTotleInitialThickness, add);
@@ -22,20 +22,20 @@
 			Io.StreamWrite(OUTS, nflag, StartPrintTime, nnd, PrintTimes);
 
 			// write(iouts) (printt(i), i = 1, ntime)
-			for (i = 1; i <= PrintTimes; i++)
+			for (int i = 1; i <= PrintTimes; i++)
 				Io.StreamWrite(OUTS, PrintTimeDates[i]);
-			
+
 			// write(iouts) da, dudz11, dudz21
 			Io.StreamWrite(OUTS, da, dudz11, dudz21);
 
 			// write(iouts) (e00(i), i = 1, numdf)
-			for (i = 1; i <= DredgedFillLayers; i++)
+			for (int i = 1; i <= DredgedFillLayers; i++)
 				Io.StreamWrite(OUTS, DredgedFillInitialVoidRatios[i]);
 
 			// write(iouts) (hbl(i), i = 1, numbl), (hdf(i), i = 1, numdf), hdf1, sett, sett1
-			for (i = 1; i <= CompressibleFoundationLayers; i++)
+			for (int i = 1; i <= CompressibleFoundationLayers; i++)
 				Io.StreamWrite(OUTS, CompressibleFoundationInitialThicknesses[i]);
-			for (i = 1; i <= DredgedFillLayers; i++)
+			for (int i = 1; i <= DredgedFillLayers; i++)
 				Io.StreamWrite(OUTS, DredgedFillInitialThicknesses[i]);
 
 			Io.StreamWrite(OUTS, hdf1, DredgedFillTotalSettlement, CompressibleFoundationTotalSettlement);
@@ -72,7 +72,7 @@
         write(iouts) ep(i), pep(i), rf(i)
     enddo
 			*/
-			for (i = 1; i <= 12; i++)
+			for (int i = 1; i <= 12; i++)
 				Io.StreamWrite(OUTS, ep[i], MaxEnvironmentalPotentialEvaporation[i], AverageMonthlyRainfall[i]);
 
 			/*
@@ -80,7 +80,7 @@
         write(iouts)  nmat(i)
     enddo
 			*/
-			for (i = 1; i <= CompressibleFoundationMaterialTypes + DredgedFillMaterialTypes; i++)
+			for (int i = 1; i <= CompressibleFoundationMaterialTypes + DredgedFillMaterialTypes; i++)
 				Io.StreamWrite(OUTS, MaterialIDs[i]);
 
 			/*
@@ -91,7 +91,7 @@
         write(iouts) et(i)
     enddo
 			*/
-			for (i = 1; i <= ndfpoint; i++) {
+			for (int i = 1; i <= ndfpoint; i++) {
 				Io.StreamWrite(OUTS, DredgedFillCoordA[i], af[i], bf[i], DredgedFillCurrentVoidRatio[i], DredgedFillInitialVoidRatio[i]);
 				Io.StreamWrite(OUTS, DredgedFillFinalVoidRatio[i], DredgedFillEffectiveStress[i], f[i], fint[i], DredgedFillTotalStress[i]);
 				Io.StreamWrite(OUTS, DredgedFillExcessPoreWaterPressure[i], DredgedFillHydrostaticPoreWaterPressure[i], DredgedFillTotalPoreWaterPressure[i], DredgedFillCoordXI[i], DredgedFillCoordZ[i]);
@@ -108,7 +108,7 @@
     endif
 			*/
 			if (IsFoundationCompressible != 2) {
-				for (i = 1; i <= nblpoint; i++) {
+				for (int i = 1; i <= nblpoint; i++) {
 					Io.StreamWrite(OUTS, CompressibleFoundationCoordA[i], af1[i], bf1[i], CompressibleFoundationCurrentVoidRatio[i], CompressibleFoundationInitialVoidRatio[i]);
 					Io.StreamWrite(OUTS, CompressibleFoundationFinalVoidRatio[i], CompressibleFoundationEffectiveStree[i], f1[i], fint1[i], CompressibleFoundationTotalStree[i]);
 					Io.StreamWrite(OUTS, CompressibleFoundationExcessPoreWaterPressure[i], CompressibleFoundationHydrostaticPoreWaterPressure[i], CompressibleFoundationTotalPoreWaterPressure[i], CompressibleFoundationCoordXI[i], CompressibleFoundationCoordZ[i]);
@@ -126,13 +126,13 @@
         enddo
     enddo
 			*/
-			for (i = 1; i <= DredgedFillLayers; i++) {
+			for (int i = 1; i <= DredgedFillLayers; i++) {
 				Io.StreamWrite(OUTS, DredgedFillMaterialIDs[i], DredgedFillSublayers[i], dz[i], IsDredgedFillInPrimaryConsolidations[i]);
-				id = DredgedFillMaterialIDs[i];
+				var id = DredgedFillMaterialIDs[i];
 				Io.StreamWrite(OUTS, RelationDefinitionLines[id], CaCcs[id], CrCcs[id], SpecificGravities[id], gs[id], gc[id]);
 				Io.StreamWrite(OUTS, DredgedFillSaturationLimits[id], DredgedFillDesiccationLimits[id], DredgedFillDryingMaxDepth[id], DredgedFillAverageSaturation[id]);
-				for (k = 1; k <= RelationDefinitionLines[id]; k++) {
-					Io.StreamWrite(OUTS, VoidRatios[k, id], Permeabilities[k, id], EffectiveStresses[k, id]);
+				for (int j = 1; j <= RelationDefinitionLines[id]; j++) {
+					Io.StreamWrite(OUTS, VoidRatios[j, id], Permeabilities[j, id], EffectiveStresses[j, id]);
 				}
 			}
 
@@ -149,12 +149,12 @@
     endif
 			*/
 			if (IsFoundationCompressible != 2) {
-				for (i = 1; i <= CompressibleFoundationLayers; i++) {
+				for (int i = 1; i <= CompressibleFoundationLayers; i++) {
 					Io.StreamWrite(OUTS, CompressibleFoundationMaterialIDs[i], CompressibleFoundationSublayers[i], dz1[i], IsCompressibleFoundationInPrimaryConsolidations[i]);
-					id = CompressibleFoundationMaterialIDs[i];
+					var id = CompressibleFoundationMaterialIDs[i];
 					Io.StreamWrite(OUTS, RelationDefinitionLines[id], CaCcs[id], CrCcs[id], SpecificGravities[id], gs[id], gc[id]);
-					for (k = 1; k <= RelationDefinitionLines[id]; k++) {
-						Io.StreamWrite(OUTS, VoidRatios[k, id], Permeabilities[k, id], EffectiveStresses[k, id]);
+					for (int j = 1; j <= RelationDefinitionLines[id]; j++) {
+						Io.StreamWrite(OUTS, VoidRatios[j, id], Permeabilities[j, id], EffectiveStresses[j, id]);
 					}
 				}
 			}
@@ -164,10 +164,10 @@
         write(iouts) (auxdf(k, i), i = 1, ndfpoint)
     enddo
 			*/
-			for (k = 1; k <= 15; k++) {
+			for (int i = 1; i <= 15; i++) {
 				// write(iouts) (auxdf(k, i), i = 1, ndfpoint)
-				for (i = 1; i <= ndfpoint; i++)
-					Io.StreamWrite(OUTS, auxdf[k, i]);
+				for (int j = 1; j <= ndfpoint; j++)
+					Io.StreamWrite(OUTS, auxdf[i, j]);
 			}
 
 			/*
@@ -178,9 +178,9 @@
 	endif
 			*/
 			if (IsFoundationCompressible != 2) {
-				for (k = 1; k <= 15; k++) {
-					for (i = 1; i <= nblpoint; i++)
-						Io.StreamWrite(OUTS, auxbl[k, i]);
+				for (int i = 1; i <= 15; i++) {
+					for (int j = 1; j <= nblpoint; j++)
+						Io.StreamWrite(OUTS, auxbl[i, j]);
 				}
 			}
 
@@ -195,25 +195,26 @@
 			Io.StreamWrite(OUTS, matindex);
 
 			// write(iouts) (ahdf(i), atds(i), nms(i), nnsc(i), i = 1, ntime)
-			for (i = 1; i <= PrintTimes; i++)
+			for (int i = 1; i <= PrintTimes; i++)
 				Io.StreamWrite(OUTS, NewDredgedFillInitialThicknesses[i], NewDredgedFillDesiccationDelayDays[i], NewDredgedFillDesiccationDelayMonths[i], NewDredgedFillPrintOptions[i]);
 
 			// write(iouts) tol
 			Io.StreamWrite(OUTS, SecondaryCompressionExcessPoreWaterPressureLimit);
 
 			// write(iouts) tpdf, tpbl
-			for (i = 1; i < tpdf.Length; i++)
+			for (int i = 1; i < tpdf.Length; i++)
 				Io.StreamWrite(OUTS, tpdf[i]);
-			for (i = 1; i < tpbl.Length; i++)
+			for (int i = 1; i < tpbl.Length; i++)
 				Io.StreamWrite(OUTS, tpbl[i]);
-			
+
 			// write(iouts) difsecdf, difsecbl, qdfold
-			for (i = 1; i < difsecdf.Length; i++)
+			for (int i = 1; i < difsecdf.Length; i++)
 				Io.StreamWrite(OUTS, difsecdf[i]);
-			for (i = 1; i < difsecbl.Length; i++)
+			for (int i = 1; i < difsecbl.Length; i++)
 				Io.StreamWrite(OUTS, difsecbl[i]);
 			Io.StreamWrite(OUTS, qdfold);
+
+			Io.CloseWrite(OUTS);
 		}
 	}
 }
-

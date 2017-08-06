@@ -60,6 +60,9 @@
     <Compile Include="Psddf\Intro.cs" />
     <Compile Include="Psddf\Pfunc.cs" />
     <Compile Include="Psddf\Psddf.cs" />
+    <Compile Include="Psddf\Public\ResetSimulation.cs" />
+    <Compile Include="Psddf\Public\SaveContinuation.cs" />
+    <Compile Include="Psddf\Public\RestoreContinuation.cs" />
     <Compile Include="Psddf\Recovery.cs" />
     <Compile Include="Psddf\Reset.cs" />
     <Compile Include="Psddf\Savdat.cs" />

@@ -6,7 +6,8 @@ namespace PsddfCsCli {
 	class Program {
 		const int IN = Psddf.IN;
 
-		static string InputFilePath = "test.psi";
+		static string InputFilePath = "test2c.psi";
+		static string ContinuationFilePath = "temp_contfile.psc";
 
 		static ICmd Cmd = new Cmd ();
 		static IIo Io = new Io();
@@ -59,6 +60,7 @@ namespace PsddfCsCli {
 
 			if (p.IsNewSimulation == 1) {
 				// new simulation
+				Cmd.WriteLine("\nNew simulation");
 
 				EatLineNumber();
 				p.SimulationPrintOption = Io.ReadInt(IN);
@@ -230,14 +232,93 @@ namespace PsddfCsCli {
 						"Month: {0}, MaxEnvironmentalPotentialEvaporation: {1}, AverageMonthlyRainfall: {2}",
 						i, p.MaxEnvironmentalPotentialEvaporation[i], p.AverageMonthlyRainfall[i]);
 				}
-
-				if (!Io.EndOfFile(IN))
-					throw new Exception("Input file corrupted");
 			} else {
 				// continuation file
+				Cmd.WriteLine("\nContinuation file");
+
+				EatLineNumber();
+				p.ContinuationPrintTimes = Io.ReadInt(IN);
+				p.ContinuationDredgedFillMaterialTypes = Io.ReadInt(IN);
+				Cmd.WriteLine(
+					"ContinuationPrintTimes: {0}, ContinuationDredgedFillMaterialTypes: {1}",
+					p.ContinuationPrintTimes, p.ContinuationDredgedFillMaterialTypes);
+
+				Cmd.WriteLine("\nRestore continuation status...");
+				p.RestoreContinuation(ContinuationFilePath);
+				Cmd.WriteLine("Restore continuation status complete");
+
+				Cmd.WriteLine("\nRead dredged fill material information...");
+				for (int i = p.DredgedFillMaterialTypes + 1; i <= p.DredgedFillMaterialTypes + p.ContinuationDredgedFillMaterialTypes; i++) {
+					EatLineNumber();
+					var id = Io.ReadInt(IN);
+					p.SpecificGravities[id] = Io.ReadDouble(IN);
+					p.CaCcs[id] = Io.ReadDouble(IN);
+					p.CrCcs[id] = Io.ReadDouble(IN);
+					p.DredgedFillDesiccationLimits[id] = Io.ReadDouble(IN);
+					p.DredgedFillSaturationLimits[id] = Io.ReadDouble(IN);
+					p.DredgedFillDryingMaxDepth[id] = Io.ReadDouble(IN);
+					p.DredgedFillAverageSaturation[id] = Io.ReadDouble(IN);
+					p.RelationDefinitionLines[id] = Io.ReadInt(IN);
+
+					p.MaterialIDs[p.CompressibleFoundationMaterialTypes + i] = id;
+					Cmd.WriteLine(
+						"MaterialID: {0}, SpecificGravities: {1}, CaCcs: {2}, CrCcs: {3}, DredgedFillDesiccationLimits: {4}" +
+						"\n\t DredgedFillSaturationLimits: {5}, DredgedFillDryingMaxDepth: {6}, DredgedFillAverageSaturation: {7}" +
+						"\n\t RelationDefinitionLines: {8}",
+						id, p.SpecificGravities[id], p.CaCcs[id], p.CrCcs[id], p.DredgedFillDesiccationLimits[id],
+						p.DredgedFillSaturationLimits[id], p.DredgedFillDryingMaxDepth[id], p.DredgedFillAverageSaturation[id],
+						p.RelationDefinitionLines[id]);
+
+					for (int j = 1; j <= p.RelationDefinitionLines[id]; j++) {
+						EatLineNumber();
+						p.VoidRatios[j, id] = Io.ReadDouble(IN);
+						p.EffectiveStresses[j, id] = Io.ReadDouble(IN);
+						p.Permeabilities[j, id] = Io.ReadDouble(IN);
+						Cmd.WriteLine(
+							"VoidRatios: {0}, EffectiveStresses: {1}, Permeabilities: {2}",
+							p.VoidRatios[j, id], p.EffectiveStresses[j, id], p.Permeabilities[j, id]);
+					}
+				}
+				p.DredgedFillMaterialTypes += p.ContinuationDredgedFillMaterialTypes;
+
+				Cmd.WriteLine("\nRead print options...");
+				p.StartPrintTime = p.PrintTimes + 1;
+				p.PrintTimes += p.ContinuationPrintTimes;
+				p.DredgedFillLayers = 1;
+				for (int i = p.StartPrintTime; i <= p.PrintTimes; i++) {
+					EatLineNumber();
+					p.PrintTimeDates[i] = Io.ReadDouble(IN);
+					p.NewDredgedFillInitialThicknesses[i] = Io.ReadDouble(IN);
+					p.NewDredgedFillDesiccationDelayDays[i] = Io.ReadDouble(IN);
+					p.NewDredgedFillDesiccationDelayMonths[i] = Io.ReadInt(IN);
+					p.NewDredgedFillPrintOptions[i] = Io.ReadInt(IN);
+					Cmd.WriteLine(
+						"PrintTimeDates: {0}, NewDredgedFillInitialThicknesses: {1}, NewDredgedFillDesiccationDelayDays: {2}" +
+						"\n\t NewDredgedFillDesiccationDelayMonths: {3}, NewDredgedFillPrintOptions: {4}",
+						p.PrintTimeDates[i], p.NewDredgedFillInitialThicknesses[i], p.NewDredgedFillDesiccationDelayDays[i],
+						p.NewDredgedFillDesiccationDelayMonths[i], p.NewDredgedFillPrintOptions[i]);
+
+
+					if (p.NewDredgedFillInitialThicknesses[i] != 0) {
+						// New layer has been added;
+						Cmd.WriteLine("\t Read new layer information...");
+						p.DredgedFillLayers++;
+						p.DredgedFillInitialVoidRatios[p.DredgedFillLayers] = Io.ReadDouble(IN);
+						p.DredgedFillMaterialIDs[p.DredgedFillLayers] = Io.ReadInt(IN);
+						p.DredgedFillSublayers[p.DredgedFillLayers] = Io.ReadInt(IN);
+
+						p.DredgedFillInitialThicknesses[p.DredgedFillLayers] = p.NewDredgedFillInitialThicknesses[i];
+						Cmd.WriteLine(
+							"\t DredgedFillInitialVoidRatios: {0}, DredgedFillMaterialIDs: {1}, DredgedFillSublayers: {2}",
+							p.DredgedFillInitialVoidRatios[p.DredgedFillLayers], p.DredgedFillMaterialIDs[p.DredgedFillLayers], p.DredgedFillSublayers[p.DredgedFillLayers]);
+					}
+				}
 			}
 
+			if (!Io.EndOfFile(IN))
+				throw new Exception("Input file corrupted");
 
+			Cmd.WriteLine("\nRead input file complete");
 
 
 

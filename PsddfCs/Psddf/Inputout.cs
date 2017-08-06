@@ -74,7 +74,7 @@
 				}
 				Io.PrintLine(INOUT);
 
-				for (i = nm; i <= PrintTimes; i++) {
+				for (i = StartPrintTime; i <= PrintTimes; i++) {
 					Io.Print(INOUT, j++, PrintTimeDates[i], NewDredgedFillInitialThicknesses[i], NewDredgedFillDesiccationDelayDays[i], NewDredgedFillDesiccationDelayMonths[i], NewDredgedFillPrintOptions[i]);
 
 					if (NewDredgedFillInitialThicknesses[i] != 0) {
