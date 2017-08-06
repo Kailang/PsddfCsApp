@@ -23,7 +23,7 @@
 				Io.PrintLine(INOUT);
 
 				for (kk = 1; kk <= CompressibleFoundationMaterialTypes; kk++) {
-					var kom = nmat[kk];
+					var kom = MaterialIDs[kk];
 					Io.PrintLine(INOUT, j++, kom, SpecificGravities[kom], CaCcs[kom], CrCcs[kom], RelationDefinitionLines[kom]);
 
 					for (i = 1; i <= RelationDefinitionLines[kom]; i++) {
@@ -33,7 +33,7 @@
 				Io.PrintLine(INOUT);
 
 				for (kk = 1; kk <= DredgedFillMaterialTypes; kk++) {
-					var kom = nmat[CompressibleFoundationMaterialTypes + kk];
+					var kom = MaterialIDs[CompressibleFoundationMaterialTypes + kk];
 					Io.PrintLine(INOUT, j++, kom, SpecificGravities[kom], CaCcs[kom], CrCcs[kom], DredgedFillDesiccationLimits[kom], DredgedFillSaturationLimits[kom], DredgedFillDryingMaxDepth[kom], DredgedFillAverageSaturation[kom], RelationDefinitionLines[kom]);
 
 					for (i = 1; i <= RelationDefinitionLines[kom]; i++) {
@@ -65,7 +65,7 @@
 				Io.PrintLine(INOUT);
 
 				for (kk = 1; kk <= ContinuationDredgedFillMaterialTypes; kk++) {
-					var kom = nmat[CompressibleFoundationMaterialTypes + DredgedFillMaterialTypes + kk];
+					var kom = MaterialIDs[CompressibleFoundationMaterialTypes + DredgedFillMaterialTypes + kk];
 					Io.PrintLine(INOUT, j++, kom, SpecificGravities[kom], CaCcs[kom], CrCcs[kom], DredgedFillDesiccationLimits[kom], DredgedFillSaturationLimits[kom], DredgedFillDryingMaxDepth[kom], DredgedFillAverageSaturation[kom], RelationDefinitionLines[kom]);
 
 					for (i = 1; i <= RelationDefinitionLines[kom]; i++) {

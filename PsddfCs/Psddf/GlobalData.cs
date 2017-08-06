@@ -360,6 +360,10 @@
 		/// </summary> 		
 		public readonly double[] PrintTimeDates = new double[1000 + 1];
 		/// <summary>
+		/// Number of dredge fill layer added.
+		/// </summary>
+		public int DredgedFillLayers;
+		/// <summary>
 		/// AHDF
 		/// Initial thickness of new dredged fill layer to be added at PRINTT(I).
 		/// </summary>
@@ -526,11 +530,6 @@
 
 
 		/// <summary>
-		/// Number of dredge fill layer added.
-		/// </summary>
-		int DredgedFillLayers;
-
-		/// <summary>
 		/// The next time at which the properties of the consolidating layers will be printed and/or a new layer of dredged fill will be applied. 
 		/// </summary>
 		double tprint;
@@ -613,7 +612,7 @@
 		/// </summary>
 		double pre_time;
 
-		public readonly int[] nmat = new int[nleymax + 1];
+		public readonly int[] MaterialIDs = new int[nleymax + 1];
 
 		/*
     ! Group Four

@@ -136,7 +136,7 @@
 					CaCcs[MaterialID] = Io.ReadDouble(IN);
 					CrCcs[MaterialID] = Io.ReadDouble(IN);
 					RelationDefinitionLines[MaterialID] = Io.ReadInt(IN);
-					nmat[i] = MaterialID;
+					MaterialIDs[i] = MaterialID;
 
 					for (int j = 1; j <= RelationDefinitionLines[MaterialID]; j++) {
 						Io.ReadInt(IN);
@@ -190,7 +190,7 @@
 					DredgedFillDryingMaxDepth[MaterialID] = Io.ReadDouble(IN);
 					DredgedFillAverageSaturation[MaterialID] = Io.ReadDouble(IN);
 					RelationDefinitionLines[MaterialID] = Io.ReadInt(IN);
-					nmat[intx(matindex)] = MaterialID;
+					MaterialIDs[intx(matindex)] = MaterialID;
 					matindex++;
 //					const string f114 =
 //						"\n" +
@@ -477,7 +477,7 @@
 					DredgedFillDryingMaxDepth[MaterialID] = Io.ReadDouble(IN);
 					DredgedFillAverageSaturation[MaterialID] = Io.ReadDouble(IN);
 					RelationDefinitionLines[MaterialID] = Io.ReadInt(IN);
-					nmat[intx(matindex)] = MaterialID;
+					MaterialIDs[intx(matindex)] = MaterialID;
 					matindex++;
 
 					for (int j = 1; j <= RelationDefinitionLines[MaterialID]; j++) {

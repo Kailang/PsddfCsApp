@@ -81,7 +81,7 @@
     enddo
 			*/
 			for (i = 1; i <= CompressibleFoundationMaterialTypes + DredgedFillMaterialTypes; i++)
-				Io.StreamWrite(OUTS, nmat[i]);
+				Io.StreamWrite(OUTS, MaterialIDs[i]);
 
 			/*
     do i = 1, ndfpoint

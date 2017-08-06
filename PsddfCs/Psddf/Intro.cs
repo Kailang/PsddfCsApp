@@ -138,7 +138,7 @@
 			#endregion
 
 			for (k = 1; k <= DredgedFillMaterialTypes + CompressibleFoundationMaterialTypes; k++) {
-				i = nmat[k];
+				i = MaterialIDs[k];
 				gs[i] = SpecificGravities[i] * WaterUnitWeight;
 				// Calculate unit weight of dredge fill solids;
 				gc[i] = gs[i] - WaterUnitWeight;
@@ -181,7 +181,7 @@
 					}
 
 					for (ii = 1; ii <= CompressibleFoundationMaterialTypes; ii++) {
-						k = nmat[ii];
+						k = MaterialIDs[ii];
 						j = RelationDefinitionLines[k];
 						// write(iout, 105) k, gsdf[k];
 						// write(iout, 108);
@@ -223,14 +223,14 @@
 			Io.WriteLine(OUT, f111);
 			j = intx(matindex);
 			for (i = 1; i <= DredgedFillMaterialTypes; i++) {
-				k = nmat[j];
+				k = MaterialIDs[j];
 				// write(iout, 114) k, gsdf[k], cacc[k], crcc[k], sl[k], dl[k], h2[k], sat[k];
 				Io.WriteLine(OUT, f114, k, SpecificGravities[k], CaCcs[k], CrCcs[k], DredgedFillSaturationLimits[k], DredgedFillDesiccationLimits[k], DredgedFillDryingMaxDepth[k], DredgedFillAverageSaturation[k]);
 				j = j + 1;
 			}
 
 			for (ii = 1; ii <= DredgedFillMaterialTypes; ii++) {
-				k = nmat[intx(matindex)];
+				k = MaterialIDs[intx(matindex)];
 				// write(iout, 305) k;
 				Io.WriteLine(OUT, f305, k);
 				j = RelationDefinitionLines[k];

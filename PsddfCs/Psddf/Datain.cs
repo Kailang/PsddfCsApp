@@ -134,7 +134,7 @@ namespace PsddfCs {
     enddo
 			*/
 			for (i = 1; i <= CompressibleFoundationMaterialTypes + DredgedFillMaterialTypes; i++)
-				nmat[i] = Io.StreamReadInt(INS);
+				MaterialIDs[i] = Io.StreamReadInt(INS);
 
 			/*
     do i = 1, ndfpoint
