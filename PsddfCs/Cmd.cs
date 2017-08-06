@@ -8,8 +8,6 @@ namespace PsddfCs {
 		void WriteLine (object o = null);
 		void WriteLine (string format, params object[] args);
 
-		string ReadLine ();
-
 		void Print (params object[] objs);
 	}
 
@@ -28,10 +26,6 @@ namespace PsddfCs {
 
 		public void WriteLine (string format, params object[] args) {
 			Console.WriteLine(format, args);
-		}
-
-		public string ReadLine () {
-			return Console.ReadLine();
 		}
 
 		public void Print (params object[] objs) {

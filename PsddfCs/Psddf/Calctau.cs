@@ -17,7 +17,7 @@
 				dz[i] = DredgedFillInitialThicknesses[i] / ((1 + DredgedFillInitialVoidRatios[i]) * DredgedFillSublayers[i]);
 			}
 
-			if (IsFoundationCompressible != 2 && ndff <= 1) {
+			if (IsFoundationCompressible != 2 && IsNewSimulation == 1) {
 				// Check For Compressible Foundation;
 				dzz = 0.0;
 				efs = 0.0;

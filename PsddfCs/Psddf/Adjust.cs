@@ -13,7 +13,6 @@ namespace PsddfCs {
 			int i;
 			double slope;
 			var new_void = new double[d1, d2];
-			string cont;
 
 			const string f2001 =
 				"NOTE: The initial void ratio specified for material number {0,2} is less\n" +
@@ -35,16 +34,6 @@ namespace PsddfCs {
 				// This prevents altering the curve a second time;
 				// write (*, 2001) id;
 				Cmd.WriteLine(f2001, id);
-				// Notify user of change;
-				// write(*, '(2x, a)') "Do you wish to contiue correcting the e-log p' relationship (Y/N)? :";
-				Cmd.WriteLine("  Do you wish to contiue correcting the e-log p' relationship (Y/N)? :");
-				// read(*, '(a)') cont;
-				cont = Cmd.ReadLine();
-
-				if (cont == "n" || cont == "N") {
-					throw new SimulationException("Stop the program since user does not wish to continue.");
-					// Stops program if user does not wish to continue;
-				}
 				// Calcuration of slope of void ratio change: Choi's method;
 				slope = (DredgedFillInitialVoidRatios[ii] - voidratio[total_point, id]) / (voidratio[1, id] - voidratio[total_point, id]);
 				for (i = 1; i <= total_point; i++) {

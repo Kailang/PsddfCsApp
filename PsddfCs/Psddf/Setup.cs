@@ -16,7 +16,7 @@
 
 			nblpoint = nblpoint + CompressibleFoundationLayers;
 
-			if (ndff <= 1) {
+			if (IsNewSimulation == 1) {
 				// ndff = 1 when it is not a restart;
 				// Set constants;
 				ndfpoint = DredgedFillSublayers[1] + 1;

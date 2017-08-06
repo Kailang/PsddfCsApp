@@ -145,8 +145,8 @@
 				// Calculate effective unit weight of fill;
 			}
 
-			if (ndff <= 1) {
-				// ndff = 1 if not a restart loop;
+			if (IsNewSimulation == 1) {
+				// ndff = 1 if new simulation;
 
 				// Print problem number and heading;
 				// write(iout, 100);
@@ -266,14 +266,14 @@
 
 			// Print to output indicating e-log p' curve has been adjusted;
 			for (k = 1; k <= (DredgedFillMaterialTypes + CompressibleFoundationMaterialTypes); k++) {
-				if (!IsCurveAdjusteds[k]) {
+				if (!IsCurveNotAdjusteds[k]) {
 					// Flag changed to False if it was adjusted;
 					// write(iout, 2001);
 					Io.WriteLine(OUT, f2001, k);
 				}
 			}
 
-			if (ndff <= 1) {
+			if (IsNewSimulation == 1) {
 				// Print summary of rainfall and evaporation potential;
 				// write(iout, 119);
 				// write(iout, 120);

@@ -53,6 +53,8 @@
 		#endregion
 
 		#region Group A
+		public event System.Action<double> OnProgressUpdated;
+		public event System.Action<Psddf> OnPrintTimeReached;
 
 		/// <summary>
 		/// Path or name of the input data file.
@@ -68,7 +70,8 @@
 		/// true = print simulation process.
 		/// false = do not print simulation process.
 		/// </summary>
-		public bool IsPrintProcess;
+		public bool IsPrintProgress;
+		public double Progress;
 
 		/// <summary>
 		/// NPROB
@@ -548,7 +551,7 @@
 		/// <summary>
 		/// Total print time.
 		/// </summary>
-		int LastPrintTimeDate;
+		int TotalTime;
 
 
 
@@ -711,7 +714,7 @@
 		/// Vector holding flag for adjusting e-p curves.
 		/// True: Not adjusted; False: Adjusted.
 		/// </summary>
-		bool[] IsCurveAdjusteds = new bool[npdf + 1];
+		bool[] IsCurveNotAdjusteds = new bool[npdf + 1];
 
 		int MaterialTypes, temp_id;
 		int[] indi_id = new int[1000 + 1];

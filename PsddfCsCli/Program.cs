@@ -19,6 +19,8 @@ namespace PsddfCsCli {
 		static void Main (string[] args) {
 			var p = new Psddf(Cmd, Io);
 
+			//p.Main(new[] { InputFilePath }); return;
+
 			// set input file
 			if (args.Length > 0)
 				InputFilePath = args[0];
@@ -29,7 +31,7 @@ namespace PsddfCsCli {
 			// set output file
 			if (args.Length > 1) {
 				if (args[1].ToLower() == "-s")
-					p.IsPrintProcess = true;
+					p.IsPrintProgress = true;
 				else
 					p.OutputFilePath = args[1];
 			}
@@ -232,6 +234,8 @@ namespace PsddfCsCli {
 						"Month: {0}, MaxEnvironmentalPotentialEvaporation: {1}, AverageMonthlyRainfall: {2}",
 						i, p.MaxEnvironmentalPotentialEvaporation[i], p.AverageMonthlyRainfall[i]);
 				}
+
+				p.ResetSimulation();
 			} else {
 				// continuation file
 				Cmd.WriteLine("\nContinuation file");
@@ -318,31 +322,25 @@ namespace PsddfCsCli {
 			if (!Io.EndOfFile(IN))
 				throw new Exception("Input file corrupted");
 
+			Io.CloseRead(IN);
 			Cmd.WriteLine("\nRead input file complete");
 
+			p.InitSimulation();
 
+			p.PrintIntro();
+			if (p.SimulationPrintOption != 3) {
+				p.RunSimulation();
+			}
 
+			if (p.IsNotSaveContinuation == 2) {
+				p.SaveContinuation(ContinuationFilePath);
+			}
 
+			p.EndSimulation();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+			Cmd.WriteLine("\n============================ Simulation Completed ==============================");
 			Cmd.Write("\nPress enter to exit...");
-			Cmd.ReadLine();
+			Console.ReadLine();
 		}
 	}
 }

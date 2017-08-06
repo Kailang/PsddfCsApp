@@ -17,7 +17,7 @@
 			// Set flag to normally consolidated;
 			for (int i = 1; i <= nleymax; i++) CompressibleFoundationOCR[i] = 1;
 			// Clear adjustflags ;
-			for (int i = 1; i <= npdf; i++) IsCurveAdjusteds[i] = true;
+			for (int i = 1; i <= npdf; i++) IsCurveNotAdjusteds[i] = true;
 			ndff = 1;
 
 			// Get the name of the file holding the input data
@@ -280,7 +280,7 @@
 					// Check all added layers;
 					if (DredgedFillInitialVoidRatios[i] != VoidRatios[1, DredgedFillMaterialIDs[i]]) {
 //						Cmd.WriteLine("e00[{0}] != voidratio[0, iddf[{0}]; call adjust()", i);
-						Adjust(dim1, dim2, i, DredgedFillMaterialIDs[i], RelationDefinitionLines[DredgedFillMaterialIDs[i]], VoidRatios, ref IsCurveAdjusteds[DredgedFillMaterialIDs[i]]);
+						Adjust(dim1, dim2, i, DredgedFillMaterialIDs[i], RelationDefinitionLines[DredgedFillMaterialIDs[i]], VoidRatios, ref IsCurveNotAdjusteds[DredgedFillMaterialIDs[i]]);
 					}
 				}
 
@@ -537,7 +537,7 @@
 
 			// Run program (npt = 3 will only print out soil conditions);
 			if (SimulationPrintOption != 3) {
-				LastPrintTimeDate = intx(PrintTimeDates[PrintTimes]);
+				TotalTime = intx(PrintTimeDates[PrintTimes]);
 
 				// Main simulation loop.
 				for (int i = StartPrintTime; i <= PrintTimes; i++) {

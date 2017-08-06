@@ -9,7 +9,7 @@
 
 			double cf, dz2, dz12, cf1, est = 0, cc = 0, ca;
 			double ut, est1 = 0, ut1, rpker = 0, pke = 0, raf, rbf, stab, cons;
-			double maxu, voidx = 0, ratio;
+			double maxu, voidx = 0;
 
 			bool logic1;
 
@@ -334,11 +334,12 @@
 				}
 
 				// write the status of the simulation to the screen;
-				if (IsPrintProcess) {
-					ratio = CurrentTime / LastPrintTimeDate * 100;
+				Progress = CurrentTime / TotalTime * 100;
+				if (IsPrintProgress) {
 					// write (*, '(a36, f6.1)') '+ Percentage of Execution Completed:', ratio;
-					Cmd.WriteLine("+ Percentage of Execution Completed:{0,6:F1}", ratio);
+					Cmd.WriteLine("+ Percentage of Execution Completed:{0,6:F1}", Progress);
 				}
+				OnProgressUpdated?.Invoke(Progress);
 			}
 		}
 	}

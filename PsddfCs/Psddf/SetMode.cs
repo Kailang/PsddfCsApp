@@ -14,7 +14,7 @@ namespace PsddfCs {
 				throw new ConsoleException("Input file does not exist in {0}.", InputFilePath);
 
 			// If the second args is "-s", output progress;
-			IsPrintProcess = args.Length > 1 && args[1].ToLower() == "-s";
+			IsPrintProgress = args.Length > 1 && args[1].ToLower() == "-s";
 
 //			const string f100 =
 //				" ********************************************************* \n" +
