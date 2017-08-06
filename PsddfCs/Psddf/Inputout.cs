@@ -3,11 +3,11 @@
 		/// <summary>
 		/// Save the .psi input file of the simulation to the filename.
 		/// </summary>
-		/// <param name="filename">Filename.</param>
-		void Inputout (string filename) {
+		/// <param name="path">Filename.</param>
+		public void Inputout (string path) {
 			int i, j = 100, kk;
 
-			Io.OpenWrite(INOUT, filename);
+			Io.OpenWrite(INOUT, path);
 
 			Io.PrintLine(INOUT, j++, "'" + ProblemName + "'", IsNewSimulation, IsNotSaveContinuation);
 
@@ -84,6 +84,8 @@
 					Io.PrintLine(INOUT);
 				}
 			}
+
+			Io.CloseWrite(INOUT);
 		}
 	}
 }
