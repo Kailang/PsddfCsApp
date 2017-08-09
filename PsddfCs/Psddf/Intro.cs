@@ -139,9 +139,9 @@
 
 			for (k = 1; k <= DredgedFillMaterialTypes + CompressibleFoundationMaterialTypes; k++) {
 				i = MaterialIDs[k];
-				gs[i] = SpecificGravities[i] * WaterUnitWeight;
+				SoilUnitWeight[i] = SpecificGravities[i] * WaterUnitWeight;
 				// Calculate unit weight of dredge fill solids;
-				gc[i] = gs[i] - WaterUnitWeight;
+				SoilBuoyantUnitWeight[i] = SoilUnitWeight[i] - WaterUnitWeight;
 				// Calculate effective unit weight of fill;
 			}
 
@@ -190,7 +190,7 @@
 						Io.WriteLine(OUT, f108);
 						for (i = 1; i <= j; i++) {
 							// write(iout, 110) i, voidratio[i, k], effectivestress[i, k], perm[i, k], pk[i, k], beta[i, k], dsde[i, k], alpha[i, k];
-							Io.WriteLine(OUT, f110, i, VoidRatios[i, k], EffectiveStresses[i, k], Permeabilities[i, k], pk[i, k], beta[i, k], dsde[i, k], alpha[i, k]);
+							Io.WriteLine(OUT, f110, i, VoidRatios[i, k], EffectiveStresses[i, k], Permeabilities[i, k], PK[i, k], Beta[i, k], Dsde[i, k], Alpha[i, k]);
 						}
 					}
 
@@ -205,7 +205,7 @@
 							Io.WriteLine(OUT, f108);
 							for (j = 1; j <= RelationDefinitionLines[id]; j++) {
 								// write(iout, 110) j, voidratio[j, id], effectivestress[j, id], perm[j, id], pk[j, id], beta[j, id], dsde[j, id], alpha[j, id];
-								Io.WriteLine(OUT, f110, j, VoidRatios[j, id], EffectiveStresses[j, id], Permeabilities[j, id], pk[j, id], beta[j, id], dsde[j, id], alpha[j, id]);
+								Io.WriteLine(OUT, f110, j, VoidRatios[j, id], EffectiveStresses[j, id], Permeabilities[j, id], PK[j, id], Beta[j, id], Dsde[j, id], Alpha[j, id]);
 							}
 						}
 					}
@@ -239,7 +239,7 @@
 				Io.WriteLine(OUT, f108);
 				for (i = 1; i <= j; i++) {
 					// write(iout, 110) i, voidratio[i, k], effectivestress[i, k], perm[i, k], pk[i, k], beta[i, k], dsde[i, k], alpha[i, k];
-					Io.WriteLine(OUT, f110, i, VoidRatios[i, k], EffectiveStresses[i, k], Permeabilities[i, k], pk[i, k], beta[i, k], dsde[i, k], alpha[i, k]);
+					Io.WriteLine(OUT, f110, i, VoidRatios[i, k], EffectiveStresses[i, k], Permeabilities[i, k], PK[i, k], Beta[i, k], Dsde[i, k], Alpha[i, k]);
 				}
 				matindex = matindex + 1;
 			}

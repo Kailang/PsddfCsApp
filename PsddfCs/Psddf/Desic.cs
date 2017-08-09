@@ -244,7 +244,7 @@ namespace PsddfCs {
 							id = DredgedFillMaterialIDs[ndflayer];
 							aev1 = (dz[ndflayer] * eav * (1.0 - sav)) + aev1;
 //							Cmd.Print("-!", qdf, dz[ndflayer], id, gs[id], eav, gw, sav);
-							qdf = qdf + (dz[ndflayer] * (gs[id] + (eav * WaterUnitWeight * sav)));
+							qdf = qdf + (dz[ndflayer] * (SoilUnitWeight[id] + (eav * WaterUnitWeight * sav)));
 //							Cmd.WriteLine("-!\t" + qdf);
 						}
 //						return;
@@ -316,7 +316,7 @@ namespace PsddfCs {
 
 			if (check) {
 				ntemp = ndfpoint;
-				SecondReset(d1, VoidRatios, EffectiveStresses, pk, dvds, dsde, alpha, beta, ndflayer, ntemp);
+				SecondReset(d1, VoidRatios, EffectiveStresses, PK, dvds, Dsde, Alpha, Beta, ndflayer, ntemp);
 			}
 
 			qdfold = qdf;

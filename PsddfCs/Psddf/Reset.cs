@@ -25,11 +25,11 @@
 
 				// Updating u for compresible foundation and dreged fill;
 				for (i = 1; i <= nblpoint; i++) {
-					CompressibleFoundationExcessPoreWaterPressure[i] = CompressibleFoundationExcessPoreWaterPressure[i] + el * gc[id];
+					CompressibleFoundationExcessPoreWaterPressure[i] = CompressibleFoundationExcessPoreWaterPressure[i] + el * SoilBuoyantUnitWeight[id];
 				}
 
 				for (i = 1; i <= ndfpoint; i++) {
-					DredgedFillExcessPoreWaterPressure[i] = DredgedFillExcessPoreWaterPressure[i] + gc[id] * el;
+					DredgedFillExcessPoreWaterPressure[i] = DredgedFillExcessPoreWaterPressure[i] + SoilBuoyantUnitWeight[id] * el;
 				}
 
 				ndfpoint = ndfpoint + DredgedFillSublayers[ndflayer] + 1;
@@ -57,7 +57,7 @@
 					DredgedFillInitialVoidRatio[i] = DredgedFillInitialVoidRatios[ndflayer];
 					f[i] = DredgedFillInitialVoidRatios[ndflayer];
 					DredgedFillCurrentVoidRatio[i] = DredgedFillInitialVoidRatios[ndflayer];
-					DredgedFillExcessPoreWaterPressure[i] = gc[id] * (acumel - DredgedFillCoordZ[i]);
+					DredgedFillExcessPoreWaterPressure[i] = SoilBuoyantUnitWeight[id] * (acumel - DredgedFillCoordZ[i]);
 				}
 
 				nt = ntemp - 1;
@@ -94,7 +94,7 @@
 				// Set void ratio functions for reset values;
 				jin = 2;
 				for (i = ntemp; i <= ndfpoint; i++) {
-					Intpgg(d1, RelationDefinitionLines, DredgedFillCurrentVoidRatio[i], VoidRatios, alpha, beta, ref af[i], ref bf[i], ref jin, id, auxdf, i, 0, 0);
+					Intpgg(d1, RelationDefinitionLines, DredgedFillCurrentVoidRatio[i], VoidRatios, Alpha, Beta, ref af[i], ref bf[i], ref jin, id, auxdf, i, 0, 0);
 				}
 
 				for (i = 1; i <= ndfpoint; i++) {
@@ -113,7 +113,7 @@
 					Vrfunc(d1);
 				}
 
-				SecondReset(d1, VoidRatios, EffectiveStresses, pk, dvds, dsde, alpha, beta, ndflayer - 1, ntemp - 1);
+				SecondReset(d1, VoidRatios, EffectiveStresses, PK, dvds, Dsde, Alpha, Beta, ndflayer - 1, ntemp - 1);
 				ndfcons = ndfpoint;
 			}
 		}

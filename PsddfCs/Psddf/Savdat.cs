@@ -41,7 +41,7 @@
 			Io.StreamWrite(OUTS, hdf1, DredgedFillTotalSettlement, CompressibleFoundationTotalSettlement);
 
 			// write(iouts) sfin, sfin1, tau, time, tprint
-			Io.StreamWrite(OUTS, DredgedFillFinalSettlement, CompressibleFoundationFinalSettlement, TimeStep, CurrentTime, tprint);
+			Io.StreamWrite(OUTS, DredgedFillFinalSettlement, CompressibleFoundationFinalSettlement, TimeStep, CurrentTime, NextPrintDate);
 
 			// write(iouts) ucon, ucon1, vri1
 			Io.StreamWrite(OUTS, DredgedFillAverageConsolidationDegree, CompressibleFoundationAverageConsolidationDegree, vri1);
@@ -129,7 +129,7 @@
 			for (i = 1; i <= DredgedFillLayers; i++) {
 				Io.StreamWrite(OUTS, DredgedFillMaterialIDs[i], DredgedFillSublayers[i], dz[i], IsDredgedFillInPrimaryConsolidations[i]);
 				id = DredgedFillMaterialIDs[i];
-				Io.StreamWrite(OUTS, RelationDefinitionLines[id], CaCcs[id], CrCcs[id], SpecificGravities[id], gs[id], gc[id]);
+				Io.StreamWrite(OUTS, RelationDefinitionLines[id], CaCcs[id], CrCcs[id], SpecificGravities[id], SoilUnitWeight[id], SoilBuoyantUnitWeight[id]);
 				Io.StreamWrite(OUTS, DredgedFillSaturationLimits[id], DredgedFillDesiccationLimits[id], DredgedFillDryingMaxDepth[id], DredgedFillAverageSaturation[id]);
 				for (k = 1; k <= RelationDefinitionLines[id]; k++) {
 					Io.StreamWrite(OUTS, VoidRatios[k, id], Permeabilities[k, id], EffectiveStresses[k, id]);
@@ -152,7 +152,7 @@
 				for (i = 1; i <= CompressibleFoundationLayers; i++) {
 					Io.StreamWrite(OUTS, CompressibleFoundationMaterialIDs[i], CompressibleFoundationSublayers[i], dz1[i], IsCompressibleFoundationInPrimaryConsolidations[i]);
 					id = CompressibleFoundationMaterialIDs[i];
-					Io.StreamWrite(OUTS, RelationDefinitionLines[id], CaCcs[id], CrCcs[id], SpecificGravities[id], gs[id], gc[id]);
+					Io.StreamWrite(OUTS, RelationDefinitionLines[id], CaCcs[id], CrCcs[id], SpecificGravities[id], SoilUnitWeight[id], SoilBuoyantUnitWeight[id]);
 					for (k = 1; k <= RelationDefinitionLines[id]; k++) {
 						Io.StreamWrite(OUTS, VoidRatios[k, id], Permeabilities[k, id], EffectiveStresses[k, id]);
 					}

@@ -56,7 +56,7 @@
     <Compile Include="Psddf\FinalVr.cs" />
     <Compile Include="Psddf\GlobalData.cs" />
     <Compile Include="Psddf\Ifn.cs" />
-    <Compile Include="Psddf\Inputout.cs" />
+    <Compile Include="Psddf\Public\SaveInput.cs" />
     <Compile Include="Psddf\Intro.cs" />
     <Compile Include="Psddf\Pfunc.cs" />
     <Compile Include="Psddf\Psddf.cs" />

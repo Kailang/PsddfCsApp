@@ -45,7 +45,7 @@
 				for (i = 1; i <= ndflayer; i++) {
 					id = DredgedFillMaterialIDs[i];
 					j = k + DredgedFillSublayers[i];
-					g1 = g1 + (DredgedFillCoordZ[j] - DredgedFillCoordZ[k]) * gc[id];
+					g1 = g1 + (DredgedFillCoordZ[j] - DredgedFillCoordZ[k]) * SoilBuoyantUnitWeight[id];
 					k = j + 1;
 				}
 				g1 = qdf + g1;
@@ -62,12 +62,12 @@
 						}
 						CompressibleFoundationHydrostaticPoreWaterPressure[kk] = WaterUnitWeight * (wl1 - CompressibleFoundationCoordXI[kk]) + overpress;
 						CompressibleFoundationTotalStree[kk] = WaterUnitWeight * (w1 - fint1[kk]) + hsa + g1 + overpress;
-						hsa = hsa + gs[id] * dz1[i];
+						hsa = hsa + SoilUnitWeight[id] * dz1[i];
 						CompressibleFoundationTotalPoreWaterPressure[kk] = CompressibleFoundationTotalStree[kk] - CompressibleFoundationEffectiveStree[kk];
 						CompressibleFoundationExcessPoreWaterPressure[kk] = CompressibleFoundationTotalPoreWaterPressure[kk] - CompressibleFoundationHydrostaticPoreWaterPressure[kk];
 					}
 					k = kk;
-					hsa = hsa - gs[id] * dz1[i];
+					hsa = hsa - SoilUnitWeight[id] * dz1[i];
 				}
 				if (CompressibleFoundationExcessPoreWaterPressure[1] < 0.0) {
 					CompressibleFoundationExcessPoreWaterPressure[1] = 0.0;
@@ -104,13 +104,13 @@
 					}
 					DredgedFillHydrostaticPoreWaterPressure[kk] = WaterUnitWeight * (DredgedFillCoordXI[ndfcons] - DredgedFillCoordXI[kk]) + overpress;
 					DredgedFillTotalStress[kk] = WaterUnitWeight * (fint[ndfcons] - fint[kk]) + hsa + qdf + overpress;
-					hsa = hsa + gs[id] * dz[i];
+					hsa = hsa + SoilUnitWeight[id] * dz[i];
 					DredgedFillTotalPoreWaterPressure[kk] = DredgedFillTotalStress[kk] - DredgedFillEffectiveStress[kk];
 					if (DredgedFillTotalPoreWaterPressure[kk] < DredgedFillHydrostaticPoreWaterPressure[kk])
 						DredgedFillTotalPoreWaterPressure[kk] = DredgedFillHydrostaticPoreWaterPressure[kk];
 					DredgedFillExcessPoreWaterPressure[kk] = DredgedFillTotalPoreWaterPressure[kk] - DredgedFillHydrostaticPoreWaterPressure[kk];
 				}
-				h_solid = h_solid + gs[id] * DredgedFillSublayers[i] * dz[i];
+				h_solid = h_solid + SoilUnitWeight[id] * DredgedFillSublayers[i] * dz[i];
 				k = kk;
 			}
 

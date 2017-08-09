@@ -4,7 +4,7 @@
 		/// Reset status
 		/// </summary>
 		public void ResetSimulation () {
-			for (int i = 1; i <= npdf; i++) af[i] = 0;
+			for (int i = 1; i <= DredgedFillMaxLayers; i++) af[i] = 0;
 
 			/*
 	! Set initial variables
@@ -45,13 +45,13 @@
 				difsecdf[i] = 0.0;
 			}
 
-			for (int i = 1; i <= npdf; i++) {
+			for (int i = 1; i <= DredgedFillMaxLayers; i++) {
 				for (int j = 1; j <= 15; j++) {
 					auxdf[j, i] = 0.0;
 				}
 			}
 
-			for (int i = 1; i <= npbl; i++) {
+			for (int i = 1; i <= CompressibleFoundationMaxLayers; i++) {
 				for (int j = 1; j <= 15; j++) {
 					auxbl[j, i] = 0.0;
 				}

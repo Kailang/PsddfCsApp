@@ -4,8 +4,6 @@
 		/// Init status
 		/// </summary>
 		public void InitSimulation () {
-			MaterialTypes = CompressibleFoundationMaterialTypes + DredgedFillMaterialTypes;
-
 			CompressibleFoundationTotalInitialThickness = 0;
 			for (int i = 1; i <= CompressibleFoundationLayers; i++)
 				CompressibleFoundationTotalInitialThickness += CompressibleFoundationInitialThicknesses[i];
@@ -13,6 +11,8 @@
 			DredgedFillTotleInitialThickness = 0;
 			for (int i = 1; i <= DredgedFillLayers; i++)
 				DredgedFillTotleInitialThickness += DredgedFillInitialThicknesses[i];
+
+			TotalMaterialTypes = CompressibleFoundationMaterialTypes + DredgedFillMaterialTypes;
 
 			TotalTime = intx(PrintTimeDates[PrintTimes]);
 
@@ -48,7 +48,7 @@
 
 				if (DredgedFillInitialVoidRatios[i] != VoidRatios[1, DredgedFillMaterialIDs[i]]) {
 					Cmd.WriteLine("DredgedFillInitialVoidRatios[{0}] != VoidRatios[1, {1}], auto adjust", i, DredgedFillMaterialIDs[i]);
-					Adjust(dim1, dim2, i, DredgedFillMaterialIDs[i], RelationDefinitionLines[DredgedFillMaterialIDs[i]], VoidRatios, ref IsCurveNotAdjusteds[DredgedFillMaterialIDs[i]]);
+					Adjust(Dimension1, Dimension2, i, DredgedFillMaterialIDs[i], RelationDefinitionLines[DredgedFillMaterialIDs[i]], VoidRatios, ref IsCurveNotAdjusteds[DredgedFillMaterialIDs[i]]);
 				}
 			}
 		}

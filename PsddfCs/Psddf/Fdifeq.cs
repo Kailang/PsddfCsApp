@@ -45,9 +45,9 @@
 						dz12 = dz1[k] * 2.0;
 						if (IsCompressibleFoundationInPrimaryConsolidations[k]) {
 							if (l == 1) {
-								FirstPoint(d1, RelationDefinitionLines, ref CompressibleFoundationCurrentVoidRatio[1], VoidRatios, dsde, dudz11, gc[id], f1[1], f1[2], af1, 1, dz1[k], cf1, bf1[1], CompressibleFoundationFinalVoidRatio[1], CompressibleFoundationInitialVoidRatio[1], ref jin, id, auxbl);
+								FirstPoint(d1, RelationDefinitionLines, ref CompressibleFoundationCurrentVoidRatio[1], VoidRatios, Dsde, dudz11, SoilBuoyantUnitWeight[id], f1[1], f1[2], af1, 1, dz1[k], cf1, bf1[1], CompressibleFoundationFinalVoidRatio[1], CompressibleFoundationInitialVoidRatio[1], ref jin, id, auxbl);
 							} else {
-								Boundary(d1, RelationDefinitionLines, l, k, CompressibleFoundationCurrentVoidRatio, f1, CompressibleFoundationFinalVoidRatio, dz1, CompressibleFoundationExcessPoreWaterPressure, pk, VoidRatios, EffectiveStresses, CompressibleFoundationEffectiveStree, CompressibleFoundationMaterialIDs, ref jin, auxbl);
+								Boundary(d1, RelationDefinitionLines, l, k, CompressibleFoundationCurrentVoidRatio, f1, CompressibleFoundationFinalVoidRatio, dz1, CompressibleFoundationExcessPoreWaterPressure, PK, VoidRatios, EffectiveStresses, CompressibleFoundationEffectiveStree, CompressibleFoundationMaterialIDs, ref jin, auxbl);
 							}
 						}
 						if (IsCompressibleFoundationInPrimaryConsolidations[k]) {
@@ -56,7 +56,7 @@
 								i = l + j;
 								ij = i + 1;
 								ii = i - 1;
-								CompressibleFoundationCurrentVoidRatio[i] = VoidRatio(f1[i], f1[ij], f1[ii], af1[i], af1[ii], af1[ij], dz1[k], dz12, cf1, gc[id], bf1[i]);
+								CompressibleFoundationCurrentVoidRatio[i] = VoidRatio(f1[i], f1[ij], f1[ii], af1[i], af1[ii], af1[ij], dz1[k], dz12, cf1, SoilBuoyantUnitWeight[id], bf1[i]);
 								if (CompressibleFoundationCurrentVoidRatio[i] > f1[i]) {
 									CompressibleFoundationCurrentVoidRatio[i] = f1[i];
 								}
@@ -77,7 +77,7 @@
 //							if (maxu < tol) {
 							// If Compressible Foundation's degree of consolidatoin is larger than 96%,
 							// start secondary compression.
-							if (CompressibleFoundationAverageConsolidationDegree > uconmax) {
+							if (CompressibleFoundationAverageConsolidationDegree > MaxConsolidationDegree) {
 								IsCompressibleFoundationInPrimaryConsolidations[k] = false;
 								tpbl[k] = CurrentTime;
 								if (l > 1) CompressibleFoundationCurrentVoidRatio[l - 1] = CompressibleFoundationFinalVoidRatio[l - 1];
@@ -116,7 +116,7 @@
 
 					// Reset Bottom Boundary Gradient for C.F.;
 					id = CompressibleFoundationMaterialIDs[1];
-					Intpgg(d1, RelationDefinitionLines, CompressibleFoundationCurrentVoidRatio[1], VoidRatios, pk, pk, ref rpker, ref voidx, ref jin, id, auxbl, 1, 0, 0);
+					Intpgg(d1, RelationDefinitionLines, CompressibleFoundationCurrentVoidRatio[1], VoidRatios, PK, PK, ref rpker, ref voidx, ref jin, id, auxbl, 1, 0, 0);
 					Intpgg(d1, RelationDefinitionLines, CompressibleFoundationCurrentVoidRatio[1], VoidRatios, EffectiveStresses, EffectiveStresses, ref voidx, ref est1, ref jin, id, auxbl, 1, 6, 6);
 
 					dudz11 = dudz10 * pk0 / rpker;
@@ -124,11 +124,11 @@
 					dudz10 = ut1 / IncompressibleFoudationDrainagePathLength;
 
 					// Calculate void ratio of top point in C.F.;
-					Bcfdf(d1, VoidRatios, EffectiveStresses, pk, ref jin);
+					Bcfdf(d1, VoidRatios, EffectiveStresses, PK, ref jin);
 				} else {
 					// Rest Bottom Boundary dudz for D.F.;
 					id = DredgedFillMaterialIDs[1];
-					Intpgg(d1, RelationDefinitionLines, DredgedFillCurrentVoidRatio[1], VoidRatios, pk, pk, ref pke, ref voidx, ref jin, id, auxdf, 1, 0, 0);
+					Intpgg(d1, RelationDefinitionLines, DredgedFillCurrentVoidRatio[1], VoidRatios, PK, PK, ref pke, ref voidx, ref jin, id, auxdf, 1, 0, 0);
 					Intpgg(d1, RelationDefinitionLines, DredgedFillCurrentVoidRatio[1], VoidRatios, EffectiveStresses, EffectiveStresses, ref voidx, ref est, ref jin, id, auxdf, 1, 10, 4);
 					dudz21 = dudz10 * pk0 / pke;
 					ut = DredgedFillExcessPoreWaterPressure[1] - est + DredgedFillEffectiveStress[1];
@@ -143,9 +143,9 @@
 					dz2 = dz[k] * 2.0;
 					if (IsDredgedFillInPrimaryConsolidations[k]) {
 						if (l == 1 && IsFoundationCompressible == 2) {
-							FirstPoint(d1, RelationDefinitionLines, ref DredgedFillCurrentVoidRatio[l], VoidRatios, dsde, dudz21, gc[id], f[l], f[l + 1], af, l, dz[k], cf, bf[l], DredgedFillFinalVoidRatio[l], DredgedFillInitialVoidRatio[l], ref jin, id, auxdf);
+							FirstPoint(d1, RelationDefinitionLines, ref DredgedFillCurrentVoidRatio[l], VoidRatios, Dsde, dudz21, SoilBuoyantUnitWeight[id], f[l], f[l + 1], af, l, dz[k], cf, bf[l], DredgedFillFinalVoidRatio[l], DredgedFillInitialVoidRatio[l], ref jin, id, auxdf);
 						} else if (l != 1) {
-							Boundary(d1, RelationDefinitionLines, l, k, DredgedFillCurrentVoidRatio, f, DredgedFillFinalVoidRatio, dz, DredgedFillExcessPoreWaterPressure, pk, VoidRatios, EffectiveStresses, DredgedFillEffectiveStress, DredgedFillMaterialIDs, ref jin, auxdf);
+							Boundary(d1, RelationDefinitionLines, l, k, DredgedFillCurrentVoidRatio, f, DredgedFillFinalVoidRatio, dz, DredgedFillExcessPoreWaterPressure, PK, VoidRatios, EffectiveStresses, DredgedFillEffectiveStress, DredgedFillMaterialIDs, ref jin, auxdf);
 						}
 					}
 					if (IsDredgedFillInPrimaryConsolidations[k]) {
@@ -155,7 +155,7 @@
 							if (DredgedFillCurrentVoidRatio[i] > DredgedFillFinalVoidRatio[i]) {
 								ij = i + 1;
 								ii = i - 1;
-								DredgedFillCurrentVoidRatio[i] = VoidRatio(f[i], f[ij], f[ii], af[i], af[ii], af[ij], dz[k], dz2, cf, gc[id], bf[i]);
+								DredgedFillCurrentVoidRatio[i] = VoidRatio(f[i], f[ij], f[ii], af[i], af[ii], af[ij], dz[k], dz2, cf, SoilBuoyantUnitWeight[id], bf[i]);
 								if (DredgedFillCurrentVoidRatio[i] <= DredgedFillFinalVoidRatio[i]) {
 									DredgedFillCurrentVoidRatio[i] = DredgedFillFinalVoidRatio[i];
 								}
@@ -174,7 +174,7 @@
 //						if (maxu < tol) {
 						// If Dredged Fill's degree of consolidatoin is larger tha 96%,
 						// start secondary compression.
-						if (DredgedFillAverageConsolidationDegree > uconmax) {
+						if (DredgedFillAverageConsolidationDegree > MaxConsolidationDegree) {
 							IsDredgedFillInPrimaryConsolidations[k] = false;
 							// Changes this because of secondary compression??;
 
@@ -250,7 +250,7 @@
 				}
 
 				// tnnn = tnnn + 1;
-				if (CurrentTime >= tprint) {
+				if (CurrentTime >= NextPrintDate) {
 					logic1 = false;
 					// Recover actual void ratios;
 					for (i = 2; i <= ndfcons; i++) {
@@ -285,7 +285,7 @@
 									Cmd.WriteLine(f100, i);
 								}
 								id = CompressibleFoundationMaterialIDs[i];
-								cons = abs((2.0 * raf) / (gc[id] * rbf));
+								cons = abs((2.0 * raf) / (SoilBuoyantUnitWeight[id] * rbf));
 								if (cons <= dz1[i]) {
 									// write[iout, 101] i;
 									// write[*, 101] i;
@@ -320,7 +320,7 @@
 								Cmd.WriteLine(f102, i);
 							}
 							id = DredgedFillMaterialIDs[i];
-							cons = abs((2.0 * raf) / (gc[id] * rbf));
+							cons = abs((2.0 * raf) / (SoilBuoyantUnitWeight[id] * rbf));
 							if (cons <= dz[i]) {
 								// write[iout, 103] i;
 								// write[*, 103] i;

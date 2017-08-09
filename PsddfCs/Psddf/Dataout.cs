@@ -214,7 +214,7 @@
 					CompressibleFoundationTotalSettlement, 
 					CompressibleFoundationTotalSettlement - CompressibleFoundationSecondaryCompressionSettlement);
 
-				if (CompressibleFoundationAverageConsolidationDegree > uconmax) {
+				if (CompressibleFoundationAverageConsolidationDegree > MaxConsolidationDegree) {
 					Io.Write(OUT, f107sc, CurrentTime, CompressibleFoundationSecondaryCompressionSettlement);
 					Cmd.Write(f107sc, CurrentTime, CompressibleFoundationSecondaryCompressionSettlement);
 				} else {
@@ -332,7 +332,7 @@
 				DredgedFillTotalSettlement, 
 				DredgedFillTotalSettlement - DredgedFillSecondaryCompressionSettlement - DredgedFillDesiccationSettlement);
 
-			if (DredgedFillAverageConsolidationDegree > uconmax) {
+			if (DredgedFillAverageConsolidationDegree > MaxConsolidationDegree) {
 				Io.Write(OUT, f107sc, CurrentTime, DredgedFillSecondaryCompressionSettlement);
 				Cmd.Write(f107sc, CurrentTime, DredgedFillSecondaryCompressionSettlement);
 			} else {

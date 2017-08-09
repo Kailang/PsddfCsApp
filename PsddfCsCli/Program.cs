@@ -6,7 +6,7 @@ namespace PsddfCsCli {
 	class Program {
 		const int IN = Psddf.IN;
 
-		static string InputFilePath = "test2c.psi";
+		static string InputFilePath = "test.psi";
 		static string ContinuationFilePath = "temp_contfile.psc";
 
 		static ICmd Cmd = new Cmd ();

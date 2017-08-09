@@ -1,11 +1,11 @@
 ﻿namespace PsddfCs {
 	public partial class Psddf {
-		const int npdf = 1001, npbl = 201;
+		const int DredgedFillMaxLayers = 1001, CompressibleFoundationMaxLayers = 201;
 		/// <summary>
 		/// Max number of material types.
 		/// </summary>
-		const int nleymax = 200;
-		const int dim1 = 100, dim2 = 200;
+		const int MaxMaterialTypes = 200;
+		const int Dimension1 = 100, Dimension2 = 200;
 
 		#region IO Channels
 		public readonly ICmd Cmd;
@@ -52,7 +52,7 @@
 
 		#endregion
 
-		#region Group A
+		#region Group A - Description
 		public event System.Action<double> OnProgressUpdated;
 		public event System.Action<Psddf> OnPrintTimeReached;
 
@@ -95,7 +95,7 @@
 
 		#endregion
 
-		#region Group B
+		#region Group B - Execution
 
 		/// <summary>
 		/// NPT
@@ -122,7 +122,7 @@
 
 		#endregion
 
-		#region Group C
+		#region Group C - Incompressible Foundation
 
 		/// <summary>
 		/// E0
@@ -151,6 +151,7 @@
 		/// </summary>
 		public double ExternalWaterSurfaceElevation;
 		/// <summary>
+		/// γw - unit weight of soil solids
 		/// GW
 		/// Unit weight of water in consistent units, e.g., 62.4 lbs/ft3.
 		/// </summary>
@@ -167,11 +168,11 @@
 		/// <summary>
 		/// Kailang: Now secondary compression will be turned on automatically if the degree of consolidation is larger than maxUcon.
 		/// </summary>
-		const double uconmax = 0.96;
+		const double MaxConsolidationDegree = 0.96;
 
 		#endregion
 
-		#region Group D
+		#region Group D - Number of Materials
 
 		/// <summary>
 		/// NUMBL
@@ -188,28 +189,16 @@
 		/// Number of different dredged fill material types.
 		/// </summary>
 		public int DredgedFillMaterialTypes;
-		/// <summary>
-		/// Integer denoting the following options:
-		/// 1 = compressible foundation.
-		/// 2 = noncompressible foundation.
-		/// </summary>
-		int IsFoundationCompressible;
 		#endregion
 		
-		#region Group D1
+		#region Group D1 - Compressible Foundation Layers
 
 		/// <summary>
 		/// HBL
 		/// Initial thickness of compressible foundation layer. 
 		/// Repeat NUMBL times.
 		/// </summary>
-		public readonly double[] CompressibleFoundationInitialThicknesses = new double[nleymax + 1];
-		/// <summary>
-		/// HHBL
-		/// Total initial thickness of compressible foundation layer.
-		/// The sum of hbl.
-		/// </summary>
-		double CompressibleFoundationTotalInitialThickness;
+		public readonly double[] CompressibleFoundationInitialThicknesses = new double[MaxMaterialTypes + 1];
 		/// <summary>
 		/// IDBL
 		/// Material identification number for the compressible foundation layer. 
@@ -221,87 +210,89 @@
 		/// Number of sublayers that the compressible foundation layer is divided into for computational purposes. 
 		/// Repeat NUMBL times.
 		/// </summary>
-		public readonly int[] CompressibleFoundationSublayers = new int[nleymax + 1];
+		public readonly int[] CompressibleFoundationSublayers = new int[MaxMaterialTypes + 1];
 		/// <summary>
 		/// OCR
 		/// Average overconsolidation ratio (OCR) at the middle of each compressible foundation layer.
 		/// </summary>
-		public readonly double[] CompressibleFoundationOCR = new double[nleymax + 1];
+		public readonly double[] CompressibleFoundationOCR = new double[MaxMaterialTypes + 1];
 
 		#endregion
 
-		#region Group D2
+		#region Group D2 - Common Mateiral Properties
 
 		/// <summary>
-		/// KOM
-		/// Material identification number for the compressible foundation layer. 
+		/// Material IDs
 		/// </summary>
-		int MaterialID;
+		public readonly int[] MaterialIDs = new int[MaxMaterialTypes + 1];
 		/// <summary>
 		/// GSDF
 		/// Specific gravity of soil solids of the compressible foundation material type KOM.
 		/// </summary>
-		public readonly double[] SpecificGravities = new double[2 * nleymax];
+		public readonly double[] SpecificGravities = new double[2 * MaxMaterialTypes];
 		/// <summary>
 		/// CACC
 		/// Ratio between secondary compression index, Ca, and Compression index, Cc from standard oedometer tests. 
 		/// </summary>
-		public readonly double[] CaCcs = new double[2 * nleymax];
+		public readonly double[] CaCcs = new double[2 * MaxMaterialTypes];
 		/// <summary>
 		/// CRCC
 		/// Ratio between recompression index, Cr, and Compression index, Cc from standard oedometer tests. 
 		/// </summary>
-		public readonly double[] CrCcs = new double[2 * nleymax];
+		public readonly double[] CrCcs = new double[2 * MaxMaterialTypes];
 		/// <summary>
 		/// LDF
 		/// Number of subsequent lines of data points that will be entered to define the void ratio-effective stress and void ratio-permeability relationships for each material type (KOM). 
 		/// </summary>
-		public readonly int[] RelationDefinitionLines = new int[2 * nleymax];
+		public readonly int[] RelationDefinitionLines = new int[2 * MaxMaterialTypes];
 		#endregion
 
-		#region D3
+		#region Group D3 - Common Material Relation Definitions
 		/// <summary>
+		/// e - void ratio
 		/// VOIDRATIO (I,KOM)
 		/// Measured void ratios of compressible foundation layer under effective stresses applied in laboratory consolidation tests.
 		/// </summary>
-		public readonly double[,] VoidRatios = new double[dim1 + 1, dim2 + 1];
+		public readonly double[,] VoidRatios = new double[Dimension1 + 1, Dimension2 + 1];
 		/// <summary>
+		/// σ' - effective stress
 		/// EFFECTIVESTRESS (I,KOM) 
 		/// Effective stresses applied in laboratory consolidation tests corresponding to the void ratios entered above.
 		/// </summary>
-		public readonly double[,] EffectiveStresses = new double[dim1 + 1, dim2 + 1];
+		public readonly double[,] EffectiveStresses = new double[Dimension1 + 1, Dimension2 + 1];
 		/// <summary>
+		/// k(e) - coefficient of soil permeability as a function of void ratio 
 		/// PERM (I,KOM) 
 		/// Permeabilities from the laboratory consolidation tests on the compressible foundation layer corresponding to the void ratios entered above.
 		/// </summary>
-		public readonly double[,] Permeabilities = new double[dim1 + 1, dim2 + 1];
+		public readonly double[,] Permeabilities = new double[Dimension1 + 1, Dimension2 + 1];
 		#endregion
 
-		#region D4
+		#region Group D4 - Dredged Fill Material Specific Properties
 		/// <summary>
 		/// SL
 		/// Saturation limit of the dredged fill defined as the void ratio which separates first-stage desiccation from second-stage desiccation. 
 		/// </summary>
-		public readonly double[] DredgedFillSaturationLimits = new double[nleymax + 1];
+		public readonly double[] DredgedFillSaturationLimits = new double[MaxMaterialTypes + 1];
 		/// <summary>
 		/// DL
 		/// Desiccation limit of the dredged fill defined as the lowest void ratio the material will attain during second-stage drying. 
 		/// </summary>
-		public readonly double[] DredgedFillDesiccationLimits = new double[nleymax + 1];
+		public readonly double[] DredgedFillDesiccationLimits = new double[MaxMaterialTypes + 1];
 		/// <summary>
 		/// H2
 		/// The maximum depth to which second-stage drying will occur (max. crust thickness) in the dredged fill.
 		/// </summary>
-		public readonly double[] DredgedFillDryingMaxDepth = new double[nleymax + 1];
+		public readonly double[] DredgedFillDryingMaxDepth = new double[MaxMaterialTypes + 1];
 		/// <summary>
 		/// SAT
 		/// The average degree of saturation, expressed as a fraction of 1.0, of the dredged fill when dried to the desiccation limit, DL.
 		/// </summary>
-		public readonly double[] DredgedFillAverageSaturation = new double[nleymax + 1];
+		public readonly double[] DredgedFillAverageSaturation = new double[MaxMaterialTypes + 1];
 
 		#endregion
 
-		#region Group E
+		#region Group E - Print Times
 		/// <summary>
 		/// Number of output or print times during simulation. 
 		/// The value of NTIME must be less than or equal to 1000. 
@@ -309,18 +300,12 @@
 		public int PrintTimes, StartPrintTime;
 		#endregion
 
-		#region Group F
+		#region Group F - First Dredged Fill Layer
 		/// <summary>
 		/// HDF
 		/// Initial thickness of dredged fill layers. 
 		/// </summary>
-		public readonly double[] DredgedFillInitialThicknesses = new double[nleymax + 1];
-		/// <summary>
-		/// HHDF
-		/// Totle initial thickness of dredged fill layers.
-		/// The sum of hdf.
-		/// </summary>
-		double DredgedFillTotleInitialThickness;
+		public readonly double[] DredgedFillInitialThicknesses = new double[MaxMaterialTypes + 1];
 		/// <summary>
 		/// TDS
 		/// Number of time periods (usually days) from the addition of the first layer of dredged fill to the start of desiccation in the first layer of dredged fill.
@@ -343,20 +328,20 @@
 		/// E00
 		/// Initial void ratio of new dredged fill after sedimentation and before the start of consolidation. 
 		/// </summary>
-		public readonly double[] DredgedFillInitialVoidRatios = new double[npdf + 1];
+		public readonly double[] DredgedFillInitialVoidRatios = new double[DredgedFillMaxLayers + 1];
 		/// <summary>
 		/// IDDF
 		/// Material identification number for the dredged fill layer added at PRINTT(I). 
 		/// </summary>
-		public readonly int[] DredgedFillMaterialIDs = new int[nleymax + 1];
+		public readonly int[] DredgedFillMaterialIDs = new int[MaxMaterialTypes + 1];
 		/// <summary>
 		/// NSUB
 		/// Number of sublayers that the dredged fill layer is divided into for computational purposes. 
 		/// </summary>
-		public readonly int[] DredgedFillSublayers = new int[nleymax + 1];
+		public readonly int[] DredgedFillSublayers = new int[MaxMaterialTypes + 1];
 		#endregion
 
-		#region Group G
+		#region Group G - New Dredged Fill Layers
 		/// <summary>
 		/// PRINTT
 		/// Time at which the properties of the consolidating layers will be printed and/or a new layer of dredged fill will be applied. 
@@ -391,7 +376,7 @@
 		public readonly int[] NewDredgedFillPrintOptions = new int[1000 + 1];
 		#endregion
 
-		#region Group H
+		#region Group H - Desiccation
 		/// <summary>
 		/// TPM
 		/// Number of basic time periods in a month.
@@ -410,7 +395,7 @@
 		public double MaxDredgedFillEvaporationEfficiency;
 		#endregion
 
-		#region Group I
+		#region Group I - Percipitation
 		/// <summary>
 		/// PEP
 		/// Monthly Class A pan or maximum environmental potential evaporation expected at the containment area each month of the year. 
@@ -425,8 +410,7 @@
 		public readonly double[] AverageMonthlyRainfall = new double[12 + 1];
 		#endregion
 
-
-		#region Group K - Continuation Data
+		#region Group J - Continuation Data
 
 		/// <summary>
 		/// Number of output or print times during simulation in continuation. 
@@ -440,13 +424,15 @@
 
 		#endregion
 
-		#region Simulation Data
+
+		#region Group K - Simulation Output
 
 		/// <summary>
 		/// The simulation time.
 		/// </summary>
 		public double CurrentTime;
 		/// <summary>
+		/// τ - time interval of the explicit finite difference analysis 
 		/// TAU
 		/// Time interval of the explicit finite difference analysis.
 		/// </summary>
@@ -455,41 +441,60 @@
 		/// Coordinates of nodal points.
 		/// </summary>
 		public readonly double[]
-			DredgedFillCoordA = new double[npdf + 1], CompressibleFoundationCoordA = new double[npbl + 1],
-			DredgedFillCoordXI = new double[npdf + 1], CompressibleFoundationCoordXI = new double[npbl + 1],
-			DredgedFillCoordZ = new double[npdf + 1], CompressibleFoundationCoordZ = new double[npbl + 1];
+			DredgedFillCoordA = new double[DredgedFillMaxLayers + 1], CompressibleFoundationCoordA = new double[CompressibleFoundationMaxLayers + 1],
+			DredgedFillCoordXI = new double[DredgedFillMaxLayers + 1], CompressibleFoundationCoordXI = new double[CompressibleFoundationMaxLayers + 1],
+			DredgedFillCoordZ = new double[DredgedFillMaxLayers + 1], CompressibleFoundationCoordZ = new double[CompressibleFoundationMaxLayers + 1];
 		/// <summary>
 		/// Initial void ratio at each coordinate point.
 		/// </summary>
-		public readonly double[] DredgedFillInitialVoidRatio = new double[npdf + 1], CompressibleFoundationInitialVoidRatio = new double[npbl + 1];
+		public readonly double[] 
+			DredgedFillInitialVoidRatio = new double[DredgedFillMaxLayers + 1], 
+			CompressibleFoundationInitialVoidRatio = new double[CompressibleFoundationMaxLayers + 1];
 		/// <summary>
 		/// Current void ratio at each coordinate point.
 		/// </summary>
-		public readonly double[] DredgedFillCurrentVoidRatio = new double[npdf + 1], CompressibleFoundationCurrentVoidRatio = new double[npbl + 1];
+		public readonly double[] 
+			DredgedFillCurrentVoidRatio = new double[DredgedFillMaxLayers + 1], 
+			CompressibleFoundationCurrentVoidRatio = new double[CompressibleFoundationMaxLayers + 1];
 		/// <summary>
 		/// Final void ratio at each coordinate point.
 		/// </summary>
-		public readonly double[] DredgedFillFinalVoidRatio = new double[npdf + 1], CompressibleFoundationFinalVoidRatio = new double[npbl + 1];
+		public readonly double[] 
+			DredgedFillFinalVoidRatio = new double[DredgedFillMaxLayers + 1], 
+			CompressibleFoundationFinalVoidRatio = new double[CompressibleFoundationMaxLayers + 1];
 		/// <summary>
 		/// Total stress at each coordinate point.
 		/// </summary>
-		public readonly double[] DredgedFillTotalStress = new double[npdf + 1], CompressibleFoundationTotalStree = new double[npbl + 1];
+		public readonly double[] 
+			DredgedFillTotalStress = new double[DredgedFillMaxLayers + 1], 
+			CompressibleFoundationTotalStree = new double[CompressibleFoundationMaxLayers + 1];
 		/// <summary>
 		/// Effective stress at each coordinate point.
 		/// </summary>
-		public readonly double[] DredgedFillEffectiveStress = new double[npdf + 1], CompressibleFoundationEffectiveStree = new double[npbl + 1], f = new double[npdf + 1], f1 = new double[npbl + 1];
+		public readonly double[] 
+			DredgedFillEffectiveStress = new double[DredgedFillMaxLayers + 1], 
+			CompressibleFoundationEffectiveStree = new double[CompressibleFoundationMaxLayers + 1], 
+			f = new double[DredgedFillMaxLayers + 1], f1 = new double[CompressibleFoundationMaxLayers + 1];
 		/// <summary>
+		/// uw - total pore-water pressure
 		/// Total pore pressure at each coordinate point.
 		/// </summary>
-		public readonly double[] DredgedFillTotalPoreWaterPressure = new double[npdf + 1], CompressibleFoundationTotalPoreWaterPressure = new double[npbl + 1];
+		public readonly double[] 
+			DredgedFillTotalPoreWaterPressure = new double[DredgedFillMaxLayers + 1], 
+			CompressibleFoundationTotalPoreWaterPressure = new double[CompressibleFoundationMaxLayers + 1];
 		/// <summary>
+		/// u0 - hydrostatic pore-water pressure
 		/// Static pore pressure at each coordinate point.
 		/// </summary>
-		public readonly double[] DredgedFillHydrostaticPoreWaterPressure = new double[npdf + 1], CompressibleFoundationHydrostaticPoreWaterPressure = new double[npbl + 1];
+		public readonly double[] 
+			DredgedFillHydrostaticPoreWaterPressure = new double[DredgedFillMaxLayers + 1], 
+			CompressibleFoundationHydrostaticPoreWaterPressure = new double[CompressibleFoundationMaxLayers + 1];
 		/// <summary>
+		/// u(z,t) = uw(z,t) - u0(z,t) - excess pore-water pressure
 		/// Excess pore-water pressure at each coordinate point.
 		/// </summary>
-		public readonly double[] DredgedFillExcessPoreWaterPressure = new double[npdf + 1], CompressibleFoundationExcessPoreWaterPressure = new double[npbl + 1];
+		public readonly double[] 
+			DredgedFillExcessPoreWaterPressure = new double[DredgedFillMaxLayers + 1], CompressibleFoundationExcessPoreWaterPressure = new double[CompressibleFoundationMaxLayers + 1];
 		/// <summary>
 		/// Degree of consolidation.
 		/// </summary>
@@ -513,29 +518,78 @@
 
 		#endregion
 
+		#region Group L - Initialized before Simulation
+		
 		/// <summary>
+		/// HHBL
+		/// Total initial thickness of compressible foundation layer.
+		/// The sum of hbl.
+		/// </summary>
+		double CompressibleFoundationTotalInitialThickness;
+		/// <summary>
+		/// HHDF
+		/// Totle initial thickness of dredged fill layers.
+		/// The sum of hdf.
+		/// </summary>
+		double DredgedFillTotleInitialThickness;
+		/// <summary>
+		/// Total number of material types
+		/// </summary>
+		int TotalMaterialTypes;
+		/// <summary>
+		/// Total print time.
+		/// </summary>
+		int TotalTime;
+		/// <summary>
+		/// Integer denoting the following options:
+		/// 1 = compressible foundation.
+		/// 2 = noncompressible foundation.
+		/// </summary>
+		int IsFoundationCompressible;
+		/// <summary>
+		/// Vector holding flag for adjusting e-p curves.
+		/// True: Not adjusted; False: Adjusted.
+		/// </summary>
+		bool[] IsCurveNotAdjusteds = new bool[DredgedFillMaxLayers + 1];
+
+		/// <summary>
+		/// γs - unit weight of soil solids 
+		/// GS
+		/// </summary>
+		double[] SoilUnitWeight = new double[MaxMaterialTypes + 1];
+		/// <summary>
+		/// γc - buoyant unit weight of solids (γc = γs - γw) 
+		/// GC
+		/// </summary>
+		double[] SoilBuoyantUnitWeight = new double[MaxMaterialTypes + 1];
+		#endregion
+
+		/// <summary>
+		/// pk = k(e) / (1 + e)
 		/// pk(i, k) = perm(i, k) / (1.0 + voidratio(i, k))
 		/// </summary>
-		double[,] pk = new double[dim1 + 1, dim2 + 1];
-		double[,] dvds = new double[dim1 + 1, dim2 + 1];
+		double[,] PK = new double[Dimension1 + 1, Dimension2 + 1];
 		/// <summary>
+		/// dσ' / de
 		/// Slope of stress-void ratio curve.
 		/// </summary>
-		double[,] dsde = new double[dim1 + 1, dim2 + 1];
+		double[,] Dsde = new double[Dimension1 + 1, Dimension2 + 1];
 		/// <summary>
+		/// β(e) = (d / de)(k(e) / (1 + e)) - a function of the void ratio and permeability
 		/// Slope of permeability function.
 		/// </summary>
-		double[,] beta = new double[dim1 + 1, dim2 + 1];
+		double[,] Beta = new double[Dimension1 + 1, Dimension2 + 1];
 		/// <summary>
+		/// α(e) = (k(e) / (1 + e))(dσ' / de) - a function of void ratio, permeability, and compressibility
 		/// Permeability function times dsde.
 		/// </summary>
-		double[,] alpha = new double[dim1 + 1, dim2 + 1];
+		double[,] Alpha = new double[Dimension1 + 1, Dimension2 + 1];
 
 
 		/// <summary>
 		/// The next time at which the properties of the consolidating layers will be printed and/or a new layer of dredged fill will be applied. 
 		/// </summary>
-		double tprint;
+		double NextPrintDate;
 		/// <summary>
 		/// Kailang: This is somehow useless.
 		/// </summary>
@@ -548,11 +602,6 @@
 		/// Accumulation for each add.
 		/// </summary>
 		double tadd;
-		/// <summary>
-		/// Total print time.
-		/// </summary>
-		int TotalTime;
-
 
 
 		/*
@@ -575,15 +624,15 @@
     real*8:: time, tau
     integer:: ndflayer
 		*/
+		double[,] dvds = new double[Dimension1 + 1, Dimension2 + 1];
 		double[] 
-			dz = new double[nleymax + 1], dz1 = new double[nleymax + 1];
+			dz = new double[MaxMaterialTypes + 1], dz1 = new double[MaxMaterialTypes + 1];
 
 		double 
 			da, dudz10, dudz11, dudz21, pk0;
 		double[] 
-			gc = new double[nleymax + 1], gs = new double[nleymax + 1],
-			af = new double[npdf + 1], af1 = new double[npbl + 1],
-			bf = new double[npdf + 1], bf1 = new double[npbl + 1];
+			af = new double[DredgedFillMaxLayers + 1], af1 = new double[CompressibleFoundationMaxLayers + 1],
+			bf = new double[DredgedFillMaxLayers + 1], bf1 = new double[CompressibleFoundationMaxLayers + 1];
 		int ndflayer;
 
 		/*
@@ -603,8 +652,7 @@
 		/// <summary>
 		/// Previous void ratio saving for recovery.
 		/// </summary>
-		double[]
-			pre_e = new double[npdf + 1], pre_er = new double[npbl + 1];
+		double[] pre_e = new double[DredgedFillMaxLayers + 1], pre_er = new double[CompressibleFoundationMaxLayers + 1];
 		int nblpoint, ndfpoint;
 		/// <summary>
 		/// Previous total number of nodes for recovery.
@@ -614,118 +662,41 @@
 		/// Previous time for recovery.
 		/// </summary>
 		double pre_time;
-
-		public readonly int[] MaterialIDs = new int[nleymax + 1];
-
-		/*
-    ! Group Four
-    real*8:: totstr(npdf), tostr1(npbl), u(npdf), u1(npbl), u0(npdf), &
-             u01(npbl), uw(npdf), uw1(npbl), xi(npdf), xi1(npbl), z(npdf), &
-             z1(npbl), fint(npdf), fint1(npbl), aev, ce, cset, dreff, &
-             dsc, dset, dtim, qdf, setc, setd, tds, tpm, &
-             vrint, xel, ep(12), et(npdf), pep(12), rf(12), wtelev, &
-             add, tadd, hhbl, hhdf, setsbl, setsdf, ffint(npdf), ffint1(npbl)
-		*/
+		
 		double 
 			aev, cset, dsc, dset, dtim, qdf, setc, 
 			vrint;
 		double[]
-			fint = new double[npdf + 1], fint1 = new double[npbl + 1],
-			ep = new double[12 + 1], et = new double[npdf + 1],
-			ffint = new double[npdf + 1], ffint1 = new double[npbl + 1];
-
-		/*
-    ! Group Five
-    integer:: mtime, in = 10, iouts = 13, ins = 14
-    integer:: nbl, nflag, nm, npt, nnd, ntime, &
-              m, mm, ms, ndfcons, nsc, &
-              ntypescompress, ntypedredge, &
-              numbl, numdf
-    integer:: nloop
-    real*8:: pretime, preelev
-    integer, dimension(nleymax):: ldf(2 * nleymax), ibdl, iddf
-    real*8:: efsbot, hsolids, acumel, cacc(2 * nleymax), crcc(2 * nleymax)
-		*/
-
-
-
-
+			fint = new double[DredgedFillMaxLayers + 1], fint1 = new double[CompressibleFoundationMaxLayers + 1],
+			ep = new double[12 + 1], et = new double[DredgedFillMaxLayers + 1],
+			ffint = new double[DredgedFillMaxLayers + 1], ffint1 = new double[CompressibleFoundationMaxLayers + 1];
 
 		int nflag, nnd, m, mm, ndfcons;
 		int nloop;
 		double pretime, preelev;
 
-		int[] ibdl = new int[nleymax + 1];
+		int[] ibdl = new int[MaxMaterialTypes + 1];
 		double efsbot, hsolids, acumel;
 
+		
+		double[,] auxdf = new double[15 + 1, DredgedFillMaxLayers + 1];
+		double[,] auxbl = new double[15 + 1, CompressibleFoundationMaxLayers + 1];
 
-		/*
-    ! Group Seven
-    real*8:: auxdf(15, npdf), tpdf(nleymax), difsecdf(nleymax)
-		*/
-		double[,] auxdf = new double[15 + 1, npdf + 1];
-		double[] tpdf = new double[nleymax + 1], difsecdf = new double[nleymax + 1];
+		double[] tpdf = new double[MaxMaterialTypes + 1], difsecdf = new double[MaxMaterialTypes + 1];
+		double[] tpbl = new double[MaxMaterialTypes + 1], difsecbl = new double[MaxMaterialTypes + 1];
 
-		/*
-    ! Group Eight
-    real*8:: auxbl(15, npbl), tpbl(nleymax), difsecbl(nleymax)
-    logical*1:: primdf(nleymax), primbl(nleymax)
-    character(len=60):: problemname
-		*/
-		double[,] auxbl = new double[15 + 1, npbl + 1];
-		double[] tpbl = new double[nleymax + 1], difsecbl = new double[nleymax + 1];
-		bool[] IsDredgedFillInPrimaryConsolidations = new bool[nleymax + 1], IsCompressibleFoundationInPrimaryConsolidations = new bool[nleymax + 1];
-
-		/*
-    ! Input and output variables
-    integer:: iout = 11, iplot = 12, igracf = 15, igradf = 16, ngraph = 0, recoveryout = 20
-    real*8:: qdfold = 0.0
-		*/
+		bool[] IsDredgedFillInPrimaryConsolidations = new bool[MaxMaterialTypes + 1];
+		bool[] IsCompressibleFoundationInPrimaryConsolidations = new bool[MaxMaterialTypes + 1];
 
 		int ngraph = 0;
 		double qdfold = 0;
 
-		/*
-    ! MOVED THESE VARIABLE TO SOLVE USE BEFORE VALUE PROBLEM
-    real*8:: vri1, hdf1
-    integer:: last_print
-    integer, dimension(1000):: idbl
-    real*8, dimension(1000):: effstr
-		*/
 		double vri1;
 
-
-		/*
-    ! Tells if the compressible foundation layer is over-consolidated
-    ! OCR < 1 under-consolidated; = 1 normally consolidated; > 1 over-consolidated
-    real*8, dimension(nleymax):: OCR
-		*/
-
-
-		/*
-    ! Holds the values for the segment length and void ratio for recovery subroutine
-    logical:: adjustflag(npdf)  ! Vector holding flag for adjusting e-p curves
-    integer:: dimensionflag = 0
-    integer:: recoveryflag  ! Tells if the program needs to create a recovery output file
-    integer:: totaltypes, temp_id
-    integer, dimension(1000):: indi_id
-		*/
-		/// <summary>
-		/// Vector holding flag for adjusting e-p curves.
-		/// True: Not adjusted; False: Adjusted.
-		/// </summary>
-		bool[] IsCurveNotAdjusteds = new bool[npdf + 1];
-
-		int MaterialTypes, temp_id;
+		int temp_id;
 		int[] indi_id = new int[1000 + 1];
 
-		/*
-    ! Desiccation parameter modification to array form for each material type
-    real*8, dimension (200):: sl, dl, h2, sat
-    real*8, dimension (200):: layer_stress
-		*/
-
-		double[] layer_stress = new double[nleymax + 1];
+		double[] layer_stress = new double[MaxMaterialTypes + 1];
 	}
 }
 

@@ -7,7 +7,7 @@
 			Cmd.WriteLine("\nRun simulation...");
 
 			for (int i = StartPrintTime; i <= PrintTimes; i++) {
-				tprint = PrintTimeDates[i];
+				NextPrintDate = PrintTimeDates[i];
 				DredgedFillPrintOption = NewDredgedFillPrintOptions[i];
 				add = NewDredgedFillInitialThicknesses[i];
 
@@ -17,11 +17,11 @@
 					tadd = tadd + hdf1;
 					DredgedFillDesiccationDelayDays = NewDredgedFillDesiccationDelayDays[i - 1];
 					DredgedFillDesiccationDelayMonths = NewDredgedFillDesiccationDelayMonths[i - 1];
-					Reset(dim1);
+					Reset(Dimension1);
 				}
 
-				Fdifq(dim1);
-				Stress(dim1);
+				Fdifq(Dimension1);
+				Stress(Dimension1);
 
 				Dataout();
 				// Create Recovery input file from PSDDF output;

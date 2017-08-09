@@ -17,10 +17,10 @@
 				efs = top_stress;
 				for (j = 1; j <= nsubcap[i] + 1; j++) {
 					Intpl(d1, RelationDefinitionLines, efs, effectivestress, voidratio, ref ef[k - j + 1], ref jin, id, aux, k - j + 1);
-					efs = efs + gc[id] * dzz[i];
+					efs = efs + SoilBuoyantUnitWeight[id] * dzz[i];
 				}
 				k = k - j + 1;
-				top_stress = top_stress + gc[id] * dzz[i] * nsubcap[i];
+				top_stress = top_stress + SoilBuoyantUnitWeight[id] * dzz[i] * nsubcap[i];
 			}
 			nsubcap[ncap] = nsubcap[ncap] + ndesicl;
 		}

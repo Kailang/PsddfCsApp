@@ -16,12 +16,12 @@
 				}
 
 				for (i = 1; i <= RelationDefinitionLines[k]; i++) {
-					pk[i, k] = Permeabilities[i, k] / (1.0 + VoidRatios[i, k]);
+					PK[i, k] = Permeabilities[i, k] / (1.0 + VoidRatios[i, k]);
 				}
 
 				cd = VoidRatios[2, k] - VoidRatios[1, k];
-				beta[1, k] = (pk[2, k] - pk[1, k]) / cd;
-				dsde[1, k] = (EffectiveStresses[2, k] - EffectiveStresses[1, k]) / cd;
+				Beta[1, k] = (PK[2, k] - PK[1, k]) / cd;
+				Dsde[1, k] = (EffectiveStresses[2, k] - EffectiveStresses[1, k]) / cd;
 				EffectiveStresses[1, k] = EffectiveStresses[2, k] / 100;
 
 				den = dlog10(EffectiveStresses[2, k]) - dlog10(EffectiveStresses[1, k]);
@@ -39,8 +39,8 @@
 						EffectiveStresses[1, k] = 0.0;
 					}
 
-					beta[i, k] = (pk[ij, k] - pk[ii, k]) / cd;
-					dsde[i, k] = (EffectiveStresses[ij, k] - EffectiveStresses[ii, k]) / cd;
+					Beta[i, k] = (PK[ij, k] - PK[ii, k]) / cd;
+					Dsde[i, k] = (EffectiveStresses[ij, k] - EffectiveStresses[ii, k]) / cd;
 					dvds[i, k] = cd / den;
 				}
 
@@ -49,12 +49,12 @@
 
 				den = dlog10(EffectiveStresses[ii, k]) - dlog10(EffectiveStresses[l, k]);
 
-				beta[ii, k] = (pk[ii, k] - pk[l, k]) / cd;
-				dsde[ii, k] = (EffectiveStresses[ii, k] - EffectiveStresses[l, k]) / cd;
+				Beta[ii, k] = (PK[ii, k] - PK[l, k]) / cd;
+				Dsde[ii, k] = (EffectiveStresses[ii, k] - EffectiveStresses[l, k]) / cd;
 				dvds[ii, k] = cd / den;
 
 				for (i = 1; i <= RelationDefinitionLines[k]; i++) {
-					alpha[i, k] = pk[i, k] * dsde[i, k];
+					Alpha[i, k] = PK[i, k] * Dsde[i, k];
 				}
 			}
 		}

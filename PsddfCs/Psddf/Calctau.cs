@@ -7,7 +7,7 @@
 		void Calctau (int d1) {
 			int i, j, nbd, jin = 0, k, l, temp, id;
 			double dzz, efs, dabl, v = 0, tdz, taubl, taudf, sum;
-			double[] cent_eff = new double[nleymax], cent_eff_ocr = new double[nleymax], cent_e_ocr = new double[nleymax];
+			double[] cent_eff = new double[MaxMaterialTypes], cent_eff_ocr = new double[MaxMaterialTypes], cent_e_ocr = new double[MaxMaterialTypes];
 
 			taubl = 1.0e30;
 			taudf = 1.0e30;
@@ -40,14 +40,14 @@
 						// in case of under consolidated compressible foundation;
 						if (CompressibleFoundationOCR[i] < 1.0) {
 							if (j <= intx(nbd / 2)) {
-								efs = efs + gc[CompressibleFoundationMaterialIDs[i]] * tdz * CompressibleFoundationOCR[i];
+								efs = efs + SoilBuoyantUnitWeight[CompressibleFoundationMaterialIDs[i]] * tdz * CompressibleFoundationOCR[i];
 								sum = sum + efs;
 							} else {
-								efs = efs + gc[CompressibleFoundationMaterialIDs[i]] * tdz * (2 - CompressibleFoundationOCR[i]);
+								efs = efs + SoilBuoyantUnitWeight[CompressibleFoundationMaterialIDs[i]] * tdz * (2 - CompressibleFoundationOCR[i]);
 								sum = sum + efs;
 							}
 						} else {
-							efs = efs + gc[CompressibleFoundationMaterialIDs[i]] * tdz;
+							efs = efs + SoilBuoyantUnitWeight[CompressibleFoundationMaterialIDs[i]] * tdz;
 							sum = sum + efs;
 						}
 						dzz = dzz + tdz;
@@ -83,8 +83,8 @@
 							}
 						}
 						SpecificGravities[temp_id] = SpecificGravities[id];
-						gs[temp_id] = gs[id];
-						gc[temp_id] = gc[id];
+						SoilUnitWeight[temp_id] = SoilUnitWeight[id];
+						SoilBuoyantUnitWeight[temp_id] = SoilBuoyantUnitWeight[id];
 						CaCcs[temp_id] = CaCcs[id];
 						CrCcs[temp_id] = CrCcs[id];
 						RelationDefinitionLines[temp_id] = RelationDefinitionLines[id];
@@ -114,12 +114,12 @@
 						// in case of under consolidated compressible foundation;
 						if (CompressibleFoundationOCR[i] < 1.0) {
 							if (j <= intx(nbd / 2)) {
-								efs = efs + gc[CompressibleFoundationMaterialIDs[i]] * tdz * CompressibleFoundationOCR[i];
+								efs = efs + SoilBuoyantUnitWeight[CompressibleFoundationMaterialIDs[i]] * tdz * CompressibleFoundationOCR[i];
 							} else {
-								efs = efs + gc[CompressibleFoundationMaterialIDs[i]] * tdz * (2 - CompressibleFoundationOCR[i]);
+								efs = efs + SoilBuoyantUnitWeight[CompressibleFoundationMaterialIDs[i]] * tdz * (2 - CompressibleFoundationOCR[i]);
 							}
 						} else {
-							efs = efs + gc[CompressibleFoundationMaterialIDs[i]] * tdz;
+							efs = efs + SoilBuoyantUnitWeight[CompressibleFoundationMaterialIDs[i]] * tdz;
 						}
 
 						dzz = dzz + tdz;
@@ -138,12 +138,12 @@
 			Pfunc();
 
 			// This will find the tau for the dredgefill;
-			taudf = Mintau(d1, alpha, DredgedFillLayers, DredgedFillMaterialIDs, dz);
+			taudf = Mintau(d1, Alpha, DredgedFillLayers, DredgedFillMaterialIDs, dz);
 
 			if (IsFoundationCompressible != 2) {
 				// Check for Compressible Foundation;
 				// This will find the tau for the compressible foundation;
-				taubl = Mintau(d1, alpha, CompressibleFoundationLayers, CompressibleFoundationMaterialIDs, dz1);
+				taubl = Mintau(d1, Alpha, CompressibleFoundationLayers, CompressibleFoundationMaterialIDs, dz1);
 			}
 
 			if (taubl < taudf) {

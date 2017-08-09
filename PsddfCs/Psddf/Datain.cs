@@ -69,7 +69,7 @@ namespace PsddfCs {
 			CompressibleFoundationFinalSettlement = Io.StreamReadDouble(INS);
 			TimeStep = Io.StreamReadDouble(INS);
 			CurrentTime = Io.StreamReadDouble(INS);
-			tprint = Io.StreamReadDouble(INS);
+			NextPrintDate = Io.StreamReadDouble(INS);
 
 			// read(ins) ucon, ucon1, vri1
 			DredgedFillAverageConsolidationDegree = Io.StreamReadDouble(INS);
@@ -231,8 +231,8 @@ namespace PsddfCs {
 				CaCcs[id] = Io.StreamReadDouble(INS);
 				CrCcs[id] = Io.StreamReadDouble(INS);
 				SpecificGravities[id] = Io.StreamReadDouble(INS);
-				gs[id] = Io.StreamReadDouble(INS);
-				gc[id] = Io.StreamReadDouble(INS);
+				SoilUnitWeight[id] = Io.StreamReadDouble(INS);
+				SoilBuoyantUnitWeight[id] = Io.StreamReadDouble(INS);
 
 				// read(ins) sl(id), dl(id), h2(id), sat(id)
 				DredgedFillSaturationLimits[id] = Io.StreamReadDouble(INS);
@@ -276,8 +276,8 @@ namespace PsddfCs {
 					CaCcs[id] = Io.StreamReadDouble(INS);
 					CrCcs[id] = Io.StreamReadDouble(INS);
 					SpecificGravities[id] = Io.StreamReadDouble(INS);
-					gs[id] = Io.StreamReadDouble(INS);
-					gc[id] = Io.StreamReadDouble(INS);
+					SoilUnitWeight[id] = Io.StreamReadDouble(INS);
+					SoilBuoyantUnitWeight[id] = Io.StreamReadDouble(INS);
 
 					for (k = 1; k <= RelationDefinitionLines[id]; k++) {
 						// read(ins) voidratio(k, id), perm(k, id), effectivestress(k, id)

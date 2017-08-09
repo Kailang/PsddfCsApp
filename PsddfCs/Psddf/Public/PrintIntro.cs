@@ -4,7 +4,7 @@
 		/// Init status
 		/// </summary>
 		public void PrintIntro () {
-			Intro(dim1);
+			Intro(Dimension1);
 		}
 	}
 }

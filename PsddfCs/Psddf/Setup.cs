@@ -59,48 +59,48 @@
 									if (para == 1) {
 										// nsub1[i] is even number;
 										if (j <= intx(CompressibleFoundationSublayers[i] / 2)) {
-											efs = efs - gc[id] * dz1[i] * (2 - CompressibleFoundationOCR[i]) - 0.5 * (layer_stress[i] + layer_stress[i + 1]) * CompressibleFoundationOCR[i] / CompressibleFoundationSublayers[i];
+											efs = efs - SoilBuoyantUnitWeight[id] * dz1[i] * (2 - CompressibleFoundationOCR[i]) - 0.5 * (layer_stress[i] + layer_stress[i + 1]) * CompressibleFoundationOCR[i] / CompressibleFoundationSublayers[i];
 										} else {
-											efs = efs - gc[id] * dz1[i] * CompressibleFoundationOCR[i] + 0.5 * (layer_stress[i] + layer_stress[i + 1]) * CompressibleFoundationOCR[i] / CompressibleFoundationSublayers[i];
+											efs = efs - SoilBuoyantUnitWeight[id] * dz1[i] * CompressibleFoundationOCR[i] + 0.5 * (layer_stress[i] + layer_stress[i + 1]) * CompressibleFoundationOCR[i] / CompressibleFoundationSublayers[i];
 										}
 									} else if (para == 2) {
 										// nsub1[i] is odd number;
 										if (j <= intx(CompressibleFoundationSublayers[i] / 2)) {
-											efs = efs - gc[id] * dz1[i] * (2 - CompressibleFoundationOCR[i]) - 0.5 * (layer_stress[i] + layer_stress[i + 1]) * CompressibleFoundationOCR[i] / CompressibleFoundationSublayers[i];
+											efs = efs - SoilBuoyantUnitWeight[id] * dz1[i] * (2 - CompressibleFoundationOCR[i]) - 0.5 * (layer_stress[i] + layer_stress[i + 1]) * CompressibleFoundationOCR[i] / CompressibleFoundationSublayers[i];
 										} else if (j == intx(CompressibleFoundationSublayers[i] / 2) + 1) {
-											efs = efs - gc[id] * dz1[i];
+											efs = efs - SoilBuoyantUnitWeight[id] * dz1[i];
 										} else {
-											efs = efs - gc[id] * dz1[i] * CompressibleFoundationOCR[i] + 0.5 * (layer_stress[i] + layer_stress[i + 1]) * CompressibleFoundationOCR[i] / CompressibleFoundationSublayers[i];
+											efs = efs - SoilBuoyantUnitWeight[id] * dz1[i] * CompressibleFoundationOCR[i] + 0.5 * (layer_stress[i] + layer_stress[i + 1]) * CompressibleFoundationOCR[i] / CompressibleFoundationSublayers[i];
 										}
 									}
 								} else {
 									if (para == 2) {
 										// nsub1[numbl] is odd number;
 										if (j <= intx(CompressibleFoundationSublayers[i] / 2) + 1) {
-											efs = efs - gc[id] * dz1[i] * (2 - CompressibleFoundationOCR[i]);
+											efs = efs - SoilBuoyantUnitWeight[id] * dz1[i] * (2 - CompressibleFoundationOCR[i]);
 										} else {
-											efs = efs - gc[id] * dz1[i] * CompressibleFoundationOCR[i];
+											efs = efs - SoilBuoyantUnitWeight[id] * dz1[i] * CompressibleFoundationOCR[i];
 										}
 									} else if (para == 1) {
 										// nsub1[i] is even number;
 										if (j <= intx(CompressibleFoundationSublayers[i] / 2)) {
-											efs = efs - gc[id] * dz1[i] * (2 - CompressibleFoundationOCR[i]);
+											efs = efs - SoilBuoyantUnitWeight[id] * dz1[i] * (2 - CompressibleFoundationOCR[i]);
 										} else if (j == intx(CompressibleFoundationSublayers[i] / 2) + 1) {
-											efs = efs - gc[id] * dz1[i];
+											efs = efs - SoilBuoyantUnitWeight[id] * dz1[i];
 										} else {
-											efs = efs - gc[id] * dz1[i] * CompressibleFoundationOCR[i];
+											efs = efs - SoilBuoyantUnitWeight[id] * dz1[i] * CompressibleFoundationOCR[i];
 										}
 									}
 
 								}
 
 							} else {
-								efs = efs - gc[id] * dz1[i];
+								efs = efs - SoilBuoyantUnitWeight[id] * dz1[i];
 							}
 						}
 						k = k + j - 1;
 						// after } j = ii + 1 Fortran's feature (reasong for -1);
-						totstress = totstress + gc[id] * dz1[i] * CompressibleFoundationSublayers[i];
+						totstress = totstress + SoilBuoyantUnitWeight[id] * dz1[i] * CompressibleFoundationSublayers[i];
 					}
 
 					CompressibleFoundationSublayers[CompressibleFoundationLayers] = CompressibleFoundationSublayers[CompressibleFoundationLayers] + 1;
@@ -170,7 +170,7 @@
 				// Calculate maximum second stage drying depth;
 				id = DredgedFillMaterialIDs[1];
 				Intpgg(d1, RelationDefinitionLines, DredgedFillDesiccationLimits[id], VoidRatios, EffectiveStresses, EffectiveStresses, ref efsdl, ref voidx, ref jin, id, auxdf, 1, 0, 0);
-				dz2 = efsdl / (gs[id] + (WaterUnitWeight * DredgedFillDesiccationLimits[id] * DredgedFillAverageSaturation[id]));
+				dz2 = efsdl / (SoilUnitWeight[id] + (WaterUnitWeight * DredgedFillDesiccationLimits[id] * DredgedFillAverageSaturation[id]));
 				h2mx = dz2 * (1.0 + DredgedFillDesiccationLimits[id]);
 				if (DredgedFillDryingMaxDepth[id] > h2mx) {
 					DredgedFillDryingMaxDepth[id] = h2mx;
@@ -184,7 +184,7 @@
 					// Calculate initial stresses and pore pressures for foundation layer;
 					wl1 = DredgedFillCoordXI[ndfpoint] + CompressibleFoundationCoordXI[nblpoint];
 					id = DredgedFillMaterialIDs[1];
-					g1 = (DredgedFillCoordZ[ndfpoint] * gc[id]);
+					g1 = (DredgedFillCoordZ[ndfpoint] * SoilBuoyantUnitWeight[id]);
 					w1 = fint1[nblpoint] + DredgedFillCoordXI[ndfpoint];
 					k = nblpoint + 1;
 					hsa = 0.0;
@@ -195,12 +195,12 @@
 							Intpgg(d1, RelationDefinitionLines, CompressibleFoundationCurrentVoidRatio[kk], VoidRatios, EffectiveStresses, EffectiveStresses, ref CompressibleFoundationEffectiveStree[kk], ref voidx, ref jin, id, auxbl, kk, 0, 0);
 							CompressibleFoundationHydrostaticPoreWaterPressure[kk] = WaterUnitWeight * (wl1 - CompressibleFoundationCoordXI[kk]) + overpress;
 							CompressibleFoundationTotalStree[kk] = WaterUnitWeight * (w1 - fint1[kk]) + hsa + g1 + overpress;
-							hsa = hsa + gs[id] * dz1[i];
+							hsa = hsa + SoilUnitWeight[id] * dz1[i];
 							CompressibleFoundationTotalPoreWaterPressure[kk] = CompressibleFoundationTotalStree[kk] - CompressibleFoundationEffectiveStree[kk];
 							CompressibleFoundationExcessPoreWaterPressure[kk] = CompressibleFoundationTotalPoreWaterPressure[kk] - CompressibleFoundationHydrostaticPoreWaterPressure[kk];
 						}
 						k = kk;
-						hsa = hsa - gs[id] * dz1[i];
+						hsa = hsa - SoilUnitWeight[id] * dz1[i];
 					}
 
 					// Ultimate settlement for compresible foundation;
@@ -213,7 +213,7 @@
 				id = DredgedFillMaterialIDs[1];
 				for (i = 1; i <= ndfpoint; i++) {
 					DredgedFillHydrostaticPoreWaterPressure[i] = WaterUnitWeight * (DredgedFillCoordXI[ndfpoint] - DredgedFillCoordXI[i]) + overpress;
-					DredgedFillExcessPoreWaterPressure[i] = gc[id] * (DredgedFillInitialThicknesses[1] / (1 + DredgedFillInitialVoidRatios[1]) - DredgedFillCoordZ[i]);
+					DredgedFillExcessPoreWaterPressure[i] = SoilBuoyantUnitWeight[id] * (DredgedFillInitialThicknesses[1] / (1 + DredgedFillInitialVoidRatios[1]) - DredgedFillCoordZ[i]);
 					DredgedFillTotalPoreWaterPressure[i] = DredgedFillHydrostaticPoreWaterPressure[i] + DredgedFillExcessPoreWaterPressure[i];
 					DredgedFillEffectiveStress[i] = 0.0;
 					DredgedFillTotalStress[i] = DredgedFillTotalPoreWaterPressure[i];
