@@ -52,26 +52,26 @@
 			// Find change of void ratio in compressible foundation between t and t + 1;
 			if (IsFoundationCompressible != 2) {
 				// Nbl is not 2 means there are compressible layers;
-				for (i = 1; i <= nblpoint; i++) {
+				for (i = 1; i <= CompressibleFoundationTotalSublayers; i++) {
 					del_er[i] = pre_er[i] - CompressibleFoundationCurrentVoidRatio[i];
 					pre_er[i] = CompressibleFoundationCurrentVoidRatio[i];
 					// For the next time step;
 				}
 			}
 			// Find change of void ratio in dredged fill between t and t + 1;
-			if (pre_ndfpoint < ndfpoint) {
+			if (pre_ndfpoint < DredgedFillTotalSublayers) {
 				// In case new dredge layer is installed;
 				for (i = 1; i <= pre_ndfpoint; i++) {
 					del_e[i] = pre_e[i] - DredgedFillCurrentVoidRatio[i];
 					pre_e[i] = DredgedFillCurrentVoidRatio[i];
 				}
-				for (i = pre_ndfpoint + 1; i <= ndfpoint; i += 1) {
-					del_e[i] = DredgedFillCurrentVoidRatio[ndfpoint] - DredgedFillCurrentVoidRatio[i];
+				for (i = pre_ndfpoint + 1; i <= DredgedFillTotalSublayers; i += 1) {
+					del_e[i] = DredgedFillCurrentVoidRatio[DredgedFillTotalSublayers] - DredgedFillCurrentVoidRatio[i];
 					pre_e[i] = DredgedFillCurrentVoidRatio[i];
 				}
-				pre_ndfpoint = ndfpoint;
+				pre_ndfpoint = DredgedFillTotalSublayers;
 			} else {
-				for (i = 1; i <= ndfpoint; i++) {
+				for (i = 1; i <= DredgedFillTotalSublayers; i++) {
 					del_e[i] = pre_e[i] - DredgedFillCurrentVoidRatio[i];
 					pre_e[i] = DredgedFillCurrentVoidRatio[i];
 				}
@@ -129,7 +129,7 @@
 			i = 1;
 			g = 1;
 
-			for (k = 1; k <= ndflayer; k++) {
+			for (k = 1; k <= DredgedFillCurrentLayer; k++) {
 				for (kk = 1; kk <= DredgedFillSublayers[k]; kk++) {
 					id_element[i] = i;
 					// Id of element;

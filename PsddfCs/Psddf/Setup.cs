@@ -8,19 +8,19 @@
 			double efs, h2mx, dz2, g1, w1, hsa, wl1, efsdl = 0, elev, overpress, voidx = 0, totstress;
 
 			jin = 2;
-			nblpoint = 0;
+			CompressibleFoundationTotalSublayers = 0;
 
 			for (i = 1; i <= CompressibleFoundationLayers; i++) {
-				nblpoint = nblpoint + CompressibleFoundationSublayers[i];
+				CompressibleFoundationTotalSublayers = CompressibleFoundationTotalSublayers + CompressibleFoundationSublayers[i];
 			}
 
-			nblpoint = nblpoint + CompressibleFoundationLayers;
+			CompressibleFoundationTotalSublayers = CompressibleFoundationTotalSublayers + CompressibleFoundationLayers;
 
 			if (IsNewSimulation == 1) {
 				// ndff = 1 when it is not a restart;
 				// Set constants;
-				ndfpoint = DredgedFillSublayers[1] + 1;
-				ndfcons = ndfpoint;
+				DredgedFillTotalSublayers = DredgedFillSublayers[1] + 1;
+				ndfcons = DredgedFillTotalSublayers;
 				pk0 = IncompressibleFoudationPermeability / (1.0 + IncompressibleFoudationVoidRatio);
 				// Kailang: Record du0;
 				OriginalDU0 = IncompressibleFoudationDrainagePathLength;
@@ -105,9 +105,9 @@
 
 					CompressibleFoundationSublayers[CompressibleFoundationLayers] = CompressibleFoundationSublayers[CompressibleFoundationLayers] + 1;
 					id = CompressibleFoundationMaterialIDs[CompressibleFoundationLayers];
-					CompressibleFoundationInitialVoidRatio[nblpoint] = VoidRatios[1, id];
-					f1[nblpoint] = CompressibleFoundationInitialVoidRatio[nblpoint];
-					CompressibleFoundationCurrentVoidRatio[nblpoint] = CompressibleFoundationInitialVoidRatio[nblpoint];
+					CompressibleFoundationInitialVoidRatio[CompressibleFoundationTotalSublayers] = VoidRatios[1, id];
+					f1[CompressibleFoundationTotalSublayers] = CompressibleFoundationInitialVoidRatio[CompressibleFoundationTotalSublayers];
+					CompressibleFoundationCurrentVoidRatio[CompressibleFoundationTotalSublayers] = CompressibleFoundationInitialVoidRatio[CompressibleFoundationTotalSublayers];
 
 					Integral(CompressibleFoundationCurrentVoidRatio, dz1, CompressibleFoundationSublayers, fint1, CompressibleFoundationLayers, 0);
 
@@ -154,7 +154,7 @@
 					DredgedFillCurrentVoidRatio[i] = DredgedFillInitialVoidRatios[1];
 					et[i] = DredgedFillInitialVoidRatios[1];
 				}
-				elev = IncompressibleFoudationElevation + DredgedFillCoordXI[ndfpoint] + CompressibleFoundationTotalInitialThickness;
+				elev = IncompressibleFoudationElevation + DredgedFillCoordXI[DredgedFillTotalSublayers] + CompressibleFoundationTotalInitialThickness;
 
 				// Is the water table above surface elevation;
 				if (ExternalWaterSurfaceElevation > elev) {
@@ -165,7 +165,7 @@
 				totstress = 0.0;
 
 				// Calculate final void ratios for dredged fill;
-				FinalVr(d1, VoidRatios, EffectiveStresses, DredgedFillFinalVoidRatio, dz, DredgedFillSublayers, ndflayer, DredgedFillMaterialIDs, ndfpoint, ref totstress, 0, ref jin, auxdf);
+				FinalVr(d1, VoidRatios, EffectiveStresses, DredgedFillFinalVoidRatio, dz, DredgedFillSublayers, DredgedFillCurrentLayer, DredgedFillMaterialIDs, DredgedFillTotalSublayers, ref totstress, 0, ref jin, auxdf);
 
 				// Calculate maximum second stage drying depth;
 				id = DredgedFillMaterialIDs[1];
@@ -179,24 +179,24 @@
 				// Calculate final void ratios for compressible foundation;
 				if (IsFoundationCompressible != 2) {
 					// Checks For Compressible Foundation (1 = Compressible);
-					FinalVr(d1, VoidRatios, EffectiveStresses, CompressibleFoundationFinalVoidRatio, dz1, CompressibleFoundationSublayers, CompressibleFoundationLayers, CompressibleFoundationMaterialIDs, nblpoint, ref totstress, 0, ref jin, auxbl);
+					FinalVr(d1, VoidRatios, EffectiveStresses, CompressibleFoundationFinalVoidRatio, dz1, CompressibleFoundationSublayers, CompressibleFoundationLayers, CompressibleFoundationMaterialIDs, CompressibleFoundationTotalSublayers, ref totstress, 0, ref jin, auxbl);
 
 					// Calculate initial stresses and pore pressures for foundation layer;
-					wl1 = DredgedFillCoordXI[ndfpoint] + CompressibleFoundationCoordXI[nblpoint];
+					wl1 = DredgedFillCoordXI[DredgedFillTotalSublayers] + CompressibleFoundationCoordXI[CompressibleFoundationTotalSublayers];
 					id = DredgedFillMaterialIDs[1];
-					g1 = (DredgedFillCoordZ[ndfpoint] * SoilBuoyantUnitWeight[id]);
-					w1 = fint1[nblpoint] + DredgedFillCoordXI[ndfpoint];
-					k = nblpoint + 1;
+					g1 = (DredgedFillCoordZ[DredgedFillTotalSublayers] * SoilBuoyantUnitWeight[id]);
+					w1 = fint1[CompressibleFoundationTotalSublayers] + DredgedFillCoordXI[DredgedFillTotalSublayers];
+					k = CompressibleFoundationTotalSublayers + 1;
 					hsa = 0.0;
 					for (i = CompressibleFoundationLayers; i >= 1; i -= 1) {
 						id = CompressibleFoundationMaterialIDs[i];
 						for (j = 1; j <= CompressibleFoundationSublayers[i] + 1; j++) {
 							kk = k - j;
-							Intpgg(d1, RelationDefinitionLines, CompressibleFoundationCurrentVoidRatio[kk], VoidRatios, EffectiveStresses, EffectiveStresses, ref CompressibleFoundationEffectiveStree[kk], ref voidx, ref jin, id, auxbl, kk, 0, 0);
+							Intpgg(d1, RelationDefinitionLines, CompressibleFoundationCurrentVoidRatio[kk], VoidRatios, EffectiveStresses, EffectiveStresses, ref CompressibleFoundationEffectiveStress[kk], ref voidx, ref jin, id, auxbl, kk, 0, 0);
 							CompressibleFoundationHydrostaticPoreWaterPressure[kk] = WaterUnitWeight * (wl1 - CompressibleFoundationCoordXI[kk]) + overpress;
-							CompressibleFoundationTotalStree[kk] = WaterUnitWeight * (w1 - fint1[kk]) + hsa + g1 + overpress;
+							CompressibleFoundationTotalStress[kk] = WaterUnitWeight * (w1 - fint1[kk]) + hsa + g1 + overpress;
 							hsa = hsa + SoilUnitWeight[id] * dz1[i];
-							CompressibleFoundationTotalPoreWaterPressure[kk] = CompressibleFoundationTotalStree[kk] - CompressibleFoundationEffectiveStree[kk];
+							CompressibleFoundationTotalPoreWaterPressure[kk] = CompressibleFoundationTotalStress[kk] - CompressibleFoundationEffectiveStress[kk];
 							CompressibleFoundationExcessPoreWaterPressure[kk] = CompressibleFoundationTotalPoreWaterPressure[kk] - CompressibleFoundationHydrostaticPoreWaterPressure[kk];
 						}
 						k = kk;
@@ -204,15 +204,15 @@
 					}
 
 					// Ultimate settlement for compresible foundation;
-					vri1 = fint1[nblpoint];
+					vri1 = fint1[CompressibleFoundationTotalSublayers];
 					Integral(CompressibleFoundationFinalVoidRatio, dz1, CompressibleFoundationSublayers, fint1, CompressibleFoundationLayers, 0);
-					CompressibleFoundationFinalSettlement = vri1 - fint1[nblpoint];
+					CompressibleFoundationFinalSettlement = vri1 - fint1[CompressibleFoundationTotalSublayers];
 				}
 
 				// For dredged fill layer;
 				id = DredgedFillMaterialIDs[1];
-				for (i = 1; i <= ndfpoint; i++) {
-					DredgedFillHydrostaticPoreWaterPressure[i] = WaterUnitWeight * (DredgedFillCoordXI[ndfpoint] - DredgedFillCoordXI[i]) + overpress;
+				for (i = 1; i <= DredgedFillTotalSublayers; i++) {
+					DredgedFillHydrostaticPoreWaterPressure[i] = WaterUnitWeight * (DredgedFillCoordXI[DredgedFillTotalSublayers] - DredgedFillCoordXI[i]) + overpress;
 					DredgedFillExcessPoreWaterPressure[i] = SoilBuoyantUnitWeight[id] * (DredgedFillInitialThicknesses[1] / (1 + DredgedFillInitialVoidRatios[1]) - DredgedFillCoordZ[i]);
 					DredgedFillTotalPoreWaterPressure[i] = DredgedFillHydrostaticPoreWaterPressure[i] + DredgedFillExcessPoreWaterPressure[i];
 					DredgedFillEffectiveStress[i] = 0.0;
@@ -220,8 +220,8 @@
 				}
 
 				// Ultimate settlement for dredged fill;
-				Integral(DredgedFillFinalVoidRatio, dz, DredgedFillSublayers, fint, ndflayer, 0);
-				DredgedFillFinalSettlement = hsolids - fint[ndfpoint];
+				Integral(DredgedFillFinalVoidRatio, dz, DredgedFillSublayers, fint, DredgedFillCurrentLayer, 0);
+				DredgedFillFinalSettlement = hsolids - fint[DredgedFillTotalSublayers];
 
 				if (IsFoundationCompressible != 2) {
 					// Check for Compressible Foundation;

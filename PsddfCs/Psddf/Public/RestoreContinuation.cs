@@ -29,9 +29,9 @@
 			// read(ins) nbl, ndfcons, ndflayer, ndfpoint, nblpoint
 			IsFoundationCompressible = Io.StreamReadInt(INS);
 			ndfcons = Io.StreamReadInt(INS);
-			ndflayer = Io.StreamReadInt(INS);
-			ndfpoint = Io.StreamReadInt(INS);
-			nblpoint = Io.StreamReadInt(INS);
+			DredgedFillCurrentLayer = Io.StreamReadInt(INS);
+			DredgedFillTotalSublayers = Io.StreamReadInt(INS);
+			CompressibleFoundationTotalSublayers = Io.StreamReadInt(INS);
 
 			// read(ins) nflag, nm, nnd, ntime
 			nflag = Io.StreamReadInt(INS);
@@ -142,7 +142,7 @@
         read(ins)  et(i)
     enddo
 			*/
-			for (int i = 1; i <= ndfpoint; i++) {
+			for (int i = 1; i <= DredgedFillTotalSublayers; i++) {
 				// read(ins)  a(i), af(i), bf(i), e(i), e1(i)
 				DredgedFillCoordA[i] = Io.StreamReadDouble(INS);
 				af[i] = Io.StreamReadDouble(INS);
@@ -179,7 +179,7 @@
 			*/
 			if (IsFoundationCompressible != 2) {
 				// Check for Compressible Foundation
-				for (int i = 1; i <= ndfpoint; i++) {
+				for (int i = 1; i <= DredgedFillTotalSublayers; i++) {
 					// read(ins)  a1(i), af1(i), bf1(i), er(i), e11(i)
 					CompressibleFoundationCoordA[i] = Io.StreamReadDouble(INS);
 					af1[i] = Io.StreamReadDouble(INS);
@@ -189,10 +189,10 @@
 
 					// read(ins)  efin1(i), efstr1(i), f1(i), fint1(i), tostr1(i)
 					CompressibleFoundationFinalVoidRatio[i] = Io.StreamReadDouble(INS);
-					CompressibleFoundationEffectiveStree[i] = Io.StreamReadDouble(INS);
+					CompressibleFoundationEffectiveStress[i] = Io.StreamReadDouble(INS);
 					f1[i] = Io.StreamReadDouble(INS);
 					fint1[i] = Io.StreamReadDouble(INS);
-					CompressibleFoundationTotalStree[i] = Io.StreamReadDouble(INS);
+					CompressibleFoundationTotalStress[i] = Io.StreamReadDouble(INS);
 
 					// read(ins)  u1(i), u01(i), uw1(i), xi1(i), z1(i)
 					CompressibleFoundationExcessPoreWaterPressure[i] = Io.StreamReadDouble(INS);
@@ -293,7 +293,7 @@
 			*/
 			for (int i = 1; i <= 15; i++) {
 				// read(ins) (auxdf(k, i), i = 1, ndfpoint)
-				for (int j = 1; j <= ndfpoint; j++)
+				for (int j = 1; j <= DredgedFillTotalSublayers; j++)
 					auxdf[i, j] = Io.StreamReadDouble(INS);
 			}
 
@@ -307,7 +307,7 @@
 			if (IsFoundationCompressible != 2) {
 				for (int i = 1; i <= 15; i++) {
 					// read(ins) (auxbl(k, i), i = 1, nblpoint)
-					for (int j = 1; j <= nblpoint; j++)
+					for (int j = 1; j <= CompressibleFoundationTotalSublayers; j++)
 						auxbl[i, j] = Io.StreamReadDouble(INS);
 				}
 			}

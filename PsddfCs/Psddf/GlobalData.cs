@@ -1,6 +1,6 @@
 ﻿namespace PsddfCs {
 	public partial class Psddf {
-		const int DredgedFillMaxLayers = 1001, CompressibleFoundationMaxLayers = 201;
+		const int DredgedFillMaxSublayers = 1001, CompressibleFoundationMaxSublayers = 201;
 		/// <summary>
 		/// Max number of material types.
 		/// </summary>
@@ -310,12 +310,12 @@
 		/// TDS
 		/// Number of time periods (usually days) from the addition of the first layer of dredged fill to the start of desiccation in the first layer of dredged fill.
 		/// </summary>
-		public double DredgedFillDesiccationDelayDays;
+		public double DredgedFillDesiccationDelayDays, DredgedFillInitialDesiccationDelayDays;
 		/// <summary>
 		/// MS
 		/// The number of the month at which desiccation starts in the first layer of dredged fill. (January = 1)
 		/// </summary>
-		public int DredgedFillDesiccationDelayMonths;
+		public int DredgedFillDesiccationDelayMonths, DredgedFillInitialDesiccationDelayMonths;
 		/// <summary>
 		/// NSC
 		/// Integer denoting the following options:
@@ -328,7 +328,7 @@
 		/// E00
 		/// Initial void ratio of new dredged fill after sedimentation and before the start of consolidation. 
 		/// </summary>
-		public readonly double[] DredgedFillInitialVoidRatios = new double[DredgedFillMaxLayers + 1];
+		public readonly double[] DredgedFillInitialVoidRatios = new double[DredgedFillMaxSublayers + 1];
 		/// <summary>
 		/// IDDF
 		/// Material identification number for the dredged fill layer added at PRINTT(I). 
@@ -441,60 +441,60 @@
 		/// Coordinates of nodal points.
 		/// </summary>
 		public readonly double[]
-			DredgedFillCoordA = new double[DredgedFillMaxLayers + 1], CompressibleFoundationCoordA = new double[CompressibleFoundationMaxLayers + 1],
-			DredgedFillCoordXI = new double[DredgedFillMaxLayers + 1], CompressibleFoundationCoordXI = new double[CompressibleFoundationMaxLayers + 1],
-			DredgedFillCoordZ = new double[DredgedFillMaxLayers + 1], CompressibleFoundationCoordZ = new double[CompressibleFoundationMaxLayers + 1];
+			DredgedFillCoordA = new double[DredgedFillMaxSublayers + 1], CompressibleFoundationCoordA = new double[CompressibleFoundationMaxSublayers + 1],
+			DredgedFillCoordXI = new double[DredgedFillMaxSublayers + 1], CompressibleFoundationCoordXI = new double[CompressibleFoundationMaxSublayers + 1],
+			DredgedFillCoordZ = new double[DredgedFillMaxSublayers + 1], CompressibleFoundationCoordZ = new double[CompressibleFoundationMaxSublayers + 1];
 		/// <summary>
 		/// Initial void ratio at each coordinate point.
 		/// </summary>
 		public readonly double[] 
-			DredgedFillInitialVoidRatio = new double[DredgedFillMaxLayers + 1], 
-			CompressibleFoundationInitialVoidRatio = new double[CompressibleFoundationMaxLayers + 1];
+			DredgedFillInitialVoidRatio = new double[DredgedFillMaxSublayers + 1], 
+			CompressibleFoundationInitialVoidRatio = new double[CompressibleFoundationMaxSublayers + 1];
 		/// <summary>
 		/// Current void ratio at each coordinate point.
 		/// </summary>
 		public readonly double[] 
-			DredgedFillCurrentVoidRatio = new double[DredgedFillMaxLayers + 1], 
-			CompressibleFoundationCurrentVoidRatio = new double[CompressibleFoundationMaxLayers + 1];
+			DredgedFillCurrentVoidRatio = new double[DredgedFillMaxSublayers + 1], 
+			CompressibleFoundationCurrentVoidRatio = new double[CompressibleFoundationMaxSublayers + 1];
 		/// <summary>
 		/// Final void ratio at each coordinate point.
 		/// </summary>
 		public readonly double[] 
-			DredgedFillFinalVoidRatio = new double[DredgedFillMaxLayers + 1], 
-			CompressibleFoundationFinalVoidRatio = new double[CompressibleFoundationMaxLayers + 1];
+			DredgedFillFinalVoidRatio = new double[DredgedFillMaxSublayers + 1], 
+			CompressibleFoundationFinalVoidRatio = new double[CompressibleFoundationMaxSublayers + 1];
 		/// <summary>
 		/// Total stress at each coordinate point.
 		/// </summary>
 		public readonly double[] 
-			DredgedFillTotalStress = new double[DredgedFillMaxLayers + 1], 
-			CompressibleFoundationTotalStree = new double[CompressibleFoundationMaxLayers + 1];
+			DredgedFillTotalStress = new double[DredgedFillMaxSublayers + 1], 
+			CompressibleFoundationTotalStress = new double[CompressibleFoundationMaxSublayers + 1];
 		/// <summary>
 		/// Effective stress at each coordinate point.
 		/// </summary>
 		public readonly double[] 
-			DredgedFillEffectiveStress = new double[DredgedFillMaxLayers + 1], 
-			CompressibleFoundationEffectiveStree = new double[CompressibleFoundationMaxLayers + 1], 
-			f = new double[DredgedFillMaxLayers + 1], f1 = new double[CompressibleFoundationMaxLayers + 1];
+			DredgedFillEffectiveStress = new double[DredgedFillMaxSublayers + 1], 
+			CompressibleFoundationEffectiveStress = new double[CompressibleFoundationMaxSublayers + 1], 
+			f = new double[DredgedFillMaxSublayers + 1], f1 = new double[CompressibleFoundationMaxSublayers + 1];
 		/// <summary>
 		/// uw - total pore-water pressure
 		/// Total pore pressure at each coordinate point.
 		/// </summary>
 		public readonly double[] 
-			DredgedFillTotalPoreWaterPressure = new double[DredgedFillMaxLayers + 1], 
-			CompressibleFoundationTotalPoreWaterPressure = new double[CompressibleFoundationMaxLayers + 1];
+			DredgedFillTotalPoreWaterPressure = new double[DredgedFillMaxSublayers + 1], 
+			CompressibleFoundationTotalPoreWaterPressure = new double[CompressibleFoundationMaxSublayers + 1];
 		/// <summary>
 		/// u0 - hydrostatic pore-water pressure
 		/// Static pore pressure at each coordinate point.
 		/// </summary>
 		public readonly double[] 
-			DredgedFillHydrostaticPoreWaterPressure = new double[DredgedFillMaxLayers + 1], 
-			CompressibleFoundationHydrostaticPoreWaterPressure = new double[CompressibleFoundationMaxLayers + 1];
+			DredgedFillHydrostaticPoreWaterPressure = new double[DredgedFillMaxSublayers + 1], 
+			CompressibleFoundationHydrostaticPoreWaterPressure = new double[CompressibleFoundationMaxSublayers + 1];
 		/// <summary>
 		/// u(z,t) = uw(z,t) - u0(z,t) - excess pore-water pressure
 		/// Excess pore-water pressure at each coordinate point.
 		/// </summary>
 		public readonly double[] 
-			DredgedFillExcessPoreWaterPressure = new double[DredgedFillMaxLayers + 1], CompressibleFoundationExcessPoreWaterPressure = new double[CompressibleFoundationMaxLayers + 1];
+			DredgedFillExcessPoreWaterPressure = new double[DredgedFillMaxSublayers + 1], CompressibleFoundationExcessPoreWaterPressure = new double[CompressibleFoundationMaxSublayers + 1];
 		/// <summary>
 		/// Degree of consolidation.
 		/// </summary>
@@ -550,7 +550,7 @@
 		/// Vector holding flag for adjusting e-p curves.
 		/// True: Not adjusted; False: Adjusted.
 		/// </summary>
-		bool[] IsCurveNotAdjusteds = new bool[DredgedFillMaxLayers + 1];
+		bool[] IsCurveNotAdjusteds = new bool[DredgedFillMaxSublayers + 1];
 
 		/// <summary>
 		/// γs - unit weight of soil solids 
@@ -609,6 +609,14 @@
     ! Used to be 501, 51, 50 (old removed values)
     integer, parameter:: npdf = 1001, npbl = 201, nleymax = 200
 		*/
+		double[]
+			af = new double[DredgedFillMaxSublayers + 1], af1 = new double[CompressibleFoundationMaxSublayers + 1],
+			bf = new double[DredgedFillMaxSublayers + 1], bf1 = new double[CompressibleFoundationMaxSublayers + 1];
+		double[]
+			fint = new double[DredgedFillMaxSublayers + 1], fint1 = new double[CompressibleFoundationMaxSublayers + 1],
+			ffint = new double[DredgedFillMaxSublayers + 1], ffint1 = new double[CompressibleFoundationMaxSublayers + 1];
+
+		double[] ep = new double[12 + 1], et = new double[DredgedFillMaxSublayers + 1];
 
 
 		/*
@@ -625,15 +633,10 @@
     integer:: ndflayer
 		*/
 		double[,] dvds = new double[Dimension1 + 1, Dimension2 + 1];
-		double[] 
-			dz = new double[MaxMaterialTypes + 1], dz1 = new double[MaxMaterialTypes + 1];
 
-		double 
-			da, dudz10, dudz11, dudz21, pk0;
-		double[] 
-			af = new double[DredgedFillMaxLayers + 1], af1 = new double[CompressibleFoundationMaxLayers + 1],
-			bf = new double[DredgedFillMaxLayers + 1], bf1 = new double[CompressibleFoundationMaxLayers + 1];
-		int ndflayer;
+		double da, dudz10, dudz11, dudz21, pk0;
+
+		int DredgedFillCurrentLayer;
 
 		/*
     ! Group Two
@@ -652,8 +655,8 @@
 		/// <summary>
 		/// Previous void ratio saving for recovery.
 		/// </summary>
-		double[] pre_e = new double[DredgedFillMaxLayers + 1], pre_er = new double[CompressibleFoundationMaxLayers + 1];
-		int nblpoint, ndfpoint;
+		double[] pre_e = new double[DredgedFillMaxSublayers + 1], pre_er = new double[CompressibleFoundationMaxSublayers + 1];
+		int CompressibleFoundationTotalSublayers, DredgedFillTotalSublayers;
 		/// <summary>
 		/// Previous total number of nodes for recovery.
 		/// </summary>
@@ -665,38 +668,33 @@
 		
 		double 
 			aev, cset, dsc, dset, dtim, qdf, setc, 
-			vrint;
-		double[]
-			fint = new double[DredgedFillMaxLayers + 1], fint1 = new double[CompressibleFoundationMaxLayers + 1],
-			ep = new double[12 + 1], et = new double[DredgedFillMaxLayers + 1],
-			ffint = new double[DredgedFillMaxLayers + 1], ffint1 = new double[CompressibleFoundationMaxLayers + 1];
+			vrint, vri1;
 
-		int nflag, nnd, m, mm, ndfcons;
-		int nloop;
+		int nflag, nnd, m, mm, ndfcons,nloop;
 		double pretime, preelev;
 
-		int[] ibdl = new int[MaxMaterialTypes + 1];
 		double efsbot, hsolids, acumel;
 
-		
-		double[,] auxdf = new double[15 + 1, DredgedFillMaxLayers + 1];
-		double[,] auxbl = new double[15 + 1, CompressibleFoundationMaxLayers + 1];
+		int ngraph = 0;
+		double qdfold = 0;
+
+		int temp_id;
+
+		double[,] auxdf = new double[15 + 1, DredgedFillMaxSublayers + 1];
+		double[,] auxbl = new double[15 + 1, CompressibleFoundationMaxSublayers + 1];
+
+		int[] indi_id = new int[1000 + 1];
+
+		int[] ibdl = new int[MaxMaterialTypes + 1];
+		double[] layer_stress = new double[MaxMaterialTypes + 1];
+
+		double[] dz = new double[MaxMaterialTypes + 1], dz1 = new double[MaxMaterialTypes + 1];
 
 		double[] tpdf = new double[MaxMaterialTypes + 1], difsecdf = new double[MaxMaterialTypes + 1];
 		double[] tpbl = new double[MaxMaterialTypes + 1], difsecbl = new double[MaxMaterialTypes + 1];
 
 		bool[] IsDredgedFillInPrimaryConsolidations = new bool[MaxMaterialTypes + 1];
 		bool[] IsCompressibleFoundationInPrimaryConsolidations = new bool[MaxMaterialTypes + 1];
-
-		int ngraph = 0;
-		double qdfold = 0;
-
-		double vri1;
-
-		int temp_id;
-		int[] indi_id = new int[1000 + 1];
-
-		double[] layer_stress = new double[MaxMaterialTypes + 1];
 	}
 }
 

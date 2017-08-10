@@ -4,6 +4,9 @@
 		/// Init status
 		/// </summary>
 		public void InitSimulation () {
+			m = DredgedFillDesiccationDelayMonths - 1;
+			dtim = DredgedFillDesiccationDelayDays + DaysInMonth;
+
 			CompressibleFoundationTotalInitialThickness = 0;
 			for (int i = 1; i <= CompressibleFoundationLayers; i++)
 				CompressibleFoundationTotalInitialThickness += CompressibleFoundationInitialThicknesses[i];

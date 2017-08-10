@@ -33,8 +33,8 @@ namespace PsddfCs {
 
 			// Calculate net desication for month;
 			dtim = dtim + DaysInMonth;
-			Integral(DredgedFillCurrentVoidRatio, dz, DredgedFillSublayers, fint, ndflayer, 0);
-			ct = DredgedFillCoordZ[ndfpoint] + fint[ndfpoint] - DredgedFillCoordZ[ndfcons] - fint[ndfcons];
+			Integral(DredgedFillCurrentVoidRatio, dz, DredgedFillSublayers, fint, DredgedFillCurrentLayer, 0);
+			ct = DredgedFillCoordZ[DredgedFillTotalSublayers] + fint[DredgedFillTotalSublayers] - DredgedFillCoordZ[ndfcons] - fint[ndfcons];
 			cset = vrint - fint[ndfcons];
 			setc = setc + cset;
 			m = m + 1;
@@ -45,46 +45,46 @@ namespace PsddfCs {
 			}
 
 			ep[m] = MaxEnvironmentalPotentialEvaporation[m] - ((1.0 - SurfaceDrainageEfficiencyFactor) * AverageMonthlyRainfall[m]);
-			eveff = MaxDredgedFillEvaporationEfficiency * (1.0 - (ct / DredgedFillDryingMaxDepth[DredgedFillMaterialIDs[ndflayer]]));
+			eveff = MaxDredgedFillEvaporationEfficiency * (1.0 - (ct / DredgedFillDryingMaxDepth[DredgedFillMaterialIDs[DredgedFillCurrentLayer]]));
 			ep[m] = ep[m] * eveff;
 			dset = ep[m] - cset - dsc;
 			dsc = 0.0;
 
 //			Cmd.WriteLine("(\t" + dset + "\t" + ct + "\t" + ndflayer + "\t" + iddf[ndflayer] + "\t" + h2[iddf[ndflayer]]);
-			if (dset > 0.0 && ct < DredgedFillDryingMaxDepth[DredgedFillMaterialIDs[ndflayer]]) {
+			if (dset > 0.0 && ct < DredgedFillDryingMaxDepth[DredgedFillMaterialIDs[DredgedFillCurrentLayer]]) {
 				// Addittion to prevent desiccation if surface below a fixed water table;
-				Integral(DredgedFillCurrentVoidRatio, dz, DredgedFillSublayers, fint, ndflayer, 0);
+				Integral(DredgedFillCurrentVoidRatio, dz, DredgedFillSublayers, fint, DredgedFillCurrentLayer, 0);
 
-				for (i = 1; i <= ndfpoint; i++) {
+				for (i = 1; i <= DredgedFillTotalSublayers; i++) {
 					DredgedFillCoordXI[i] = DredgedFillCoordZ[i] + fint[i];
 				}
 
 				if (IsFoundationCompressible != 2) {
 					// Check for Compressible Foundation;
 					Integral(CompressibleFoundationCurrentVoidRatio, dz1, CompressibleFoundationSublayers, fint1, CompressibleFoundationLayers, 0);
-					for (i = 1; i <= nblpoint; i++) {
+					for (i = 1; i <= CompressibleFoundationTotalSublayers; i++) {
 						CompressibleFoundationCoordXI[i] = DredgedFillCoordZ[i] + fint1[i];
 					}
-					CompressibleFoundationTotalSettlement = CompressibleFoundationCoordA[nblpoint] - CompressibleFoundationCoordXI[nblpoint];
+					CompressibleFoundationTotalSettlement = CompressibleFoundationCoordA[CompressibleFoundationTotalSublayers] - CompressibleFoundationCoordXI[CompressibleFoundationTotalSublayers];
 				} else {
 					CompressibleFoundationTotalSettlement = 0.0;
 				}
 
-				elev = IncompressibleFoudationElevation - CompressibleFoundationTotalSettlement + DredgedFillCoordXI[ndfpoint] + CompressibleFoundationTotalInitialThickness;
+				elev = IncompressibleFoudationElevation - CompressibleFoundationTotalSettlement + DredgedFillCoordXI[DredgedFillTotalSublayers] + CompressibleFoundationTotalInitialThickness;
 //				Cmd.WriteLine("_\t" + elev + "\t" + wtelev);
 				if (elev > ExternalWaterSurfaceElevation) {
 					DredgedFillDesiccationSettlement = DredgedFillDesiccationSettlement + dset;
-					if (DredgedFillCurrentVoidRatio[ndfpoint] >= DredgedFillSaturationLimits[DredgedFillMaterialIDs[ndflayer]]) {
+					if (DredgedFillCurrentVoidRatio[DredgedFillTotalSublayers] >= DredgedFillSaturationLimits[DredgedFillMaterialIDs[DredgedFillCurrentLayer]]) {
 						// Determine which points are adjustable to sl;
 						while (lset) {
-							i = ndfpoint;
+							i = DredgedFillTotalSublayers;
 							lset = false;
 							lset1 = true;
 							lset2 = true;
 							while (i > 4 && lset1 && lset2) {
-								if (DredgedFillCurrentVoidRatio[i] > DredgedFillSaturationLimits[DredgedFillMaterialIDs[ndflayer]] && DredgedFillFinalVoidRatio[i] >= DredgedFillSaturationLimits[DredgedFillMaterialIDs[ndflayer]]) {
+								if (DredgedFillCurrentVoidRatio[i] > DredgedFillSaturationLimits[DredgedFillMaterialIDs[DredgedFillCurrentLayer]] && DredgedFillFinalVoidRatio[i] >= DredgedFillSaturationLimits[DredgedFillMaterialIDs[DredgedFillCurrentLayer]]) {
 									lset1 = false;
-								} else if (DredgedFillFinalVoidRatio[i] < DredgedFillSaturationLimits[DredgedFillMaterialIDs[ndflayer]]) {
+								} else if (DredgedFillFinalVoidRatio[i] < DredgedFillSaturationLimits[DredgedFillMaterialIDs[DredgedFillCurrentLayer]]) {
 									lset2 = false;
 									lset3 = true;
 								}
@@ -96,33 +96,33 @@ namespace PsddfCs {
 							if (!lset1) {
 								// Check crust depth;
 								i = i + 1;
-								cd = DredgedFillCoordZ[ndfpoint] + fint[ndfpoint] - DredgedFillCoordZ[i] - fint[i];
-								if (DredgedFillDryingMaxDepth[DredgedFillMaterialIDs[ndflayer]] > DredgedFillInitialThicknesses[ndflayer]) {
-									DredgedFillDryingMaxDepth[DredgedFillMaterialIDs[ndflayer]] = DredgedFillInitialThicknesses[ndflayer];
+								cd = DredgedFillCoordZ[DredgedFillTotalSublayers] + fint[DredgedFillTotalSublayers] - DredgedFillCoordZ[i] - fint[i];
+								if (DredgedFillDryingMaxDepth[DredgedFillMaterialIDs[DredgedFillCurrentLayer]] > DredgedFillInitialThicknesses[DredgedFillCurrentLayer]) {
+									DredgedFillDryingMaxDepth[DredgedFillMaterialIDs[DredgedFillCurrentLayer]] = DredgedFillInitialThicknesses[DredgedFillCurrentLayer];
 								}
 								/**
 								 * Jiarui: Fixed PSDDF Error 1
 								 * Original: h2t = h2[iddf[ndflayer]];
 								 * Descriptions: According to Cargill (1985) Page B19, H2T=H2*(SL/DL).
 								 **/
-								h2t = DredgedFillDryingMaxDepth[DredgedFillMaterialIDs[ndflayer]] * DredgedFillSaturationLimits[DredgedFillMaterialIDs[ndflayer]] / DredgedFillDesiccationLimits[DredgedFillMaterialIDs[ndflayer]];
+								h2t = DredgedFillDryingMaxDepth[DredgedFillMaterialIDs[DredgedFillCurrentLayer]] * DredgedFillSaturationLimits[DredgedFillMaterialIDs[DredgedFillCurrentLayer]] / DredgedFillDesiccationLimits[DredgedFillMaterialIDs[DredgedFillCurrentLayer]];
 
 								if (cd <= h2t) {
 									// Adjust void ratios which are above sl;
-									deav = dset / dz[ndflayer];
-									if (i == ndfpoint) {
+									deav = dset / dz[DredgedFillCurrentLayer];
+									if (i == DredgedFillTotalSublayers) {
 										deav = 2.0 * deav;
 									}
 									v = DredgedFillCurrentVoidRatio[i] - deav;
-									if (v > DredgedFillSaturationLimits[DredgedFillMaterialIDs[ndflayer]]) {
+									if (v > DredgedFillSaturationLimits[DredgedFillMaterialIDs[DredgedFillCurrentLayer]]) {
 										DredgedFillCurrentVoidRatio[i] = v;
 									} else {
-										rv = deav - DredgedFillCurrentVoidRatio[i] + DredgedFillSaturationLimits[DredgedFillMaterialIDs[ndflayer]];
-										DredgedFillCurrentVoidRatio[i] = DredgedFillSaturationLimits[DredgedFillMaterialIDs[ndflayer]];
-										if (i == ndfpoint) {
+										rv = deav - DredgedFillCurrentVoidRatio[i] + DredgedFillSaturationLimits[DredgedFillMaterialIDs[DredgedFillCurrentLayer]];
+										DredgedFillCurrentVoidRatio[i] = DredgedFillSaturationLimits[DredgedFillMaterialIDs[DredgedFillCurrentLayer]];
+										if (i == DredgedFillTotalSublayers) {
 											rv = rv * 0.5;
 										}
-										dset = rv * dz[ndflayer];
+										dset = rv * dz[DredgedFillCurrentLayer];
 										if (dset > 0.0001) {
 											lset = true;
 										}
@@ -141,11 +141,11 @@ namespace PsddfCs {
 						// Determine which points are adjustable to dl;
 						lset1 = true;
 						lset2 = true;
-						i = ndfpoint;
+						i = DredgedFillTotalSublayers;
 						while (i > 4 && lset1 && lset2) {
-							if (DredgedFillCurrentVoidRatio[i] > DredgedFillDesiccationLimits[DredgedFillMaterialIDs[ndflayer]] && DredgedFillFinalVoidRatio[i] >= DredgedFillDesiccationLimits[DredgedFillMaterialIDs[ndflayer]]) {
+							if (DredgedFillCurrentVoidRatio[i] > DredgedFillDesiccationLimits[DredgedFillMaterialIDs[DredgedFillCurrentLayer]] && DredgedFillFinalVoidRatio[i] >= DredgedFillDesiccationLimits[DredgedFillMaterialIDs[DredgedFillCurrentLayer]]) {
 								lset1 = false;
-							} else if (DredgedFillFinalVoidRatio[i] < DredgedFillDesiccationLimits[DredgedFillMaterialIDs[ndflayer]]) {
+							} else if (DredgedFillFinalVoidRatio[i] < DredgedFillDesiccationLimits[DredgedFillMaterialIDs[DredgedFillCurrentLayer]]) {
 								lset2 = false;
 								// Print message when all points are at dl or efinal;
 //								write(iout, 100);
@@ -159,47 +159,47 @@ namespace PsddfCs {
 							// Adjust void ratios which are above dl;
 							i = i + 1;
 							ndfcons = i;
-							deav = dset / dz[ndflayer];
-							if (i == ndfpoint) {
+							deav = dset / dz[DredgedFillCurrentLayer];
+							if (i == DredgedFillTotalSublayers) {
 								deav = deav * 2;
 							}
 							v = DredgedFillCurrentVoidRatio[i] - deav;
-							if (v > DredgedFillDesiccationLimits[DredgedFillMaterialIDs[ndflayer]]) {
+							if (v > DredgedFillDesiccationLimits[DredgedFillMaterialIDs[DredgedFillCurrentLayer]]) {
 								DredgedFillCurrentVoidRatio[i] = v;
-								if (DredgedFillFinalVoidRatio[i] > DredgedFillSaturationLimits[DredgedFillMaterialIDs[ndflayer]]) {
-									rl = DredgedFillSaturationLimits[DredgedFillMaterialIDs[ndflayer]];
+								if (DredgedFillFinalVoidRatio[i] > DredgedFillSaturationLimits[DredgedFillMaterialIDs[DredgedFillCurrentLayer]]) {
+									rl = DredgedFillSaturationLimits[DredgedFillMaterialIDs[DredgedFillCurrentLayer]];
 								} else {
 									rl = DredgedFillFinalVoidRatio[i];
 								}
 								if (DredgedFillCurrentVoidRatio[i] >= rl) {
 									pc = 1.0;
-								} else if (DredgedFillCurrentVoidRatio[i] < rl && rl > DredgedFillDesiccationLimits[DredgedFillMaterialIDs[ndflayer]]) {
-									pc = (DredgedFillCurrentVoidRatio[i] - DredgedFillDesiccationLimits[DredgedFillMaterialIDs[ndflayer]]) / (rl - DredgedFillDesiccationLimits[DredgedFillMaterialIDs[ndflayer]]);
+								} else if (DredgedFillCurrentVoidRatio[i] < rl && rl > DredgedFillDesiccationLimits[DredgedFillMaterialIDs[DredgedFillCurrentLayer]]) {
+									pc = (DredgedFillCurrentVoidRatio[i] - DredgedFillDesiccationLimits[DredgedFillMaterialIDs[DredgedFillCurrentLayer]]) / (rl - DredgedFillDesiccationLimits[DredgedFillMaterialIDs[DredgedFillCurrentLayer]]);
 								} else {
 									pc = 0.0;
 								}
-								ps[i] = DredgedFillAverageSaturation[DredgedFillMaterialIDs[ndflayer]] + ((1.0 - DredgedFillAverageSaturation[DredgedFillMaterialIDs[ndflayer]]) * pc);
+								ps[i] = DredgedFillAverageSaturation[DredgedFillMaterialIDs[DredgedFillCurrentLayer]] + ((1.0 - DredgedFillAverageSaturation[DredgedFillMaterialIDs[DredgedFillCurrentLayer]]) * pc);
 //								Cmd.Print("ps", i, ps[i]);
 								lset = false;
 							} else {
-								rv = deav - DredgedFillCurrentVoidRatio[i] + DredgedFillDesiccationLimits[DredgedFillMaterialIDs[ndflayer]];
+								rv = deav - DredgedFillCurrentVoidRatio[i] + DredgedFillDesiccationLimits[DredgedFillMaterialIDs[DredgedFillCurrentLayer]];
 								ndfcons = i - 1;
 								ps[ndfcons] = 1.0;
 //								Cmd.Print("ps ndfcons", ndfcons, ps[ndfcons]);
 
-								DredgedFillCurrentVoidRatio[i] = DredgedFillDesiccationLimits[DredgedFillMaterialIDs[ndflayer]];
-								DredgedFillFinalVoidRatio[i] = DredgedFillDesiccationLimits[DredgedFillMaterialIDs[ndflayer]];
-								ps[i] = DredgedFillAverageSaturation[DredgedFillMaterialIDs[ndflayer]];
+								DredgedFillCurrentVoidRatio[i] = DredgedFillDesiccationLimits[DredgedFillMaterialIDs[DredgedFillCurrentLayer]];
+								DredgedFillFinalVoidRatio[i] = DredgedFillDesiccationLimits[DredgedFillMaterialIDs[DredgedFillCurrentLayer]];
+								ps[i] = DredgedFillAverageSaturation[DredgedFillMaterialIDs[DredgedFillCurrentLayer]];
 //								Cmd.Print("ps", i, ps[i]);
-								if (i == ndfpoint) {
+								if (i == DredgedFillTotalSublayers) {
 									rv = rv * 0.5;
 								}
-								dset = rv * dz[ndflayer];
+								dset = rv * dz[DredgedFillCurrentLayer];
 								DredgedFillDesiccationSettlement = DredgedFillDesiccationSettlement - dset;
 								// Check new crust thickness;
-								ct = DredgedFillCoordZ[ndfpoint] + fint[ndfpoint] - DredgedFillCoordZ[ndfcons] - fint[ndfcons];
-								if (ct < DredgedFillDryingMaxDepth[DredgedFillMaterialIDs[ndflayer]]) {
-									refx = MaxDredgedFillEvaporationEfficiency * (1.0 - (ct / DredgedFillDryingMaxDepth[DredgedFillMaterialIDs[ndflayer]]));
+								ct = DredgedFillCoordZ[DredgedFillTotalSublayers] + fint[DredgedFillTotalSublayers] - DredgedFillCoordZ[ndfcons] - fint[ndfcons];
+								if (ct < DredgedFillDryingMaxDepth[DredgedFillMaterialIDs[DredgedFillCurrentLayer]]) {
+									refx = MaxDredgedFillEvaporationEfficiency * (1.0 - (ct / DredgedFillDryingMaxDepth[DredgedFillMaterialIDs[DredgedFillCurrentLayer]]));
 									rat = refx / eveff;
 									dset = rat * dset;
 									DredgedFillDesiccationSettlement = DredgedFillDesiccationSettlement + dset;
@@ -223,8 +223,8 @@ namespace PsddfCs {
 					// Carry over desication due to loss of saturation and reset;
 					// Stresses in crust;
 //					Cmd.WriteLine("!!!\t" + ndfcons + "\t" + ndfpoint + "\t" + lset3);
-					if (ndfcons != ndfpoint && lset3) {
-						j = ndfpoint - 1;
+					if (ndfcons != DredgedFillTotalSublayers && lset3) {
+						j = DredgedFillTotalSublayers - 1;
 						qdf = 0.0;
 						aev1 = 0.0;
 						for (ji = ndfcons; ji <= j; ji++) {
@@ -241,10 +241,10 @@ namespace PsddfCs {
 							eav = (DredgedFillCurrentVoidRatio[i] + DredgedFillCurrentVoidRatio[ij]) * 0.5;
 //							Cmd.Print("-*", ps[i], ps[ij]);
 							sav = (ps[i] + ps[ij]) * 0.5;
-							id = DredgedFillMaterialIDs[ndflayer];
-							aev1 = (dz[ndflayer] * eav * (1.0 - sav)) + aev1;
+							id = DredgedFillMaterialIDs[DredgedFillCurrentLayer];
+							aev1 = (dz[DredgedFillCurrentLayer] * eav * (1.0 - sav)) + aev1;
 //							Cmd.Print("-!", qdf, dz[ndflayer], id, gs[id], eav, gw, sav);
-							qdf = qdf + (dz[ndflayer] * (SoilUnitWeight[id] + (eav * WaterUnitWeight * sav)));
+							qdf = qdf + (dz[DredgedFillCurrentLayer] * (SoilUnitWeight[id] + (eav * WaterUnitWeight * sav)));
 //							Cmd.WriteLine("-!\t" + qdf);
 						}
 //						return;
@@ -260,27 +260,27 @@ namespace PsddfCs {
 						// For dredged fill;
 						//for (i=1;i<=ndfpoint;i++) {Cmd.Print("before",time,i,efin[i]);}
 						topstress = qdf;
-						FinalVr(d1, VoidRatios, EffectiveStresses, DredgedFillFinalVoidRatio, dz, DredgedFillSublayers, ndflayer, DredgedFillMaterialIDs, ndfpoint, ref topstress, ndfpoint - ndfcons, ref jin, auxdf);
+						FinalVr(d1, VoidRatios, EffectiveStresses, DredgedFillFinalVoidRatio, dz, DredgedFillSublayers, DredgedFillCurrentLayer, DredgedFillMaterialIDs, DredgedFillTotalSublayers, ref topstress, DredgedFillTotalSublayers - ndfcons, ref jin, auxdf);
 						//for (i=1;i<=ndfpoint;i++) {Cmd.Print("after",time,i,efin[i]);}
 						// Ultimate setlement for total dredged fill;
-						Integral(DredgedFillFinalVoidRatio, dz, DredgedFillSublayers, fint, ndflayer, 0);
-						DredgedFillFinalSettlement = hsolids - fint[ndfpoint];
+						Integral(DredgedFillFinalVoidRatio, dz, DredgedFillSublayers, fint, DredgedFillCurrentLayer, 0);
+						DredgedFillFinalSettlement = hsolids - fint[DredgedFillTotalSublayers];
 						// Reset upper boundary condition for dredged fill;
 						v = DredgedFillCurrentVoidRatio[ndfcons];
 						if (v > DredgedFillFinalVoidRatio[ndfcons]) {
 							DredgedFillCurrentVoidRatio[ndfcons] = DredgedFillFinalVoidRatio[ndfcons];
 						}
 						f[ndfcons] = DredgedFillCurrentVoidRatio[ndfcons];
-						dsc = (v - DredgedFillCurrentVoidRatio[ndfcons]) * dz[ndflayer] + dsc;
+						dsc = (v - DredgedFillCurrentVoidRatio[ndfcons]) * dz[DredgedFillCurrentLayer] + dsc;
 						// Calculate new final void ratios due to lower water table;
 						// For foundation;
 						if (IsFoundationCompressible != 2) {
 							// Check for Compressible Foundation;
-							FinalVr(d1, VoidRatios, EffectiveStresses, CompressibleFoundationFinalVoidRatio, dz1, CompressibleFoundationSublayers, CompressibleFoundationLayers, CompressibleFoundationMaterialIDs, nblpoint, ref topstress, 0, ref jin, auxbl);
+							FinalVr(d1, VoidRatios, EffectiveStresses, CompressibleFoundationFinalVoidRatio, dz1, CompressibleFoundationSublayers, CompressibleFoundationLayers, CompressibleFoundationMaterialIDs, CompressibleFoundationTotalSublayers, ref topstress, 0, ref jin, auxbl);
 							// Calculate ultimate settlement for commpresive foundation;
 							Integral(CompressibleFoundationFinalVoidRatio, dz1, CompressibleFoundationSublayers, fint1, CompressibleFoundationLayers, 0);
-							CompressibleFoundationFinalSettlement = vri1 - fint1[nblpoint];
-							for (i = 1; i <= nblpoint; i++) {
+							CompressibleFoundationFinalSettlement = vri1 - fint1[CompressibleFoundationTotalSublayers];
+							for (i = 1; i <= CompressibleFoundationTotalSublayers; i++) {
 								CompressibleFoundationExcessPoreWaterPressure[i] = CompressibleFoundationExcessPoreWaterPressure[i] + (qdf - qdfold);
 							}
 						}
@@ -289,7 +289,7 @@ namespace PsddfCs {
 			}
 
 			// Recalculate void ratio integral for next cycle;
-			Integral(DredgedFillCurrentVoidRatio, dz, DredgedFillSublayers, fint, ndflayer, 0);
+			Integral(DredgedFillCurrentVoidRatio, dz, DredgedFillSublayers, fint, DredgedFillCurrentLayer, 0);
 
 			/**
 			* Jiarui: Fixed PSDDF Error 2
@@ -297,7 +297,7 @@ namespace PsddfCs {
 			* Descriptions: According to Cargill (1985) Page 33 Figure 8. At free water surface, the final void ratio should be the
 			* same as the current void ratio. So, I set efin equals e.
 			**/
-			for (i = 1; i <= ndfpoint; i++) {
+			for (i = 1; i <= DredgedFillTotalSublayers; i++) {
 				if (DredgedFillCurrentVoidRatio[i] < DredgedFillFinalVoidRatio[i]) {
 					DredgedFillFinalVoidRatio[i] = DredgedFillCurrentVoidRatio[i];
 				}
@@ -315,8 +315,8 @@ namespace PsddfCs {
 			}
 
 			if (check) {
-				ntemp = ndfpoint;
-				SecondReset(d1, VoidRatios, EffectiveStresses, PK, dvds, Dsde, Alpha, Beta, ndflayer, ntemp);
+				ntemp = DredgedFillTotalSublayers;
+				SecondReset(d1, VoidRatios, EffectiveStresses, PK, dvds, Dsde, Alpha, Beta, DredgedFillCurrentLayer, ntemp);
 			}
 
 			qdfold = qdf;

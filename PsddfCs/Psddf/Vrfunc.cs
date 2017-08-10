@@ -24,8 +24,8 @@
 			k = 0;
 
 			// For dredged fill;
-			DredgedFillSublayers[ndflayer] = DredgedFillSublayers[ndflayer] - (ndfpoint - ndfcons);
-			for (i = 1; i <= ndflayer; i++) {
+			DredgedFillSublayers[DredgedFillCurrentLayer] = DredgedFillSublayers[DredgedFillCurrentLayer] - (DredgedFillTotalSublayers - ndfcons);
+			for (i = 1; i <= DredgedFillCurrentLayer; i++) {
 				id = DredgedFillMaterialIDs[i];
 				for (j = 1; j <= DredgedFillSublayers[i] + 1; j++) {
 					kk = k + j;
@@ -35,7 +35,7 @@
 				k = kk;
 			}
 
-			DredgedFillSublayers[ndflayer] = DredgedFillSublayers[ndflayer] + (ndfpoint - ndfcons);
+			DredgedFillSublayers[DredgedFillCurrentLayer] = DredgedFillSublayers[DredgedFillCurrentLayer] + (DredgedFillTotalSublayers - ndfcons);
 		}
 	}
 }

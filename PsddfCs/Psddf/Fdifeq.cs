@@ -47,7 +47,7 @@
 							if (l == 1) {
 								FirstPoint(d1, RelationDefinitionLines, ref CompressibleFoundationCurrentVoidRatio[1], VoidRatios, Dsde, dudz11, SoilBuoyantUnitWeight[id], f1[1], f1[2], af1, 1, dz1[k], cf1, bf1[1], CompressibleFoundationFinalVoidRatio[1], CompressibleFoundationInitialVoidRatio[1], ref jin, id, auxbl);
 							} else {
-								Boundary(d1, RelationDefinitionLines, l, k, CompressibleFoundationCurrentVoidRatio, f1, CompressibleFoundationFinalVoidRatio, dz1, CompressibleFoundationExcessPoreWaterPressure, PK, VoidRatios, EffectiveStresses, CompressibleFoundationEffectiveStree, CompressibleFoundationMaterialIDs, ref jin, auxbl);
+								Boundary(d1, RelationDefinitionLines, l, k, CompressibleFoundationCurrentVoidRatio, f1, CompressibleFoundationFinalVoidRatio, dz1, CompressibleFoundationExcessPoreWaterPressure, PK, VoidRatios, EffectiveStresses, CompressibleFoundationEffectiveStress, CompressibleFoundationMaterialIDs, ref jin, auxbl);
 							}
 						}
 						if (IsCompressibleFoundationInPrimaryConsolidations[k]) {
@@ -65,9 +65,9 @@
 									CompressibleFoundationCurrentVoidRatio[i] = CompressibleFoundationFinalVoidRatio[i];
 								}
 
-								Intpgg(d1, RelationDefinitionLines, CompressibleFoundationCurrentVoidRatio[i], VoidRatios, EffectiveStresses, EffectiveStresses, ref CompressibleFoundationEffectiveStree[i], ref voidx, ref jin, id, auxbl, i, 6, 6);
+								Intpgg(d1, RelationDefinitionLines, CompressibleFoundationCurrentVoidRatio[i], VoidRatios, EffectiveStresses, EffectiveStresses, ref CompressibleFoundationEffectiveStress[i], ref voidx, ref jin, id, auxbl, i, 6, 6);
 								Intpgg(d1, RelationDefinitionLines, f1[i], VoidRatios, EffectiveStresses, EffectiveStresses, ref voidx, ref voidx, ref jin, id, auxbl, i, 6, 6);
-								CompressibleFoundationExcessPoreWaterPressure[i] = CompressibleFoundationExcessPoreWaterPressure[i] - (CompressibleFoundationEffectiveStree[i] - voidx);
+								CompressibleFoundationExcessPoreWaterPressure[i] = CompressibleFoundationExcessPoreWaterPressure[i] - (CompressibleFoundationEffectiveStress[i] - voidx);
 
 								if (CompressibleFoundationExcessPoreWaterPressure[i] > maxu) {
 									maxu = CompressibleFoundationExcessPoreWaterPressure[i];
@@ -110,7 +110,7 @@
 					}
 
 					// Reset for next loop (Compresible Foundation);
-					for (i = 1; i <= nblpoint; i++) {
+					for (i = 1; i <= CompressibleFoundationTotalSublayers; i++) {
 						f1[i] = CompressibleFoundationCurrentVoidRatio[i];
 					}
 
@@ -120,7 +120,7 @@
 					Intpgg(d1, RelationDefinitionLines, CompressibleFoundationCurrentVoidRatio[1], VoidRatios, EffectiveStresses, EffectiveStresses, ref voidx, ref est1, ref jin, id, auxbl, 1, 6, 6);
 
 					dudz11 = dudz10 * pk0 / rpker;
-					ut1 = CompressibleFoundationExcessPoreWaterPressure[1] - est1 + CompressibleFoundationEffectiveStree[1];
+					ut1 = CompressibleFoundationExcessPoreWaterPressure[1] - est1 + CompressibleFoundationEffectiveStress[1];
 					dudz10 = ut1 / IncompressibleFoudationDrainagePathLength;
 
 					// Calculate void ratio of top point in C.F.;
@@ -135,9 +135,9 @@
 					dudz10 = ut / IncompressibleFoudationDrainagePathLength;
 				}
 
-				DredgedFillSublayers[ndflayer] = DredgedFillSublayers[ndflayer] - (ndfpoint - ndfcons);
+				DredgedFillSublayers[DredgedFillCurrentLayer] = DredgedFillSublayers[DredgedFillCurrentLayer] - (DredgedFillTotalSublayers - ndfcons);
 				l = 1;
-				for (k = 1; k <= ndflayer; k++) {
+				for (k = 1; k <= DredgedFillCurrentLayer; k++) {
 					id = DredgedFillMaterialIDs[k];
 					cf = TimeStep / (WaterUnitWeight * dz[k]);
 					dz2 = dz[k] * 2.0;
@@ -186,10 +186,10 @@
 								Intpgg(d1, RelationDefinitionLines, DredgedFillCurrentVoidRatio[i], VoidRatios, EffectiveStresses, EffectiveStresses, ref voidx, ref voidx, ref jin, id, auxdf, i, 6, 6);
 								auxdf[4, i] = voidx;
 							}
-							Integral(DredgedFillCurrentVoidRatio, dz, DredgedFillSublayers, fint, ndflayer, 0);
+							Integral(DredgedFillCurrentVoidRatio, dz, DredgedFillSublayers, fint, DredgedFillCurrentLayer, 0);
 							difsecdf[k] = fint[i] - fint[l];
-							if (k == ndflayer) {
-								auxdf[4, ndfpoint] = auxdf[4, ndfpoint - 1] * 0.01;
+							if (k == DredgedFillCurrentLayer) {
+								auxdf[4, DredgedFillTotalSublayers] = auxdf[4, DredgedFillTotalSublayers - 1] * 0.01;
 							}
 						}
 					} else {
@@ -206,7 +206,7 @@
 
 						}
 
-						Integral(sub(f, DredgedFillCurrentVoidRatio), dz, DredgedFillSublayers, ffint, ndflayer, 0);
+						Integral(sub(f, DredgedFillCurrentVoidRatio), dz, DredgedFillSublayers, ffint, DredgedFillCurrentLayer, 0);
 
 						/**
 						* Jiarui: Fixed PSDDF Error 3
@@ -228,7 +228,7 @@
 					}
 					l = l + DredgedFillSublayers[k] + 1; 
 				}
-				DredgedFillSublayers[ndflayer] = DredgedFillSublayers[ndflayer] + (ndfpoint - ndfcons);
+				DredgedFillSublayers[DredgedFillCurrentLayer] = DredgedFillSublayers[DredgedFillCurrentLayer] + (DredgedFillTotalSublayers - ndfcons);
 				for (i = 1; i <= nnd; i++) {
 					f[i] = DredgedFillCurrentVoidRatio[i];
 				}
@@ -240,7 +240,7 @@
 
 				if (CurrentTime > DredgedFillDesiccationDelayDays && mm == 1) {
 					mm = 2;
-					Integral(DredgedFillCurrentVoidRatio, dz, DredgedFillSublayers, fint, ndflayer, ndfpoint - ndfcons);
+					Integral(DredgedFillCurrentVoidRatio, dz, DredgedFillSublayers, fint, DredgedFillCurrentLayer, DredgedFillTotalSublayers - ndfcons);
 					cset = vrint - fint[ndfcons];
 					setc = setc + cset;
 					vrint = fint[ndfcons];
@@ -300,7 +300,7 @@
 
 					// Dredge Fill;
 					ii = 1;
-					for (i = 1; i <= ndflayer; i++) {
+					for (i = 1; i <= DredgedFillCurrentLayer; i++) {
 						if (IsDredgedFillInPrimaryConsolidations[i]) {
 							rbf = abs(bf[ii]);
 							raf = abs(af[ii]);
@@ -337,7 +337,7 @@
 				Progress = CurrentTime / TotalTime * 100;
 				if (IsPrintProgress) {
 					// write (*, '(a36, f6.1)') '+ Percentage of Execution Completed:', ratio;
-					Cmd.WriteLine("+ Percentage of Execution Completed:{0,6:F1}", Progress);
+					Cmd.Write("\r+ Progress:{0,6:F1}%", Progress);
 				}
 				OnProgressUpdated?.Invoke(Progress);
 			}

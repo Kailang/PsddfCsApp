@@ -16,7 +16,7 @@
 			Io.StreamWrite(OUTS, acumel);
 
 			// write(iouts) nbl, ndfcons, ndflayer, ndfpoint, nblpoint
-			Io.StreamWrite(OUTS, IsFoundationCompressible, ndfcons, ndflayer, ndfpoint, nblpoint);
+			Io.StreamWrite(OUTS, IsFoundationCompressible, ndfcons, DredgedFillCurrentLayer, DredgedFillTotalSublayers, CompressibleFoundationTotalSublayers);
 
 			// write(iouts) nflag, nm, nnd, ntime
 			Io.StreamWrite(OUTS, nflag, StartPrintTime, nnd, PrintTimes);
@@ -91,7 +91,7 @@
         write(iouts) et(i)
     enddo
 			*/
-			for (i = 1; i <= ndfpoint; i++) {
+			for (i = 1; i <= DredgedFillTotalSublayers; i++) {
 				Io.StreamWrite(OUTS, DredgedFillCoordA[i], af[i], bf[i], DredgedFillCurrentVoidRatio[i], DredgedFillInitialVoidRatio[i]);
 				Io.StreamWrite(OUTS, DredgedFillFinalVoidRatio[i], DredgedFillEffectiveStress[i], f[i], fint[i], DredgedFillTotalStress[i]);
 				Io.StreamWrite(OUTS, DredgedFillExcessPoreWaterPressure[i], DredgedFillHydrostaticPoreWaterPressure[i], DredgedFillTotalPoreWaterPressure[i], DredgedFillCoordXI[i], DredgedFillCoordZ[i]);
@@ -108,9 +108,9 @@
     endif
 			*/
 			if (IsFoundationCompressible != 2) {
-				for (i = 1; i <= nblpoint; i++) {
+				for (i = 1; i <= CompressibleFoundationTotalSublayers; i++) {
 					Io.StreamWrite(OUTS, CompressibleFoundationCoordA[i], af1[i], bf1[i], CompressibleFoundationCurrentVoidRatio[i], CompressibleFoundationInitialVoidRatio[i]);
-					Io.StreamWrite(OUTS, CompressibleFoundationFinalVoidRatio[i], CompressibleFoundationEffectiveStree[i], f1[i], fint1[i], CompressibleFoundationTotalStree[i]);
+					Io.StreamWrite(OUTS, CompressibleFoundationFinalVoidRatio[i], CompressibleFoundationEffectiveStress[i], f1[i], fint1[i], CompressibleFoundationTotalStress[i]);
 					Io.StreamWrite(OUTS, CompressibleFoundationExcessPoreWaterPressure[i], CompressibleFoundationHydrostaticPoreWaterPressure[i], CompressibleFoundationTotalPoreWaterPressure[i], CompressibleFoundationCoordXI[i], CompressibleFoundationCoordZ[i]);
 				}
 			}
@@ -166,7 +166,7 @@
 			*/
 			for (k = 1; k <= 15; k++) {
 				// write(iouts) (auxdf(k, i), i = 1, ndfpoint)
-				for (i = 1; i <= ndfpoint; i++)
+				for (i = 1; i <= DredgedFillTotalSublayers; i++)
 					Io.StreamWrite(OUTS, auxdf[k, i]);
 			}
 
@@ -179,7 +179,7 @@
 			*/
 			if (IsFoundationCompressible != 2) {
 				for (k = 1; k <= 15; k++) {
-					for (i = 1; i <= nblpoint; i++)
+					for (i = 1; i <= CompressibleFoundationTotalSublayers; i++)
 						Io.StreamWrite(OUTS, auxbl[k, i]);
 				}
 			}

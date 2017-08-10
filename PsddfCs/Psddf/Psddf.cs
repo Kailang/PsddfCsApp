@@ -14,11 +14,11 @@
 			double tds1 = 0;
 			int id = 0;
 
-			for (int i = 1; i <= DredgedFillMaxLayers; i++) af[i] = 0;
+			for (int i = 1; i <= DredgedFillMaxSublayers; i++) af[i] = 0;
 			// Set flag to normally consolidated;
 			for (int i = 1; i <= MaxMaterialTypes; i++) CompressibleFoundationOCR[i] = 1;
 			// Clear adjustflags ;
-			for (int i = 1; i <= DredgedFillMaxLayers; i++) IsCurveNotAdjusteds[i] = true;
+			for (int i = 1; i <= DredgedFillMaxSublayers; i++) IsCurveNotAdjusteds[i] = true;
 			ndff = 1;
 
 			// Get the name of the file holding the input data
@@ -362,13 +362,13 @@
 					difsecdf[i] = 0.0;
 				}
 
-				for (int i = 1; i <= DredgedFillMaxLayers; i++) {
+				for (int i = 1; i <= DredgedFillMaxSublayers; i++) {
 					for (int j = 1; j <= 15; j++) {
 						auxdf[j, i] = 0.0;
 					}
 				}
 
-				for (int i = 1; i <= CompressibleFoundationMaxLayers; i++) {
+				for (int i = 1; i <= CompressibleFoundationMaxSublayers; i++) {
 					for (int j = 1; j <= 15; j++) {
 						auxbl[j, i] = 0.0;
 					}
@@ -429,7 +429,7 @@
 				dudz21 = 0.0;
 				dudz11 = 0.0;
 				tadd = 0.0;
-				ndflayer = 1;
+				DredgedFillCurrentLayer = 1;
 
 				/*
         ! Print input data and make initial calculations

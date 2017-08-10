@@ -119,8 +119,8 @@
 
 			// write(igracf, '(i10)') nblpoint;
 			// write(igradf, '(i10)') ndfpoint;
-			Io.WriteLine(GCF, "{0,10}", nblpoint);
-			Io.WriteLine(GDF, "{0,10}", ndfpoint);
+			Io.WriteLine(GCF, "{0,10}", CompressibleFoundationTotalSublayers);
+			Io.WriteLine(GDF, "{0,10}", DredgedFillTotalSublayers);
 
 			// For Compressible Foundation;
 			if (IsFoundationCompressible != 2) {
@@ -135,7 +135,7 @@
 					Io.WriteLine(OUT, f100);
 					// Saving intital void ratio in compressible layer for recovery calculation;
 					if (IsSaveRecovery == 1) {
-						for (i = 1; i <= nblpoint; i++) {
+						for (i = 1; i <= CompressibleFoundationTotalSublayers; i++) {
 							pre_er[i] = CompressibleFoundationCurrentVoidRatio[i];
 						}
 					}
@@ -146,7 +146,7 @@
 					// write(iout, 101);
 					// write(iout, 102);
 					Io.WriteLine(OUT, f101);
-					i = nblpoint;
+					i = CompressibleFoundationTotalSublayers;
 					for (j = CompressibleFoundationLayers; j >= 1; j -= 1) {
 						id = CompressibleFoundationMaterialIDs[j];
 						for (k = 1; k <= CompressibleFoundationSublayers[j] + 1; k++) {
@@ -167,7 +167,7 @@
 						// write(iout, 104);
 						// write(iout, 105);
 						Io.WriteLine(OUT, f104);
-						i = nblpoint;
+						i = CompressibleFoundationTotalSublayers;
 						for (j = CompressibleFoundationLayers; j >= 1; j -= 1) {
 							id = CompressibleFoundationMaterialIDs[j];
 							for (k = 1; k <= CompressibleFoundationSublayers[j] + 1; k++) {
@@ -175,8 +175,8 @@
 								Io.WriteLine(
 									OUT, f105, 
 									CompressibleFoundationCoordXI[i], 
-									CompressibleFoundationTotalStree[i], 
-									CompressibleFoundationEffectiveStree[i], 
+									CompressibleFoundationTotalStress[i], 
+									CompressibleFoundationEffectiveStress[i], 
 									CompressibleFoundationHydrostaticPoreWaterPressure[i], 
 									CompressibleFoundationExcessPoreWaterPressure[i], 
 									CompressibleFoundationTotalPoreWaterPressure[i], 
@@ -189,9 +189,9 @@
 
 				// write(igracf, '(g20.10)') time;
 				Io.WriteLine(GCF, "{0,20:F10}", CurrentTime);
-				for (i = 1; i <= nblpoint; i++) {
+				for (i = 1; i <= CompressibleFoundationTotalSublayers; i++) {
 					// write(igracf, '(4g20.10)') z1[i], u1[i], efstr1[i], er[i];
-					Io.WriteLine(GCF, "{0,20:F10}{1,20:F10}{2,20:F10}{3,20:F10}", CompressibleFoundationCoordZ[i], CompressibleFoundationExcessPoreWaterPressure[i], CompressibleFoundationEffectiveStree[i], CompressibleFoundationCurrentVoidRatio[i]);
+					Io.WriteLine(GCF, "{0,20:F10}{1,20:F10}{2,20:F10}{3,20:F10}", CompressibleFoundationCoordZ[i], CompressibleFoundationExcessPoreWaterPressure[i], CompressibleFoundationEffectiveStress[i], CompressibleFoundationCurrentVoidRatio[i]);
 				}
 
 				// write(*, '(80(''*''))');
@@ -249,10 +249,10 @@
 				Io.WriteLine(OUT, f106);
 				// Saving intital void ratio in compressible layer for recovery calculation;
 				if (IsSaveRecovery == 1) {
-					for (i = 1; i <= ndfpoint; i++) {
+					for (i = 1; i <= DredgedFillTotalSublayers; i++) {
 						pre_e[i] = DredgedFillCurrentVoidRatio[i];
 					}
-					pre_ndfpoint = ndfpoint;
+					pre_ndfpoint = DredgedFillTotalSublayers;
 					pre_time = CurrentTime;
 				}
 				break;
@@ -262,8 +262,8 @@
 				// write(iout, 101);
 				// write(iout, 102);
 				Io.WriteLine(OUT, f101);
-				i = ndfpoint;
-				for (j = ndflayer; j >= 1; j -= 1) {
+				i = DredgedFillTotalSublayers;
+				for (j = DredgedFillCurrentLayer; j >= 1; j -= 1) {
 					id = DredgedFillMaterialIDs[j];
 					for (k = 1; k <= DredgedFillSublayers[j] + 1; k++) {
 						// write(iout, 103)a[i], xi[i], z[i], e1[i], e[i], efin[i], id;
@@ -284,8 +284,8 @@
 					// write(iout, 104);
 					// write(iout, 105);
 					Io.WriteLine(OUT, f104);
-					i = ndfpoint;
-					for (j = ndflayer; j >= 1; j -= 1) {
+					i = DredgedFillTotalSublayers;
+					for (j = DredgedFillCurrentLayer; j >= 1; j -= 1) {
 						id = DredgedFillMaterialIDs[j];
 						for (k = 1; k <= DredgedFillSublayers[j] + 1; k++) {
 							// write(iout, 103) xi[i], totstr[i], effstr[i], uw[i], u0[i], u[i], id;
@@ -307,7 +307,7 @@
 			// write(igradf, '(g20.10)') time;
 			Io.WriteLine(GDF, "{0,20:F10}", CurrentTime);
 
-			for (i = 1; i <= ndfpoint; i++) {
+			for (i = 1; i <= DredgedFillTotalSublayers; i++) {
 				// write(igradf, '(4g20.10)')z[i], u[i], effstr[i], e[i];
 				Io.WriteLine(GDF, "{0,20:F10}{1,20:F10}{2,20:F10}{3,20:F10}", DredgedFillCoordZ[i], DredgedFillExcessPoreWaterPressure[i], DredgedFillEffectiveStress[i], DredgedFillCurrentVoidRatio[i]);
 			}
@@ -388,7 +388,7 @@
 					Io.WriteLine(PLOT, f10, pretime, elev);
 				}
 
-				elev = IncompressibleFoudationElevation - CompressibleFoundationTotalSettlement + DredgedFillCoordXI[ndfpoint] + CompressibleFoundationTotalInitialThickness;
+				elev = IncompressibleFoudationElevation - CompressibleFoundationTotalSettlement + DredgedFillCoordXI[DredgedFillTotalSublayers] + CompressibleFoundationTotalInitialThickness;
 				// write(iout, 114) elev;
 				// write(*, 114) elev;
 				// write(*, *);
